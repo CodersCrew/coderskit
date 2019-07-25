@@ -47,7 +47,7 @@ const ContentDivider = styled.div<DividerProps>(props => {
 export const Divider = (props: DividerProps) => {
   const { children } = props;
   const Component = children ? ContentDivider : PureDivider;
-  const className = classnames(props.className, 'cc-divider');
+  const className = classnames(props.className, 'ck-divider');
 
   return (
     <Component {...props} className={className}>

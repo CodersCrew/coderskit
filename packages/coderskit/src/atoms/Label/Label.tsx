@@ -24,7 +24,7 @@ const LabelContainer = styled(Typography)(props => {
 });
 
 export const Label = (props: LabelProps) => {
-  const className = classnames(props.className, 'cc-label');
+  const className = classnames(props.className, 'ck-label');
 
   return (
     <LabelContainer {...props} className={className} el="label">

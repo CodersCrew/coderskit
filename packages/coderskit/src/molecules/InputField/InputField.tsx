@@ -1,49 +1,36 @@
+import React, { HTMLAttributes } from 'react';
 import styled from '@emotion/styled';
-import React from 'react';
-import { Omit } from 'utility-types';
-import { ErrorMessage, Input, InputProps, Label } from '../..';
+import classnames from 'classnames';
+import { ErrorMessage, ErrorMessageProps, Input, InputProps, Label, LabelProps } from '../..';
 
-export interface InputFieldProps extends InputProps {
-  error?: string;
-  label?: string;
+export interface InputFieldProps extends HTMLAttributes<HTMLDivElement> {
+  error?: string | ErrorMessageProps;
+  label?: string | LabelProps;
+  input: InputProps;
+  name: string;
 }
 
-type WrapperProps = Omit<InputFieldProps, 'state' | 'size'>;
-
-const InputFieldWrapper = styled.div<WrapperProps>(() => {
+const InputFieldWrapper = styled.div(() => {
   return {
     width: 'fit-content',
   };
 });
 
-export const InputField = ({
-  type,
-  state,
-  size,
-  hasFeedback,
-  disabled,
-  value,
-  onChange,
-  onFocus,
-  onBlur,
-  width,
-  id,
-  label,
-  error,
-  name,
-  ...props
-}: InputFieldProps) => {
-  const inputProps = { type, state, size, hasFeedback, disabled, value, onChange, onFocus, onBlur, width, id };
+export const InputField = ({ error, label, input, name, ...props }: InputFieldProps) => {
+  const errorMessageProps = typeof error === 'object' ? error : { children: error };
+  const labelProps = typeof label === 'object' ? label : { children: label };
+  const hasError = typeof error === 'object' ? !!error.children : !!error;
+  const className = classnames(props.className, 'ck-input-field');
 
-  if (error && state !== 'loading') {
-    inputProps.state = 'error';
+  if (hasError && input.state !== 'loading') {
+    input.state = 'error';
   }
 
   return (
-    <InputFieldWrapper {...props}>
-      <Label htmlFor={name}>{label}</Label>
-      <Input {...inputProps} id={name} />
-      <ErrorMessage>{error}</ErrorMessage>
+    <InputFieldWrapper {...props} className={className}>
+      <Label {...labelProps} htmlFor={name} />
+      <Input {...input} id={name} name={name} />
+      <ErrorMessage {...errorMessageProps} />
     </InputFieldWrapper>
   );
 };

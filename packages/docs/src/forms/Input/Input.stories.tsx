@@ -39,16 +39,18 @@ storiesOf('Formik', module).add('Input', () => {
     <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
       {({ isSubmitting }) => (
         <Form style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-          <Field name="email" component={FInput} placeholder="Enter e-mail address" label="E-mail" width={240} />
+          <Field
+            name="email"
+            component={FInput}
+            input={{ placeholder: 'Enter e-mail address', width: 240 }}
+            label="E-mail"
+          />
           <Field
             name="password"
             component={FInput}
-            type="password"
-            placeholder="Enter password"
+            input={{ type: 'password', placeholder: 'Enter password', width: 240, hasFeedback: true }}
             label="Password"
             style={{ marginTop: 12 }}
-            width={240}
-            hasFeedback
           />
           <Button type="submit" disabled={isSubmitting} style={{ marginTop: 24 }}>
             Submit

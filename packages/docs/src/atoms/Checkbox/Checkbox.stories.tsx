@@ -7,6 +7,7 @@ storiesOf('Atoms', module).add('Checkbox', () => {
   const props = {
     disabled: boolean('disabled', false),
     children: text('children', 'Checkbox label'),
+    name: text('name', 'checkbox'),
   };
 
   return <Checkbox {...props} />;

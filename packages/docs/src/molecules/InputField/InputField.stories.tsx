@@ -30,16 +30,19 @@ const types = {
 storiesOf('Molecules', module).add('InputField', () => {
   const props = {
     disabled: boolean('disabled', false),
-    hasFeedback: boolean('hasFeedback', true),
-    size: select('size', sizes, 'default') as keyof typeof sizes,
-    type: select('type', types, 'text') as keyof typeof types,
-    state: select('state', states, 'default') as keyof typeof states,
-    placeholder: text('placeholder', 'Placeholder'),
     label: text('label', 'Label'),
     error: text('error', 'Error message'),
-    width: number('width', 240),
     name: text('name', 'field'),
   };
 
-  return <InputField {...props} />;
+  const input = {
+    placeholder: text('placeholder', 'Placeholder'),
+    state: select('state', states, 'default') as keyof typeof states,
+    hasFeedback: boolean('hasFeedback', true),
+    size: select('size', sizes, 'default') as keyof typeof sizes,
+    type: select('type', types, 'text') as keyof typeof types,
+    width: number('width', 240),
+  };
+
+  return <InputField {...props} input={input} />;
 });

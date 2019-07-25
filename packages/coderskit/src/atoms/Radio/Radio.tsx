@@ -19,13 +19,13 @@ const RadioContainer = styled.div<RadioProps>(props => {
     display: 'flex',
     alignItems: 'center',
 
-    '.cc-radio--wrapper': {
+    '.ck-radio__wrapper': {
       position: 'relative',
       width: 20,
       height: 20,
       overflow: 'hidden',
 
-      '.cc-icon': {
+      '.ck-icon': {
         position: 'absolute',
         top: 0,
         left: 0,
@@ -50,7 +50,7 @@ const RadioContainer = styled.div<RadioProps>(props => {
       },
     },
 
-    '.cc-radio--hidden': {
+    '.ck-radio__hidden': {
       position: 'absolute',
       top: 0,
       left: 0,
@@ -58,40 +58,42 @@ const RadioContainer = styled.div<RadioProps>(props => {
       padding: 0,
       zIndex: 2,
       opacity: 0,
+      cursor: 'pointer',
 
-      '&:hover:not(:disabled) + .cc-icon:first-of-type': {
+      '&:hover:not(:disabled) + .ck-icon:first-of-type': {
         opacity: 0.64,
         color: colors.primary,
       },
 
-      '&:focus + .cc-icon:first-of-type': {
+      '&:focus + .ck-icon:first-of-type': {
         opacity: 1,
         color: colors.primary,
       },
 
-      '&:checked ~ .cc-icon:first-of-type': {
+      '&:checked ~ .ck-icon:first-of-type': {
         visibility: 'hidden',
       },
 
-      '&:checked ~ .cc-icon:nth-of-type(2)': {
+      '&:checked ~ .ck-icon:nth-of-type(2)': {
         visibility: 'visible',
       },
 
-      '&:disabled:not(:checked) ~ .cc-icon:last-of-type': {
+      '&:disabled:not(:checked) ~ .ck-icon:last-of-type': {
         visibility: 'visible',
       },
 
-      '&:disabled:checked ~ .cc-icon': {
+      '&:disabled:checked ~ .ck-icon': {
         opacity: 1,
         color: colors.border,
       },
     },
 
-    '.cc-radio--label': {
+    '.ck-radio__label': {
       paddingLeft: space[8],
       fontSize: fontSizes.body2,
       lineHeight: lineHeights.body2,
       color: colors[disabled ? 'fontDisabled' : 'fontRegular'],
+      cursor: 'pointer',
     },
   };
 });
@@ -99,13 +101,13 @@ const RadioContainer = styled.div<RadioProps>(props => {
 export const Radio = (props: RadioProps) => {
   const { children, name, value } = props;
   const valueString = String(value);
-  const className = classnames(props.className, 'cc-radio');
+  const className = classnames(props.className, 'ck-radio');
 
   return (
     <RadioContainer {...props} className={className}>
-      <div className="cc-radio--wrapper">
+      <div className="ck-radio__wrapper">
         <input
-          className="cc-radio--hidden"
+          className="ck-radio__hidden"
           type="radio"
           id={valueString}
           aria-label={props['aria-label'] || valueString}
@@ -118,7 +120,7 @@ export const Radio = (props: RadioProps) => {
         <Icon icon={CircleSolid} />
       </div>
       {children && (
-        <Typography as="label" className="cc-radio--label" htmlFor={valueString}>
+        <Typography as="label" className="ck-radio__label" htmlFor={valueString}>
           {children}
         </Typography>
       )}

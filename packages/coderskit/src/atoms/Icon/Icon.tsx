@@ -62,7 +62,7 @@ const StyledIcon = styled(SVG)({
 export const Icon = (props: IconProps) => {
   const { children, src, icon } = props;
   const Component = icon!;
-  const className = classnames(props.className, 'cc-icon');
+  const className = classnames(props.className, 'ck-icon');
 
   return (
     <IconContainer {...props} className={className}>

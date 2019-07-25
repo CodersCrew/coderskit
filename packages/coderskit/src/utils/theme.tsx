@@ -6,7 +6,7 @@ export const colors = {
   success: '#00CC92',
   warning: '#FF985C',
   error: '#FF526C',
-  gray: '#8A94A6',
+  gray: '#909399',
   black: '#252529',
   white: '#FFFFFF',
   background: '#F9F9FC',

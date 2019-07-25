@@ -150,7 +150,7 @@ const components = {
 export const Typography = (props: TypographyProps) => {
   const { el, children } = props;
   const TypographyContainer = components[el!];
-  const className = classnames(props.className, 'cc-typography', `cc-typography-${el!}`);
+  const className = classnames(props.className, 'ck-typography', `ck-typography__${el!}`);
 
   return (
     <TypographyContainer {...props} className={className}>

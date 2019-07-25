@@ -1,11 +1,9 @@
-import React, { HTMLAttributes } from 'react';
+import React from 'react';
 import styled from '@emotion/styled';
 import classnames from 'classnames';
-import { Omit } from 'utility-types';
-import { Typography } from '../Typography';
+import { Typography, TypographyProps } from '../Typography';
 
-export interface ErrorMessageProps extends Omit<HTMLAttributes<any>, 'color'> {
-  children?: React.ReactNode;
+export interface ErrorMessageProps extends TypographyProps {
   width?: string | number;
 }
 
@@ -24,7 +22,7 @@ const ErrorMessageWrapper = styled(Typography)(props => {
 });
 
 export const ErrorMessage = (props: ErrorMessageProps) => {
-  const className = classnames(props.className, 'cc-error-message');
+  const className = classnames(props.className, 'ck-error-message');
 
   return (
     <ErrorMessageWrapper {...props} className={className} el="small">

@@ -1,7 +1,6 @@
 import React, { useState, InputHTMLAttributes } from 'react';
 import styled from '@emotion/styled';
 import classnames from 'classnames';
-import { omit } from 'ramda';
 import { Omit } from 'utility-types';
 import { tint } from 'polished';
 import { Theme, Icon } from '../..';
@@ -70,7 +69,7 @@ const InputContainer = styled.div<InputProps>(props => {
     position: 'relative',
     display: 'inline-block',
 
-    '.cc-input--input': {
+    '.ck-input__input': {
       width: typeof width === 'string' ? width : `${width}px`,
       height: 40,
       padding: `0 12px`,
@@ -107,59 +106,96 @@ const InputContainer = styled.div<InputProps>(props => {
       ...getStateProps(state!, theme),
     },
 
-    '.cc-input--icons': {
+    '.ck-input--icons': {
       position: 'absolute',
       right: size === 'large' ? 32 : 28,
       top: 0,
       bottom: 0,
 
-      '.cc-icon': {
+      '.ck-icon': {
         position: 'absolute',
         top: 'calc(50% - 8px)',
       },
 
-      '.cc-input--eye-icon': {
+      '.ck-input--eye-icon': {
         right: state !== 'default' ? 12 : 0,
       },
     },
   };
 });
 
-const customPropKeys = ['size', 'style', 'className', 'hasFeedback'];
+const getIcon = (state: InputState, type: string, passwordVisible: boolean, togglePasswordVisible: () => void) => {
+  switch (state) {
+    case 'success':
+      return <Icon icon={CheckCircleSolid} kind="success" />;
+    case 'loading':
+      return <Icon icon={SpinnerSolid} kind="info" spin />;
+    case 'error':
+      return <Icon icon={ExclamationCircleSolid} kind="error" />;
+    case 'warning':
+      return <Icon icon={ExclamationCircleSolid} kind="warning" />;
+    default: {
+      if (type === 'password') {
+        return (
+          <Icon
+            icon={EyeSolid}
+            kind={passwordVisible ? 'primary' : 'border'}
+            className="ck-input--eye-icon"
+            onClick={togglePasswordVisible}
+            hoverable
+          />
+        );
+      }
 
-export const Input = ({ id, ...props }: InputProps) => {
+      return null;
+    }
+  }
+};
+
+export const Input = ({
+  onFocus,
+  onBlur,
+  onChange,
+  name,
+  id,
+  value,
+  type,
+  disabled,
+  autoComplete,
+  autoFocus,
+  ...props
+}: InputProps) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const togglePasswordVisible = () => setPasswordVisible(!passwordVisible);
 
-  const { state, type, disabled, className, hasFeedback } = props;
+  const { state, className, hasFeedback } = props;
+
+  const inputProps = {
+    onFocus,
+    onBlur,
+    onChange,
+    name,
+    id,
+    value,
+    type,
+    disabled,
+    autoComplete,
+    autoFocus,
+  };
+
   const containerProps: InputProps = {
     ...props,
     disabled: disabled || state === 'loading',
-    className: classnames(className, 'cc-input'),
+    className: classnames(className, 'ck-input'),
     type: type !== 'password' || !passwordVisible ? type : 'text',
   };
-  const innerInputProps = omit(customPropKeys, containerProps);
 
   return (
     <InputContainer {...containerProps}>
-      <input {...innerInputProps} className="cc-input--input" id={id} />
+      <input {...inputProps} className="ck-input__input" />
 
       {hasFeedback && (
-        <div className="cc-input--icons">
-          {state === 'success' && <Icon icon={CheckCircleSolid} kind="success" />}
-          {state === 'loading' && <Icon icon={SpinnerSolid} kind="info" spin />}
-          {state === 'error' && <Icon icon={ExclamationCircleSolid} kind="error" />}
-          {state === 'warning' && <Icon icon={ExclamationCircleSolid} kind="warning" />}
-          {type === 'password' && (
-            <Icon
-              icon={EyeSolid}
-              kind={passwordVisible ? 'primary' : 'border'}
-              className="cc-input--eye-icon"
-              onClick={togglePasswordVisible}
-              hoverable
-            />
-          )}
-        </div>
+        <div className="ck-input--icons">{getIcon(state, type!, passwordVisible, togglePasswordVisible)}</div>
       )}
     </InputContainer>
   );

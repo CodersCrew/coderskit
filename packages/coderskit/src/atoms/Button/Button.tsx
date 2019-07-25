@@ -1,6 +1,7 @@
 import React, { HTMLAttributes, ElementType, ReactNode } from 'react';
-import { shade, tint } from 'polished';
 import styled from '@emotion/styled';
+import { shade, tint } from 'polished';
+import classnames from 'classnames';
 import { ThemeColorsKeys } from '../..';
 
 export type ButtonVariant = 'contained' | 'outlined' | 'text';
@@ -129,11 +130,16 @@ const TextButton = styled(ButtonBase)(({ theme, size, ...props }) => {
 
 export const Button = (props: ButtonProps) => {
   const { variant, children } = props;
+  const className = classnames(props.className, 'ck-button');
 
   const ButtonContainer =
     variant === 'contained' ? ContainedButton : variant === 'outlined' ? OutlinedButton : TextButton;
 
-  return <ButtonContainer {...props}>{children}</ButtonContainer>;
+  return (
+    <ButtonContainer {...props} className={className}>
+      {children}
+    </ButtonContainer>
+  );
 };
 
 Button.defaultProps = {

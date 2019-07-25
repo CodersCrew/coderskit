@@ -9,6 +9,7 @@ import CheckSquareSolid from '../../icons/CheckSquareSolid';
 
 export interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   children?: React.ReactNode;
+  name: string;
 }
 
 const CheckboxContainer = styled.div<CheckboxProps>(props => {
@@ -19,13 +20,13 @@ const CheckboxContainer = styled.div<CheckboxProps>(props => {
     display: 'flex',
     alignItems: 'center',
 
-    '.cc-checkbox--wrapper': {
+    '.ck-checkbox--wrapper': {
       position: 'relative',
       width: 20,
       height: 20,
       overflow: 'hidden',
 
-      '.cc-icon': {
+      '.ck-icon': {
         position: 'absolute',
         top: 0,
         left: 0,
@@ -50,7 +51,7 @@ const CheckboxContainer = styled.div<CheckboxProps>(props => {
       },
     },
 
-    '.cc-checkbox--hidden': {
+    '.ck-checkbox--hidden': {
       position: 'absolute',
       top: 0,
       left: 0,
@@ -58,53 +59,55 @@ const CheckboxContainer = styled.div<CheckboxProps>(props => {
       padding: 0,
       zIndex: 2,
       opacity: 0,
+      cursor: 'pointer',
 
-      '&:hover:not(:disabled) + .cc-icon:first-of-type': {
+      '&:hover:not(:disabled) + .ck-icon:first-of-type': {
         opacity: 0.64,
         color: colors.primary,
       },
 
-      '&:focus + .cc-icon:first-of-type': {
+      '&:focus + .ck-icon:first-of-type': {
         opacity: 1,
         color: colors.primary,
       },
 
-      '&:checked ~ .cc-icon:first-of-type': {
+      '&:checked ~ .ck-icon:first-of-type': {
         visibility: 'hidden',
       },
 
-      '&:checked ~ .cc-icon:nth-of-type(2)': {
+      '&:checked ~ .ck-icon:nth-of-type(2)': {
         visibility: 'visible',
       },
 
-      '&:disabled:not(:checked) ~ .cc-icon:last-of-type': {
+      '&:disabled:not(:checked) ~ .ck-icon:last-of-type': {
         visibility: 'visible',
       },
 
-      '&:disabled:checked ~ .cc-icon': {
+      '&:disabled:checked ~ .ck-icon': {
         opacity: 1,
         color: colors.border,
       },
     },
 
-    '.cc-checkbox--label': {
+    '.ck-checkbox--label': {
       paddingLeft: space[8],
       fontSize: fontSizes.body2,
       lineHeight: lineHeights.body2,
       color: colors[disabled ? 'fontDisabled' : 'fontRegular'],
+      cursor: 'pointer',
     },
   };
 });
 
 export const Checkbox = (props: CheckboxProps) => {
   const { children, name, disabled } = props;
-  const className = classnames(props.className, 'cc-checkbox');
+  const className = classnames(props.className, 'ck-checkbox');
 
   return (
     <CheckboxContainer {...props} className={className}>
-      <div className="cc-checkbox--wrapper">
+      <div className="ck-checkbox--wrapper">
         <input
-          className="cc-checkbox--hidden"
+          className="ck-checkbox--hidden"
           type="checkbox"
           id={name}
           aria-label={props['aria-label'] || name}
@@ -116,7 +119,7 @@ export const Checkbox = (props: CheckboxProps) => {
         <Icon icon={SquareSolid} />
       </div>
       {children && (
-        <Typography as="label" className="cc-checkbox--label" htmlFor={name}>
+        <Typography as="label" className="ck-checkbox--label" htmlFor={name}>
           {children}
         </Typography>
       )}

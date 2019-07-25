@@ -56,7 +56,7 @@ const ContainedNotification = styled(NotificationBase)<ContainerProps>(({ theme,
   boxShadow: theme.shadows.md,
   padding: `${theme.space[12]} ${theme.space[16]}`,
   backgroundColor: getColor(kind!, theme),
-  '.cc-typography': {
+  '.ck-typography': {
     color: kind === 'default' ? theme.colors.fontRegular : theme.colors.white,
   },
 }));

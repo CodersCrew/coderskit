@@ -3,20 +3,16 @@ import styled from '@emotion/styled';
 import classnames from 'classnames';
 import { RadioProps } from '../..';
 
-interface RadioGroupContainerProps extends React.HTMLAttributes<any> {
+export type RadioGroupLayout = 'vertical' | 'horizontal';
+
+export interface RadioGroupProps extends React.HTMLAttributes<any> {
+  name: string;
+  children: React.ReactElement<RadioProps>[];
   layout?: RadioGroupLayout;
   spaceBetween?: number;
 }
 
-export type RadioGroupLayout = 'vertical' | 'horizontal';
-
-export interface RadioGroupProps extends RadioGroupContainerProps {
-  name: string;
-  children: React.ReactElement<RadioProps>[];
-}
-
-// @ts-ignore
-const RadioGroupContainer = styled.div<RadioGroupContainerProps>(props => {
+const RadioGroupContainer = styled.div<RadioGroupProps>(props => {
   const { layout, spaceBetween } = props;
   const isHorizontal = layout === 'horizontal';
 
@@ -24,19 +20,23 @@ const RadioGroupContainer = styled.div<RadioGroupContainerProps>(props => {
     display: 'flex',
     flexDirection: isHorizontal ? 'row' : 'column',
 
-    '.cc-radio + .cc-radio': {
-      marginTop: !isHorizontal && spaceBetween,
-      marginLeft: isHorizontal && spaceBetween,
+    '.ck-radio + .ck-radio': {
+      marginTop: !isHorizontal ? spaceBetween : 0,
+      marginLeft: isHorizontal ? spaceBetween : 0,
     },
   };
 });
 
-export const RadioGroup = ({ children, name, ...props }: RadioGroupProps) => {
-  props.className = classnames(props.className, 'cc-radio-group');
-
+export const RadioGroup = (props: RadioGroupProps) => {
+  const { children, name } = props;
+  const className = classnames(props.className, 'ck-radio-group');
   const childrenWithNames = React.Children.map(children, child => React.cloneElement(child, { name }));
 
-  return <RadioGroupContainer {...props}>{childrenWithNames}</RadioGroupContainer>;
+  return (
+    <RadioGroupContainer {...props} className={className}>
+      {childrenWithNames}
+    </RadioGroupContainer>
+  );
 };
 
 RadioGroup.defaultProps = {
