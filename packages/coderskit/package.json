@@ -45,6 +45,7 @@
     "rc-util": "^4.8.4",
     "react-inlinesvg": "^1.1.1",
     "react-modal": "^3.9.1",
+    "react-switch": "^5.0.1",
     "utility-types": "^3.7.0"
   }
 }

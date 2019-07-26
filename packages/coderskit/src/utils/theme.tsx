@@ -11,7 +11,7 @@ export const colors = {
   white: '#FFFFFF',
   background: '#F9F9FC',
   border: '#E1E4E8',
-  disabled: '#F0F0F5',
+  disabled: '#E9E9EE',
   itemHover: '#F6F6F9',
   fontPrimary: '#0A1F44',
   fontRegular: '#4E5D78',

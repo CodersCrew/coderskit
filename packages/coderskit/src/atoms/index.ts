@@ -6,4 +6,5 @@ export * from './Icon';
 export * from './Input';
 export * from './Label';
 export * from './Radio';
+export * from './Switch';
 export * from './Typography';

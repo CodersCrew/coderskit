@@ -9,7 +9,7 @@ import CheckSquareSolid from '../../icons/CheckSquareSolid';
 
 export interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   children?: React.ReactNode;
-  name: string;
+  name?: string;
 }
 
 const CheckboxContainer = styled.div<CheckboxProps>(props => {
@@ -99,21 +99,36 @@ const CheckboxContainer = styled.div<CheckboxProps>(props => {
   };
 });
 
-export const Checkbox = (props: CheckboxProps) => {
-  const { children, name, disabled } = props;
+export const Checkbox = ({
+  name,
+  disabled,
+  onFocus,
+  onBlur,
+  autoFocus,
+  checked,
+  onChange,
+  children,
+  ...props
+}: CheckboxProps) => {
   const className = classnames(props.className, 'ck-checkbox');
+  const inputProps = {
+    className: 'ck-checkbox--hidden',
+    type: 'checkbox',
+    'aria-label': props['aria-label'] || name,
+    name,
+    id: name,
+    disabled,
+    onFocus,
+    onBlur,
+    autoFocus,
+    checked,
+    onChange,
+  };
 
   return (
     <CheckboxContainer {...props} className={className}>
       <div className="ck-checkbox--wrapper">
-        <input
-          className="ck-checkbox--hidden"
-          type="checkbox"
-          id={name}
-          aria-label={props['aria-label'] || name}
-          disabled={disabled}
-          name={name}
-        />
+        <input {...inputProps} />
         <Icon icon={SquareRegular} />
         <Icon icon={CheckSquareSolid} />
         <Icon icon={SquareSolid} />
