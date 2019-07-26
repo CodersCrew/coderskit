@@ -8,6 +8,7 @@ import { Theme, Icon } from '../..';
 import SpinnerSolid from '../../icons/SpinnerSolid';
 import ExclamationCircleSolid from '../../icons/ExclamationCircleSolid';
 import EyeSolid from '../../icons/EyeSolid';
+import EyeSlashSolid from '../../icons/EyeSlashSolid';
 import CheckCircleSolid from '../../icons/CheckCircleSolid';
 
 export type InputSize = 'small' | 'default' | 'large';
@@ -118,13 +119,13 @@ const InputContainer = styled.div<InputProps>(props => {
       },
 
       '.ck-input--eye-icon': {
-        right: state !== 'default' ? 12 : 0,
+        right: state !== 'default' ? 8 : 'unset',
       },
     },
   };
 });
 
-const getIcon = (state: InputState, type: string, passwordVisible: boolean, togglePasswordVisible: () => void) => {
+const getIcon = (state: InputState) => {
   switch (state) {
     case 'success':
       return <Icon icon={CheckCircleSolid} kind="success" />;
@@ -135,18 +136,6 @@ const getIcon = (state: InputState, type: string, passwordVisible: boolean, togg
     case 'warning':
       return <Icon icon={ExclamationCircleSolid} kind="warning" />;
     default: {
-      if (type === 'password') {
-        return (
-          <Icon
-            icon={EyeSolid}
-            kind={passwordVisible ? 'primary' : 'border'}
-            className="ck-input--eye-icon"
-            onClick={togglePasswordVisible}
-            hoverable
-          />
-        );
-      }
-
       return null;
     }
   }
@@ -177,25 +166,36 @@ export const Input = ({
     name,
     id,
     value,
-    type,
-    disabled,
+    disabled: disabled || state === 'loading',
     autoComplete,
     autoFocus,
+    type: type !== 'password' || !passwordVisible ? type : 'text',
   };
 
   const containerProps: InputProps = {
     ...props,
-    disabled: disabled || state === 'loading',
     className: classnames(className, 'ck-input'),
-    type: type !== 'password' || !passwordVisible ? type : 'text',
   };
+
+  console.log(containerProps);
 
   return (
     <InputContainer {...containerProps}>
       <input {...inputProps} className="ck-input__input" />
 
       {hasFeedback && (
-        <div className="ck-input--icons">{getIcon(state, type!, passwordVisible, togglePasswordVisible)}</div>
+        <div className="ck-input--icons">
+          {getIcon(state)}
+          {type === 'password' && (
+            <Icon
+              icon={passwordVisible ? EyeSolid : EyeSlashSolid}
+              kind="border"
+              className="ck-input--eye-icon"
+              onClick={togglePasswordVisible}
+              hoverable
+            />
+          )}
+        </div>
       )}
     </InputContainer>
   );

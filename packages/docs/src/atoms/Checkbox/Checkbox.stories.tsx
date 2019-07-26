@@ -7,8 +7,8 @@ import { Checkbox } from 'coderskit';
 storiesOf('Atoms', module).add('Checkbox', () => {
   const props = {
     disabled: boolean('disabled', false),
-    children: text('children', 'Checkbox label'),
     name: text('name', 'checkbox'),
+    label: text('label', 'Checkbox label content'),
   };
 
   const actions = {
@@ -17,5 +17,12 @@ storiesOf('Atoms', module).add('Checkbox', () => {
     onBlur: action('onBlur'),
   };
 
-  return <Checkbox {...props} {...actions} />;
+  const { label, ...rest } = props;
+
+  return (
+    <Checkbox.Label>
+      <Checkbox {...rest} {...actions} />
+      {label}
+    </Checkbox.Label>
+  );
 });

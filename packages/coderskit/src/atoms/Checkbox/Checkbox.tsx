@@ -1,57 +1,35 @@
-import React, { InputHTMLAttributes } from 'react';
+import React, { InputHTMLAttributes, LabelHTMLAttributes } from 'react';
 import styled from '@emotion/styled';
 import classnames from 'classnames';
-import { Icon, Typography } from '..';
+import { tint } from 'polished';
+import { Icon } from '..';
 
-import SquareSolid from '../../icons/SquareSolid';
-import SquareRegular from '../../icons/SquareRegular';
-import CheckSquareSolid from '../../icons/CheckSquareSolid';
+import CheckSolid from '../../icons/CheckSolid';
 
-export interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
-  children?: React.ReactNode;
-  name?: string;
-}
+export type CheckboxProps = InputHTMLAttributes<HTMLInputElement>;
 
-const CheckboxContainer = styled.div<CheckboxProps>(props => {
-  const { space, fontSizes, lineHeights, colors } = props.theme;
-  const { disabled } = props;
+export type CheckboxLabelProps = LabelHTMLAttributes<HTMLLabelElement>;
+
+const CheckboxBase = styled.div(props => {
+  const { colors, radii } = props.theme;
 
   return {
-    display: 'flex',
-    alignItems: 'center',
+    position: 'relative',
+    width: 20,
+    height: 20,
+    overflow: 'hidden',
+    borderRadius: radii.small,
 
-    '.ck-checkbox--wrapper': {
-      position: 'relative',
-      width: 20,
-      height: 20,
-      overflow: 'hidden',
-
-      '.ck-icon': {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-
-        '&:first-of-type': {
-          visibility: 'visible',
-          color: colors.border,
-          zIndex: 1,
-        },
-
-        '&:nth-of-type(2)': {
-          visibility: 'hidden',
-          color: colors.primary,
-        },
-
-        '&:last-of-type': {
-          visibility: 'hidden',
-          color: colors.disabled,
-        },
-      },
+    '&:focus-within': {
+      boxShadow: `0 0 0 4px ${tint(0.8, colors.primary)}`,
     },
 
-    '.ck-checkbox--hidden': {
+    '.ck-icon': {
+      visibility: 'hidden',
+      color: colors.white,
+    },
+
+    '.ck-checkbox__hidden': {
       position: 'absolute',
       top: 0,
       left: 0,
@@ -61,83 +39,89 @@ const CheckboxContainer = styled.div<CheckboxProps>(props => {
       opacity: 0,
       cursor: 'pointer',
 
-      '&:hover:not(:disabled) + .ck-icon:first-of-type': {
-        opacity: 0.64,
-        color: colors.primary,
+      '&:hover:not(:disabled) + .ck-checkbox__visible': {
+        borderColor: tint(0.4, colors.primary),
       },
 
-      '&:focus + .ck-icon:first-of-type': {
-        opacity: 1,
-        color: colors.primary,
+      '&:focus + .ck-checkbox__visible': {
+        borderColor: tint(0.4, colors.primary),
       },
 
-      '&:checked ~ .ck-icon:first-of-type': {
-        visibility: 'hidden',
+      '&:checked:not(:disabled) + .ck-checkbox__visible': {
+        backgroundColor: colors.primary,
+        borderColor: colors.primary,
+
+        '.ck-icon': {
+          visibility: 'visible',
+        },
       },
 
-      '&:checked ~ .ck-icon:nth-of-type(2)': {
-        visibility: 'visible',
+      '&:disabled:not(:checked) + .ck-checkbox__visible': {
+        backgroundColor: colors.disabled,
       },
 
-      '&:disabled:not(:checked) ~ .ck-icon:last-of-type': {
-        visibility: 'visible',
-      },
+      '&:disabled:checked + .ck-checkbox__visible': {
+        backgroundColor: colors.disabled,
+        borderColor: colors.disabled,
 
-      '&:disabled:checked ~ .ck-icon': {
-        opacity: 1,
-        color: colors.border,
+        '.ck-icon': {
+          visibility: 'visible',
+        },
       },
     },
 
-    '.ck-checkbox--label': {
-      paddingLeft: space[8],
-      fontSize: fontSizes.body2,
-      lineHeight: lineHeights.body2,
-      color: colors[disabled ? 'fontDisabled' : 'fontRegular'],
-      cursor: 'pointer',
+    '.ck-checkbox__visible': {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '100%',
+      height: '100%',
+      borderRadius: radii.small,
+      border: `2px solid ${colors.border}`,
     },
   };
 });
 
-export const Checkbox = ({
-  name,
-  disabled,
-  onFocus,
-  onBlur,
-  autoFocus,
-  checked,
-  onChange,
-  children,
-  ...props
-}: CheckboxProps) => {
-  const className = classnames(props.className, 'ck-checkbox');
-  const inputProps = {
-    className: 'ck-checkbox--hidden',
-    type: 'checkbox',
-    'aria-label': props['aria-label'] || name,
-    name,
-    id: name,
-    disabled,
-    onFocus,
-    onBlur,
-    autoFocus,
-    checked,
-    onChange,
-  };
+const ChcekboxLabelBase = styled.label(({ theme }) => {
+  const { fontSizes, fontWeights, lineHeights, colors } = theme;
 
+  return {
+    display: 'flex',
+    alignItems: 'flex-start',
+    width: 'fit-content',
+    fontSize: fontSizes.body2,
+    lineHeight: lineHeights.body2,
+    fontWeight: fontWeights.regular,
+    color: colors.fontRegular,
+    cursor: 'pointer',
+    userSelect: 'none',
+
+    '.ck-checkbox': {
+      marginRight: 8,
+    },
+  };
+});
+
+export const ChcekboxLabel = ({ children, ...props }: CheckboxLabelProps) => {
   return (
-    <CheckboxContainer {...props} className={className}>
-      <div className="ck-checkbox--wrapper">
-        <input {...inputProps} />
-        <Icon icon={SquareRegular} />
-        <Icon icon={CheckSquareSolid} />
-        <Icon icon={SquareSolid} />
-      </div>
-      {children && (
-        <Typography as="label" className="ck-checkbox--label" htmlFor={name}>
-          {children}
-        </Typography>
-      )}
-    </CheckboxContainer>
+    <ChcekboxLabelBase {...props} className={classnames(props.className, 'ck-checkbox-label')}>
+      {children}
+    </ChcekboxLabelBase>
   );
 };
+
+export const Checkbox = ({ className, ...props }: CheckboxProps) => {
+  return (
+    <CheckboxBase className={classnames(className, 'ck-checkbox')}>
+      <input {...props} type="checkbox" className="ck-checkbox__hidden" />
+      <div className="ck-checkbox__visible">
+        <Icon icon={CheckSolid} size={12} />
+      </div>
+    </CheckboxBase>
+  );
+};
+
+Checkbox.Label = ChcekboxLabel;

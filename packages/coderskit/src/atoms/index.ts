@@ -9,3 +9,4 @@ export * from './Radio';
 export * from './Switch';
 export * from './Typography';
 export * from './Tooltip';
+export * from './LinearProgress';
