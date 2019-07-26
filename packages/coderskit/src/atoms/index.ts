@@ -8,3 +8,4 @@ export * from './Label';
 export * from './Radio';
 export * from './Switch';
 export * from './Typography';
+export * from './Tooltip';
