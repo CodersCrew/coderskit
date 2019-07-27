@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import styled from '@emotion/styled';
 import classnames from 'classnames';
 import { RadioProps } from '../..';
 
 export type RadioGroupLayout = 'vertical' | 'horizontal';
 
-export interface RadioGroupProps extends React.HTMLAttributes<any> {
+export interface RadioGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   name: string;
   children: React.ReactElement<RadioProps>[];
   layout?: RadioGroupLayout;
   spaceBetween?: number;
 }
 
-const RadioGroupContainer = styled.div<RadioGroupProps>(props => {
+type RadioGroupWrapperProps = Omit<RadioGroupProps, 'name' | 'children'>;
+
+const RadioGroupWrapper = styled.div<RadioGroupWrapperProps>(props => {
   const { layout, spaceBetween } = props;
   const isHorizontal = layout === 'horizontal';
 
@@ -20,22 +22,30 @@ const RadioGroupContainer = styled.div<RadioGroupProps>(props => {
     display: 'flex',
     flexDirection: isHorizontal ? 'row' : 'column',
 
-    '.ck-radio + .ck-radio': {
+    '.ck-radio-label + .ck-radio-label': {
       marginTop: !isHorizontal ? spaceBetween : 0,
       marginLeft: isHorizontal ? spaceBetween : 0,
     },
   };
 });
 
-export const RadioGroup = (props: RadioGroupProps) => {
-  const { children, name } = props;
-  const className = classnames(props.className, 'ck-radio-group');
-  const childrenWithNames = React.Children.map(children, child => React.cloneElement(child, { name }));
+export const RadioGroup = ({ name, children, ...props }: RadioGroupProps) => {
+  const childrenWithNames = React.Children.map(children, child => {
+    const children = React.Children.map(child.props.children as ReactElement[], innerChild => {
+      if (innerChild.props && innerChild.props.value) {
+        return React.cloneElement(innerChild, { name });
+      }
+
+      return innerChild;
+    });
+
+    return React.cloneElement(child, {}, children);
+  });
 
   return (
-    <RadioGroupContainer {...props} className={className}>
+    <RadioGroupWrapper {...props} className={classnames(props.className, 'ck-radio-group')}>
       {childrenWithNames}
-    </RadioGroupContainer>
+    </RadioGroupWrapper>
   );
 };
 

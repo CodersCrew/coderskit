@@ -16,9 +16,15 @@ storiesOf('Molecules', module).add('RadioGroup', () => {
 
   return (
     <RadioGroup {...props}>
-      <Radio value="apple">Apple</Radio>
-      <Radio value="orange">Orange</Radio>
-      <Radio value="banana">Banana</Radio>
+      <Radio.Label>
+        <Radio value="apple" /> Apple
+      </Radio.Label>
+      <Radio.Label>
+        <Radio value="orange" /> Orange
+      </Radio.Label>
+      <Radio.Label>
+        <Radio value="banana" /> Banana
+      </Radio.Label>
     </RadioGroup>
   );
 });

@@ -13,8 +13,7 @@ storiesOf('Atoms', module).add('Radio', () => {
 
   return (
     <Radio.Label>
-      <Radio {...rest} />
-      <span>{label}</span>
+      <Radio {...rest} /> {label}
     </Radio.Label>
   );
 });

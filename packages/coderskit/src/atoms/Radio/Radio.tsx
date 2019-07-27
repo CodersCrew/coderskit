@@ -101,9 +101,17 @@ const RadioLabelBase = styled.label(({ theme }) => {
 });
 
 export const RadioLabel = ({ children, ...props }: RadioLabelProps) => {
+  const childrenElements = React.Children.map(children, child => {
+    if (typeof child === 'string' && child.trim()) {
+      return <span>{child}</span>;
+    }
+
+    return child;
+  });
+
   return (
     <RadioLabelBase {...props} className={classnames(props.className, 'ck-radio-label')}>
-      {children}
+      {childrenElements}
     </RadioLabelBase>
   );
 };
