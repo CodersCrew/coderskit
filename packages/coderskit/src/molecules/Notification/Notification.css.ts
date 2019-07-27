@@ -19,11 +19,11 @@ const fadeOut = keyframes`
 `;
 
 export default css`
-  .rc-notification {
+  .ck-message {
     position: fixed;
     z-index: 1000;
   }
-  .rc-notification-notice {
+  .ck-message-notice {
     background: #fff;
     display: block;
     width: auto;
@@ -40,10 +40,10 @@ export default css`
       margin-top: 16px;
     }
   }
-  .rc-notification-notice-closable {
+  .ck-message-notice-closable {
     padding-right: 20px;
   }
-  .rc-notification-notice-close {
+  .ck-message-notice-close {
     position: absolute;
     right: 5px;
     top: 3px;
@@ -58,32 +58,32 @@ export default css`
     opacity: 0.2;
     text-decoration: none;
   }
-  .rc-notification-notice-close-x:after {
+  .ck-message-notice-close-x:after {
     content: '×';
   }
-  .rc-notification-notice-close:hover {
+  .ck-message-notice-close:hover {
     opacity: 1;
     filter: alpha(opacity=100);
     text-decoration: none;
   }
-  .rc-notification-fade-enter {
+  .ck-message-fade-enter {
     opacity: 0;
     animation-duration: 0.3s;
     animation-fill-mode: both;
     animation-timing-function: cubic-bezier(0.55, 0, 0.55, 0.2);
     animation-play-state: paused;
   }
-  .rc-notification-fade-leave {
+  .ck-message-fade-leave {
     animation-duration: 0.3s;
     animation-fill-mode: both;
     animation-timing-function: cubic-bezier(0.55, 0, 0.55, 0.2);
     animation-play-state: paused;
   }
-  .rc-notification-fade-enter.rc-notification-fade-enter-active {
+  .ck-message-fade-enter.ck-message-fade-enter-active {
     animation-name: ${fadeIn};
     animation-play-state: running;
   }
-  .rc-notification-fade-leave.rc-notification-fade-leave-active {
+  .ck-message-fade-leave.ck-message-fade-leave-active {
     animation-name: ${fadeOut};
     animation-play-state: running;
   }

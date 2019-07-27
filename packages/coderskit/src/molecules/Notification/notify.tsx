@@ -10,8 +10,6 @@ import CheckCircleSolid from '../../icons/CheckCircleSolid';
 import ExclamationTriangleSolid from '../../icons/ExclamationTriangleSolid';
 import InfoCircleSolid from '../../icons/InfoCircleSolid';
 
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
-
 type NotificationVariant = 'contained' | 'outlined';
 
 type NotificationKind = 'info' | 'success' | 'warning' | 'error' | 'default';

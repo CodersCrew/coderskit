@@ -74,6 +74,7 @@ export default class Notice extends Component<Props> {
       [`${componentClass}-closable`]: props.closable,
       [props.className!]: !!props.className,
     };
+
     return (
       <div
         className={classNames(className)}

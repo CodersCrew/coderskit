@@ -11,7 +11,6 @@ const now = Date.now();
 interface Props {
   transitionName?: string;
   animation?: string;
-  prefixCls?: string;
   className?: string;
   maxCount?: number;
   closeIcon?: React.ReactNode;
@@ -32,13 +31,10 @@ interface State {
   notices: NoticeProps[];
 }
 
-function getUuid() {
-  return `rcNotification_${now}_${seed++}`;
-}
+const getUuid = () => `rcNotification_${now}_${seed++}`;
 
 class Notification extends Component<Props, State> {
   static defaultProps = {
-    prefixCls: 'rc-notification',
     animation: 'fade',
     style: {
       top: 65,
@@ -52,22 +48,24 @@ class Notification extends Component<Props, State> {
     notices: [],
   };
 
-  getTransitionName(): string {
-    const props = this.props;
-    let transitionName = props.transitionName;
-    if (!transitionName && props.animation) {
-      transitionName = `${props.prefixCls}-${props.animation}`;
+  getTransitionName = () => {
+    let { transitionName, animation } = this.props;
+
+    if (!transitionName && animation) {
+      transitionName = `ck-message-${animation}`;
     }
+
     return transitionName!;
-  }
+  };
 
   add = (notice: NoticeProps) => {
     const key = (notice.key = notice.key || getUuid());
     const { maxCount } = this.props;
-    this.setState(previousState => {
-      const notices = previousState.notices;
+
+    this.setState(({ notices }) => {
       const noticeIndex = notices.map(v => v.key).indexOf(key);
       const updatedNotices = notices.concat();
+
       if (noticeIndex !== -1) {
         updatedNotices.splice(noticeIndex, 1, notice);
       } else {
@@ -77,6 +75,7 @@ class Notification extends Component<Props, State> {
         }
         updatedNotices.push(notice);
       }
+
       return {
         notices: updatedNotices,
       };
@@ -84,76 +83,93 @@ class Notification extends Component<Props, State> {
   };
 
   remove = (key: string) => {
-    this.setState(previousState => {
+    this.setState(({ notices }) => {
       return {
-        notices: previousState.notices.filter(notice => notice.key !== key),
+        notices: notices.filter(notice => notice.key !== key),
       };
     });
   };
 
-  render() {
-    const props = this.props;
+  renderNotice = (notice: NoticeProps, index: number) => {
+    const { closeIcon } = this.props;
     const { notices } = this.state;
-    const noticeNodes: any = notices.map((notice, index) => {
-      const update = Boolean(index === notices.length - 1 && notice.updateKey);
-      const key = notice.updateKey ? notice.updateKey : notice.key;
-      const onClose: any = createChainedFunction(this.remove.bind(this, notice.key!), notice.onClose!);
-      return (
-        <Notice
-          prefixCls={props.prefixCls}
-          {...notice}
-          key={key}
-          update={update}
-          onClose={onClose}
-          onClick={notice.onClick}
-          closeIcon={props.closeIcon}
-        >
-          {notice.content}
-        </Notice>
-      );
-    });
-    const className = {
-      [props.prefixCls!]: 1,
-      [props.className!]: !!props.className,
-    };
+
+    const update = Boolean(index === notices.length - 1 && notice.updateKey);
+    const key = notice.updateKey ? notice.updateKey : notice.key;
+    const onClose: any = createChainedFunction(this.remove.bind(this, notice.key!), notice.onClose!);
+
     return (
-      <div className={classnames(className)} style={props.style}>
+      <Notice
+        prefixCls="ck-message"
+        {...notice}
+        key={key}
+        update={update}
+        onClose={onClose}
+        onClick={notice.onClick}
+        closeIcon={closeIcon}
+      >
+        {notice.content}
+      </Notice>
+    );
+  };
+
+  render() {
+    const { className, style } = this.props;
+    const { notices } = this.state;
+    const noticeNodes: any = notices.map(this.renderNotice);
+
+    return (
+      <div className={classnames('ck-message', className)} style={style}>
         <Animate transitionName={this.getTransitionName()}>{noticeNodes}</Animate>
       </div>
     );
   }
 }
 
-Notification.newInstance = function newNotificationInstance(properties: any, callback: (notice: any) => any) {
+Notification.newInstance = (properties: any, callback: (notice: any) => any) => {
   const { getContainer = null, ...props } = properties || {};
-  const div = document.createElement('div');
+
+  let messagesRootElement = document.getElementById('ck-messages-root')!;
+
+  if (!messagesRootElement) {
+    messagesRootElement = document.createElement('div');
+    messagesRootElement.id = 'ck-messages-root';
+  }
+
   if (getContainer) {
     const root = getContainer();
-    root.appendChild(div);
+    root.appendChild(messagesRootElement);
   } else {
-    document.body.appendChild(div);
+    document.body.appendChild(messagesRootElement);
   }
+
   let called = false;
+
   function ref(notification: NoticeProps) {
     if (called) {
       return;
     }
+
     called = true;
+
     callback({
       notice(noticeProps: NoticeProps) {
         notification.add(noticeProps);
       },
+
       removeNotice(key: string) {
         notification.remove(key);
       },
+
       component: notification,
+
       destroy() {
-        ReactDOM.unmountComponentAtNode(div);
-        div.parentNode!.removeChild(div);
+        ReactDOM.unmountComponentAtNode(messagesRootElement);
+        messagesRootElement.parentNode!.removeChild(messagesRootElement);
       },
     });
   }
-  return ReactDOM.createPortal(<Notification {...props} ref={ref} />, div);
+  return ReactDOM.createPortal(<Notification {...props} ref={ref} />, messagesRootElement);
 };
 
 export default Notification;
