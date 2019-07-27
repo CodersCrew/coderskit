@@ -1,132 +1,90 @@
-import React, { useState, InputHTMLAttributes } from 'react';
+import React, { InputHTMLAttributes, HTMLAttributes, ReactElement, ReactNode } from 'react';
 import styled from '@emotion/styled';
-import classnames from 'classnames';
-import { Omit } from 'utility-types';
 import { tint } from 'polished';
+import classnames from 'classnames';
 import { Theme, Icon } from '../..';
 
 import SpinnerSolid from '../../icons/SpinnerSolid';
 import ExclamationCircleSolid from '../../icons/ExclamationCircleSolid';
-import EyeSolid from '../../icons/EyeSolid';
-import EyeSlashSolid from '../../icons/EyeSlashSolid';
 import CheckCircleSolid from '../../icons/CheckCircleSolid';
+import ExclamationTriangleSolid from '../../icons/ExclamationTriangleSolid';
 
-export type InputSize = 'small' | 'default' | 'large';
+/********************
+  Input component
+********************/
 
-export type InputState = 'loading' | 'error' | 'warning' | 'success' | 'default';
+export type InputDimensions = 'small' | 'default' | 'large';
 
-export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
-  state: InputState;
-  size: InputSize;
-  hasFeedback?: boolean;
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  dimensions?: InputDimensions;
 }
 
-const getSizeProps = (size: InputSize, { fontSizes, space }: Theme) => {
-  if (size === 'large')
-    return {
-      height: 48,
-      padding: `0 ${space[16]}`,
-      fontSize: fontSizes.button1,
-    };
-
-  if (size === 'small')
-    return {
-      height: 32,
-    };
-
-  return {};
+const getDimentions = (dimensions: InputDimensions, { fontSizes: { body1, body2 } }: Theme) => {
+  if (dimensions === 'large') return { height: 48, fontSize: body1, padding: '0 16px' };
+  if (dimensions === 'small') return { height: 32, fontSize: body2, padding: '0 8px' };
+  return { height: 40, fontSize: body2, padding: '0 12px' };
 };
 
-const getStateProps = (state: InputState, { colors }: Theme) => {
-  switch (state) {
-    case 'loading': {
-      return {
-        backgroundColor: colors.background,
-      };
-    }
-    case 'default': {
-      return {
-        '&:hover:not(:disabled):not(:focus)': {
-          borderColor: tint(0.5, colors.primary),
-        },
-      };
-    }
-    default:
-      return {
-        borderColor: colors[state],
-
-        '&:hover:not(:disabled):not(:focus)': {
-          borderColor: tint(0.5, colors[state]),
-        },
-      };
-  }
-};
-
-const InputContainer = styled.div<InputProps>(props => {
-  const { theme, size, state, width } = props;
-  const { colors, borderWidths, shadows, radii, fontSizes } = theme;
+const InputBase = styled.input<InputProps>(props => {
+  const { theme, dimensions } = props;
+  const { colors, radii } = theme;
 
   return {
-    position: 'relative',
-    display: 'inline-block',
+    border: `1px solid ${colors.border}`,
+    borderRadius: radii.small,
+    backgroundColor: colors.white,
+    outline: 'none',
+    color: colors.fontRegular,
+    ...getDimentions(dimensions!, theme),
 
-    '.ck-input__input': {
-      width: typeof width === 'string' ? width : `${width}px`,
-      height: 40,
-      padding: `0 12px`,
-      borderWidth: borderWidths.regular,
-      borderStyle: 'solid',
-      borderColor: colors.border,
-      borderRadius: radii.small,
-      outline: 'none',
-      backgroundColor: colors.white,
-      fontSize: fontSizes.button2,
-
-      '&:focus': {
-        padding: `0 ${size === 'large' ? 15 : 11}px`,
-        borderWidth: borderWidths.bold,
-        borderColor: colors.primary,
-        boxShadow: shadows.md,
-      },
-
-      '&:disabled': {
-        backgroundColor: colors.disabled,
-        color: colors.fontDisabled,
-        cursor: 'not-allowed',
-
-        '&::placeholder': {
-          color: colors.fontDisabled,
-        },
-      },
-
-      '&::placeholder': {
-        color: colors.fontPlaceholder,
-      },
-
-      ...getSizeProps(size!, theme),
-      ...getStateProps(state!, theme),
+    '&::placeholder': {
+      color: colors.fontPlaceholder,
+      backgroundColor: 'transparent',
     },
 
-    '.ck-input--icons': {
-      position: 'absolute',
-      right: size === 'large' ? 32 : 28,
-      top: 0,
-      bottom: 0,
+    '&:hover:not(:disabled)': {
+      borderColor: tint(0.4, colors.primary),
+    },
 
-      '.ck-icon': {
-        position: 'absolute',
-        top: 'calc(50% - 8px)',
-      },
+    '&:focus:not(:disabled)': {
+      borderColor: colors.primary,
+      boxShadow: `0 0 0 4px ${tint(0.8, colors.primary)}`,
+    },
 
-      '.ck-input--eye-icon': {
-        right: state !== 'default' ? 8 : 'unset',
-      },
+    '&:disabled, &:disabled::placeholder': {
+      color: colors.fontDisabled,
+      backgroundColor: colors.disabled,
     },
   };
 });
 
-const getIcon = (state: InputState) => {
-  switch (state) {
+export const Input = ({ className, ...props }: InputProps) => {
+  return <InputBase {...props} className={classnames(className, 'ck-input')} id={props.id || props.name} />;
+};
+
+Input.defaultProps = {
+  dimensions: 'default',
+};
+
+/********************
+  Status component
+********************/
+
+export type InputStatus = 'error' | 'warning' | 'success' | 'loading' | 'default';
+
+export interface InputStatusProps extends HTMLAttributes<HTMLDivElement> {
+  status?: InputStatus;
+  children: ReactElement<InputProps>;
+}
+
+interface StatusBaseProps extends HTMLAttributes<HTMLDivElement> {
+  status?: InputStatus;
+  dimensions: InputDimensions;
+  children: ReactNode;
+}
+
+const getIcon = (status: InputStatus) => {
+  switch (status) {
     case 'success':
       return <Icon icon={CheckCircleSolid} kind="success" />;
     case 'loading':
@@ -134,76 +92,156 @@ const getIcon = (state: InputState) => {
     case 'error':
       return <Icon icon={ExclamationCircleSolid} kind="error" />;
     case 'warning':
-      return <Icon icon={ExclamationCircleSolid} kind="warning" />;
+      return <Icon icon={ExclamationTriangleSolid} kind="warning" />;
     default: {
       return null;
     }
   }
 };
 
-export const Input = ({
-  onFocus,
-  onBlur,
-  onChange,
-  name,
-  id,
-  value,
-  type,
-  disabled,
-  autoComplete,
-  autoFocus,
-  ...props
-}: InputProps) => {
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const togglePasswordVisible = () => setPasswordVisible(!passwordVisible);
+const getStatusInputStyles = (status: InputStatus, { colors }: Theme) => {
+  if (['success', 'warning', 'error'].includes(status)) return { borderColor: colors[status] };
+  if (status === 'loading') {
+    return {
+      backgroundColor: colors.background,
+      userSelect: 'none' as 'none',
 
-  const { state, className, hasFeedback } = props;
+      '&::placeholder': {
+        backgroundColor: colors.background,
+      },
+    };
+  }
+  return {};
+};
 
-  const inputProps = {
-    onFocus,
-    onBlur,
-    onChange,
-    name,
-    id,
-    value,
-    disabled: disabled || state === 'loading',
-    autoComplete,
-    autoFocus,
-    type: type !== 'password' || !passwordVisible ? type : 'text',
+const getRightValue = (dimensions: InputDimensions) => {
+  if (dimensions === 'large') return { right: 16 };
+  if (dimensions === 'small') return { right: 8 };
+  return { right: 12 };
+};
+
+const StatusBase = styled.div<StatusBaseProps>(props => {
+  const { theme, status, dimensions } = props;
+
+  return {
+    position: 'relative',
+    width: 'fit-content',
+
+    '.ck-input': {
+      ...getStatusInputStyles(status!, theme),
+    },
+
+    '.ck-icon': {
+      position: 'absolute',
+      top: 0,
+      height: '100%',
+      ...getRightValue(dimensions),
+    },
   };
+});
 
-  const containerProps: InputProps = {
-    ...props,
-    className: classnames(className, 'ck-input'),
-  };
+const Status = ({ children, className, ...props }: InputStatusProps) => {
+  const dimensions = children.props.dimensions!;
 
-  console.log(containerProps);
+  if (props.status === 'loading') {
+    children = React.cloneElement(children, { disabled: true });
+  }
 
   return (
-    <InputContainer {...containerProps}>
-      <input {...inputProps} className="ck-input__input" />
-
-      {hasFeedback && (
-        <div className="ck-input--icons">
-          {getIcon(state)}
-          {type === 'password' && (
-            <Icon
-              icon={passwordVisible ? EyeSolid : EyeSlashSolid}
-              kind="border"
-              className="ck-input--eye-icon"
-              onClick={togglePasswordVisible}
-              hoverable
-            />
-          )}
-        </div>
-      )}
-    </InputContainer>
+    <StatusBase {...props} className={classnames(className, 'ck-input-status')} dimensions={dimensions}>
+      {getIcon(props.status!)}
+      {children}
+    </StatusBase>
   );
 };
 
-Input.defaultProps = {
-  size: 'default',
-  state: 'default',
-  width: '100%',
-  hasFeedback: true,
+Status.defaultProps = {
+  status: 'default',
 };
+
+Input.Status = Status;
+
+/********************
+  Field component
+********************/
+
+export interface InputFieldProps extends HTMLAttributes<HTMLDivElement> {
+  label?: string;
+  error?: string;
+  help?: string;
+  children: any;
+}
+
+const getHtmlFor = (children: any): string => {
+  const childrenDefaultProps = children.type.defaultProps;
+  const childrenProps = children.props;
+
+  // If we pass Input component as children
+  if (childrenDefaultProps.dimensions) {
+    return childrenProps.id || childrenProps.name;
+  }
+
+  // If we pass Status component as children
+  return childrenProps.children.props.id || childrenProps.children.props.name;
+};
+
+const FieldBase = styled.div<InputFieldProps>(props => {
+  const { theme, error } = props;
+  const { colors, fontSizes, fontWeights, lineHeights } = theme;
+
+  const errorInput = error ? { borderColor: colors.error } : {};
+
+  return {
+    display: 'flex',
+    flexDirection: 'column',
+    width: 'fit-content',
+
+    '.ck-input-label': {
+      display: 'inline-block',
+      paddingLeft: 4,
+      paddingBottom: 4,
+      fontSize: fontSizes.label,
+      lineHeight: lineHeights.label,
+      fontWeight: fontWeights.bold,
+      color: colors.fontPrimary,
+    },
+
+    '.ck-input-error, .ck-input-help': {
+      display: 'inline-block',
+      paddingLeft: 4,
+      paddingTop: 4,
+      fontSize: fontSizes.small,
+      lineHeight: lineHeights.small,
+      fontWeight: fontWeights.regular,
+      color: colors.fontDisabled,
+    },
+
+    '.ck-input-error': {
+      color: colors.error,
+    },
+
+    '.ck-input': {
+      ...errorInput,
+    },
+  };
+});
+
+const Field = ({ children, className, ...props }: InputFieldProps) => {
+  const { label, error, help } = props;
+  const htmlFor = getHtmlFor(children);
+
+  return (
+    <FieldBase {...props} className={classnames(className, 'ck-input-field')}>
+      {label && (
+        <label htmlFor={htmlFor} className="ck-input-label">
+          {label}
+        </label>
+      )}
+      {children}
+      {error && <small className="ck-input-error">{error}</small>}
+      {help && <small className="ck-input-help">{help}</small>}
+    </FieldBase>
+  );
+};
+
+Input.Field = Field;
