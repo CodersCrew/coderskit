@@ -1,42 +1,68 @@
-import React, { CSSProperties } from 'react';
-import { Line } from 'rc-progress';
-import { withTheme } from 'emotion-theming';
-import { Theme, ThemeColorsKeys } from '../..';
+import React, { HTMLAttributes } from 'react';
+import styled from '@emotion/styled';
+import classnames from 'classnames';
+import { ThemeColorsKeys } from '../..';
 
-export interface LinearProgressProps {
+export interface LinearProgressProps extends HTMLAttributes<HTMLDivElement> {
   size?: number;
-  className?: string;
   percent?: number | number[];
   strokeColor?: ThemeColorsKeys | ThemeColorsKeys[];
   trailColor?: ThemeColorsKeys;
-  strokeLinecap?: 'butt' | 'square' | 'round';
-  style?: CSSProperties;
 }
 
-interface AdapterProps extends LinearProgressProps {
-  theme: Theme;
+interface LinearProgressPercentProps {
+  strokeColor?: ThemeColorsKeys;
+  percent: number;
 }
 
-const LinearProgressAdapter = withTheme(({ theme, ...props }: AdapterProps) => {
-  const { size = 8, trailColor = 'border', strokeColor = 'primary' } = props;
-  const { colors } = theme;
+const LinearProgressBase = styled.div<LinearProgressProps>(props => {
+  const { theme, size } = props;
+  const { colors, radii, transitions } = theme;
 
-  const trail = colors[trailColor];
-  const stroke = typeof strokeColor === 'string' ? colors[strokeColor] : strokeColor.map(color => colors[color]);
-  const realSize = size < 3 ? size / 4.8 : size / 4.81;
+  return {
+    height: size,
+    borderRadius: radii.small,
+    backgroundColor: colors.border,
+    overflow: 'hidden',
 
-  return (
-    <Line
-      {...props}
-      strokeWidth={realSize}
-      trailWidth={realSize}
-      trailColor={trail}
-      strokeColor={stroke}
-      prefixCls="ck-linear-progress"
-    />
-  );
+    '.ck-linear-progress-percent': {
+      height: '100%',
+      transition: `all 0.3s ${transitions.easeOutQuart}`,
+    },
+  };
 });
 
-export const LinearProgress = (props: LinearProgressProps) => {
-  return <LinearProgressAdapter {...props} />;
+const LinearProgressPercent = styled.div<LinearProgressPercentProps>(props => {
+  const { theme, percent, strokeColor } = props;
+  const { colors } = theme;
+
+  return {
+    backgroundColor: colors[strokeColor || 'primary'],
+    width: `${percent}%`,
+  };
+});
+
+export const LinearProgress = ({ percent, strokeColor, className, ...props }: LinearProgressProps) => {
+  const percents = typeof percent === 'number' ? [percent] : percent!;
+  const strokeColors = typeof strokeColor === 'string' ? [strokeColor] : strokeColor!;
+
+  return (
+    <LinearProgressBase {...props} className={classnames('ck-linear-progress', className)}>
+      {percents.map((percent, i) => (
+        <LinearProgressPercent
+          key={i}
+          className="ck-linear-progress-percent"
+          percent={percent || 0}
+          strokeColor={strokeColors[i] as ThemeColorsKeys}
+        />
+      ))}
+    </LinearProgressBase>
+  );
+};
+
+LinearProgress.defaultProps = {
+  size: 8,
+  percent: 0,
+  strokeColor: 'priamry',
+  trailColor: 'border',
 };
