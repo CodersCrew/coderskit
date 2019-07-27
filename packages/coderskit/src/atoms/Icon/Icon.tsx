@@ -9,8 +9,7 @@ export interface IconProps extends HTMLAttributes<any> {
   size?: number;
   src?: string;
   spin?: boolean;
-  kind?: ThemeColorsKeys;
-  color?: string;
+  color?: ThemeColorsKeys;
   icon?: ElementType;
   hoverable?: boolean;
   visible?: boolean;
@@ -28,11 +27,11 @@ const spinKeyframes = keyframes`
 
 const IconContainer = styled.div<IconProps>(props => {
   const { colors } = props.theme;
-  const { size, color, spin, hoverable, visible, kind } = props;
+  const { size, color, spin, hoverable, visible } = props;
 
   return {
     display: 'inline-flex',
-    color: color || colors[kind!],
+    color: colors[color!],
     width: `${size}px`,
     height: `${size}px`,
     visibility: visible ? 'visible' : 'hidden',
@@ -73,8 +72,7 @@ export const Icon = (props: IconProps) => {
 
 Icon.defaultProps = {
   size: 16,
-  kind: 'gray',
-  color: '',
+  color: 'gray',
   hoverable: false,
   visible: true,
 };

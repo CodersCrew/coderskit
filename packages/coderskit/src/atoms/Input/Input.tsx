@@ -86,13 +86,13 @@ interface StatusBaseProps extends HTMLAttributes<HTMLDivElement> {
 const getIcon = (status: InputStatus) => {
   switch (status) {
     case 'success':
-      return <Icon icon={CheckCircleSolid} kind="success" />;
+      return <Icon icon={CheckCircleSolid} color="success" />;
     case 'loading':
-      return <Icon icon={SpinnerSolid} kind="info" spin />;
+      return <Icon icon={SpinnerSolid} color="info" spin />;
     case 'error':
-      return <Icon icon={ExclamationCircleSolid} kind="error" />;
+      return <Icon icon={ExclamationCircleSolid} color="error" />;
     case 'warning':
-      return <Icon icon={ExclamationTriangleSolid} kind="warning" />;
+      return <Icon icon={ExclamationTriangleSolid} color="warning" />;
     default: {
       return null;
     }

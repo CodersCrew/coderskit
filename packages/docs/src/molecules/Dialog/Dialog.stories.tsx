@@ -37,7 +37,7 @@ storiesOf('Molecules', module).add('Modal', () => {
       </Dialog.Header>
       <Dialog.Content>{data.content}</Dialog.Content>
       <Dialog.Footer>
-        <Button variant="outlined" kind="gray">
+        <Button variant="outlined" color="gray">
           Cancel
         </Button>
         <Button>Confirm</Button>

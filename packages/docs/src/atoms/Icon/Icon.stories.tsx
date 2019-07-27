@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { storiesOf } from '@storybook/react';
 import { boolean, select, number } from '@storybook/addon-knobs';
-import { Icon, colors as themeColors, ThemeColorsKeys } from 'coderskit';
+import { Icon, colors as themeColors } from 'coderskit';
 
-const kinds = Object.keys(themeColors).reduce((a, key) => ({ ...a, [key]: key }), {});
+const colors = Object.keys(themeColors).reduce((a, key) => ({ ...a, [key]: key }), {});
 
 const icons = {
   'grin-tears-solid.svg': 'grin-tears-solid.svg',
@@ -18,7 +18,7 @@ storiesOf('Atoms', module).add('Icon', () => {
     spin: boolean('spin', false),
     visible: boolean('visible', true),
     src: select('src', icons, 'smile-beam-solid.svg'),
-    kind: select('kind', kinds, 'primary') as ThemeColorsKeys,
+    color: select('color', colors, 'primary') as keyof typeof colors,
     size: number('size', 16),
   };
 

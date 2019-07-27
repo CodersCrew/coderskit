@@ -23,7 +23,7 @@ const elements = {
   span: 'span',
 };
 
-const kinds = Object.keys(themeColors).reduce((a, key) => ({ ...a, [key]: key }), {});
+const colors = Object.keys(themeColors).reduce((a, key) => ({ ...a, [key]: key }), {});
 
 storiesOf('Atoms', module)
   .addParameters({
@@ -35,7 +35,7 @@ storiesOf('Atoms', module)
     const props = {
       disabled: boolean('disabled', false),
       variant: select('variant', variants, 'contained') as keyof typeof variants,
-      kind: select('kind', kinds, 'primary') as keyof typeof kinds,
+      color: select('color', colors, 'primary') as keyof typeof colors,
       size: select('size', sizes, 'default') as keyof typeof sizes,
       as: select('as', elements, 'button') as keyof typeof elements,
     };
