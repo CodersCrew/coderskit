@@ -31,6 +31,7 @@
     "@types/react-dom": "^16.8.5",
     "@types/react-inlinesvg": "^0.8.1",
     "@types/react-modal": "^3.8.2",
+    "@types/react-select": "^3.0.0",
     "concurrently": "^4.1.1",
     "gulp": "^4.0.2",
     "gulp-replace": "^1.0.0",
@@ -49,6 +50,7 @@
     "rc-util": "^4.8.4",
     "react-inlinesvg": "^1.1.1",
     "react-modal": "^3.9.1",
+    "react-select": "^3.0.4",
     "react-switch": "^5.0.1",
     "utility-types": "^3.7.0"
   }

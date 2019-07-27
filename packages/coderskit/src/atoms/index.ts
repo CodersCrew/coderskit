@@ -10,3 +10,4 @@ export * from './Switch';
 export * from './Typography';
 export * from './Tooltip';
 export * from './LinearProgress';
+export * from './Select';
