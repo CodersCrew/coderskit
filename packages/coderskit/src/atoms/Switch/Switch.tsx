@@ -1,98 +1,155 @@
-import React, { ReactNode, ElementType, HTMLAttributes, useRef, useEffect } from 'react';
-import ReactSwitch from 'react-switch';
+import React, { InputHTMLAttributes, LabelHTMLAttributes, ReactElement } from 'react';
 import styled from '@emotion/styled';
 import classnames from 'classnames';
+import { tint } from 'polished';
 
-export interface SwitchProps extends Omit<HTMLAttributes<any>, 'onChange'> {
-  children?: ReactNode;
-  checked: boolean;
-  disabled?: boolean;
-  onChange: (
-    checked: boolean,
-    event: React.SyntheticEvent<MouseEvent | KeyboardEvent> | MouseEvent,
-    id: string,
-  ) => void;
-  name: string;
-  onFocus: any;
-  onBlur: any;
-}
+export type SwitchProps = InputHTMLAttributes<HTMLInputElement>;
 
-interface WrapperProps {
-  as?: ElementType | string;
-  disabled?: boolean;
-  checked: boolean;
-}
-
-const SwitchWrapper = styled.label<WrapperProps>(props => {
-  const { disabled, checked, theme } = props;
-  const { radii, fontSizes, fontWeights, lineHeights, colors } = theme;
-
-  const switchBakground = disabled
-    ? { backgroundColor: `${checked ? colors.fontDisabled : colors.disabled} !important` }
-    : { backgroundColor: `${checked ? colors.primary : colors.border} !important` };
+const SwitchBase = styled.div(props => {
+  const { colors, radii, transitions } = props.theme;
 
   return {
-    display: 'flex',
-    alignItems: 'flex-start',
+    position: 'relative',
+    width: 40,
+    minWidth: 40,
+    height: 20,
+    overflow: 'hidden',
+    borderRadius: radii.small,
 
-    '.react-switch-handle': {
-      borderRadius: `${radii.small} !important`,
+    '&:focus-within': {
+      boxShadow: `0 0 0 4px ${tint(0.8, colors.primary)}`,
     },
 
-    '.react-switch-bg': {
-      borderRadius: `${radii.small} !important`,
-      ...switchBakground,
+    '.ck-switch-hidden': {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      padding: 0,
+      zIndex: 2,
+      opacity: 0,
+
+      '&:disabled': {
+        cursor: 'not-allowed',
+      },
+
+      '&:not(:disabled)': {
+        cursor: 'pointer',
+      },
+
+      '&:hover:not(:disabled) + .ck-switch-visible': {
+        backgroundColor: tint(0.4, colors.primary),
+      },
+
+      '&:focus + .ck-switch-visible': {
+        backgroundColor: tint(0.4, colors.primary),
+      },
+
+      '&:checked:not(:disabled) + .ck-switch-visible': {
+        backgroundColor: colors.primary,
+
+        '.ck-switch-dot': {
+          transform: 'translateX(20px)',
+        },
+      },
+
+      '&:disabled:not(:checked) + .ck-switch-visible': {
+        backgroundColor: colors.disabled,
+      },
+
+      '&:disabled:checked + .ck-switch-visible': {
+        backgroundColor: colors.fontDisabled,
+
+        '.ck-switch-dot': {
+          transform: 'translateX(20px)',
+        },
+      },
     },
 
-    '.ck-switch__text': {
-      cursor: 'pointer',
-      marginLeft: 8,
-      fontSize: fontSizes.body2,
-      lineHeight: lineHeights.body2,
-      fontWeight: fontWeights.regular,
-      color: colors.fontRegular,
+    '.ck-switch-visible': {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      padding: 2,
+      borderRadius: radii.small,
+      backgroundColor: colors.border,
+    },
+
+    '.ck-switch-dot': {
+      position: 'relative',
+      width: 16,
+      height: 16,
+      backgroundColor: colors.white,
+      borderRadius: radii.small,
+      transition: `transform 0.3s ${transitions.easeOutQuart}`,
     },
   };
 });
 
-const styleProps = {
-  uncheckedIcon: false,
-  checkedIcon: false,
-  width: 40,
-  height: 20,
-  handleDiameter: 16,
-  activeBoxShadow: 'none',
-};
-
-export const Switch = ({ children, name, checked, onChange, onFocus, onBlur, disabled, ...props }: SwitchProps) => {
-  const inputRef = useRef<any>(null);
-
-  useEffect(() => {
-    if (onFocus) {
-      inputRef.current.$inputRef.addEventListener('focus', onFocus);
-    }
-
-    if (onBlur) {
-      inputRef.current.$inputRef.addEventListener('blur', onBlur);
-    }
-  }, []);
-
-  const className = classnames(props.className, 'ck-switch');
-  const wrapperPropsObj = children ? { htmlFor: name } : { as: 'div' };
-
-  const inputProps = { name, checked, onChange, onFocus, onBlur, disabled, id: name, ref: inputRef };
-  const wrapperProps = {
-    ...props,
-    ...wrapperPropsObj,
-    disabled,
-    checked,
-    className,
-  };
-
+export const Switch = ({ className, ...props }: SwitchProps) => {
   return (
-    <SwitchWrapper {...wrapperProps}>
-      <ReactSwitch {...inputProps} {...styleProps} />
-      {children ? <span className="ck-switch__text">{children}</span> : null}
-    </SwitchWrapper>
+    <SwitchBase className={classnames(className, 'ck-switch')}>
+      <input {...props} type="checkbox" className="ck-switch-hidden" />
+      <div className="ck-switch-visible">
+        <div className="ck-switch-dot" />
+      </div>
+    </SwitchBase>
   );
 };
+
+export type SwitchLabelProps = LabelHTMLAttributes<HTMLLabelElement>;
+
+interface SwitchLabelBaseProps extends SwitchLabelProps {
+  disabled?: boolean;
+}
+
+const SwitchLabelBase = styled.label<SwitchLabelBaseProps>(props => {
+  const { theme, disabled } = props;
+  const { fontSizes, fontWeights, lineHeights, colors } = theme;
+
+  return {
+    display: 'flex',
+    alignItems: 'flex-start',
+    width: 'fit-content',
+    fontSize: fontSizes.body2,
+    lineHeight: lineHeights.body2,
+    fontWeight: fontWeights.regular,
+    color: colors[disabled ? 'fontDisabled' : 'fontRegular'],
+    userSelect: 'none',
+
+    '.ck-switch': {
+      marginRight: 8,
+    },
+
+    '.ck-switch + *': {
+      position: 'relative',
+      top: -2,
+      cursor: disabled ? 'not-allowed' : 'pointer',
+    },
+  };
+});
+
+export const SwitchLabel = ({ children, ...props }: SwitchLabelProps) => {
+  let disabled = false;
+
+  const childrenElements = React.Children.map(children, child => {
+    if (typeof child === 'string' && child.trim()) {
+      return <span>{child}</span>;
+    } else if (typeof child === 'object') {
+      disabled = !!(child as ReactElement<SwitchProps>).props.disabled;
+    }
+
+    return child;
+  });
+
+  return (
+    <SwitchLabelBase {...props} className={classnames(props.className, 'ck-switch-label')} disabled={disabled}>
+      {childrenElements}
+    </SwitchLabelBase>
+  );
+};
+
+Switch.Label = SwitchLabel;

@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes, LabelHTMLAttributes } from 'react';
+import React, { InputHTMLAttributes, LabelHTMLAttributes, ReactElement } from 'react';
 import styled from '@emotion/styled';
 import classnames from 'classnames';
 import { tint } from 'polished';
@@ -8,14 +8,13 @@ import CheckSolid from '../../icons/CheckSolid';
 
 export type CheckboxProps = InputHTMLAttributes<HTMLInputElement>;
 
-export type CheckboxLabelProps = LabelHTMLAttributes<HTMLLabelElement>;
-
 const CheckboxBase = styled.div(props => {
   const { colors, radii } = props.theme;
 
   return {
     position: 'relative',
     width: 20,
+    minWidth: 20,
     height: 20,
     overflow: 'hidden',
     borderRadius: radii.small,
@@ -92,38 +91,6 @@ const CheckboxBase = styled.div(props => {
   };
 });
 
-const ChcekboxLabelBase = styled.label(({ theme }) => {
-  const { fontSizes, fontWeights, lineHeights, colors } = theme;
-
-  return {
-    display: 'flex',
-    alignItems: 'flex-start',
-    width: 'fit-content',
-    fontSize: fontSizes.body2,
-    lineHeight: lineHeights.body2,
-    fontWeight: fontWeights.regular,
-    color: colors.fontRegular,
-    userSelect: 'none',
-
-    '.ck-checkbox': {
-      marginRight: 8,
-    },
-
-    '.ck-checkbox + *': {
-      position: 'relative',
-      top: -2,
-    },
-  };
-});
-
-export const ChcekboxLabel = ({ children, ...props }: CheckboxLabelProps) => {
-  return (
-    <ChcekboxLabelBase {...props} className={classnames(props.className, 'ck-checkbox-label')}>
-      {children}
-    </ChcekboxLabelBase>
-  );
-};
-
 export const Checkbox = ({ className, ...props }: CheckboxProps) => {
   return (
     <CheckboxBase className={classnames(className, 'ck-checkbox')}>
@@ -135,4 +102,56 @@ export const Checkbox = ({ className, ...props }: CheckboxProps) => {
   );
 };
 
-Checkbox.Label = ChcekboxLabel;
+export type CheckboxLabelProps = LabelHTMLAttributes<HTMLLabelElement>;
+
+interface CheckboxLabelBaseProps extends CheckboxLabelProps {
+  disabled?: boolean;
+}
+
+const CheckboxLabelBase = styled.label<CheckboxLabelBaseProps>(props => {
+  const { theme, disabled } = props;
+  const { fontSizes, fontWeights, lineHeights, colors } = theme;
+
+  return {
+    display: 'flex',
+    alignItems: 'flex-start',
+    width: 'fit-content',
+    fontSize: fontSizes.body2,
+    lineHeight: lineHeights.body2,
+    fontWeight: fontWeights.regular,
+    color: colors[disabled ? 'fontDisabled' : 'fontRegular'],
+    userSelect: 'none',
+
+    '.ck-checkbox': {
+      marginRight: 8,
+    },
+
+    '.ck-checkbox + *': {
+      position: 'relative',
+      top: -2,
+      cursor: disabled ? 'not-allowed' : 'pointer',
+    },
+  };
+});
+
+export const CheckboxLabel = ({ children, ...props }: CheckboxLabelProps) => {
+  let disabled = false;
+
+  const childrenElements = React.Children.map(children, child => {
+    if (typeof child === 'string' && child.trim()) {
+      return <span>{child}</span>;
+    } else if (typeof child === 'object') {
+      disabled = !!(child as ReactElement<CheckboxProps>).props.disabled;
+    }
+
+    return child;
+  });
+
+  return (
+    <CheckboxLabelBase {...props} className={classnames(props.className, 'ck-checkbox-label')} disabled={disabled}>
+      {childrenElements}
+    </CheckboxLabelBase>
+  );
+};
+
+Checkbox.Label = CheckboxLabel;

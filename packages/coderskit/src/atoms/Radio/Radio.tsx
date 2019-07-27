@@ -1,11 +1,9 @@
-import React, { InputHTMLAttributes, LabelHTMLAttributes } from 'react';
+import React, { InputHTMLAttributes, LabelHTMLAttributes, ReactElement } from 'react';
 import styled from '@emotion/styled';
 import classnames from 'classnames';
 import { tint } from 'polished';
 
 export type RadioProps = InputHTMLAttributes<HTMLInputElement>;
-
-export type RadioLabelProps = LabelHTMLAttributes<HTMLLabelElement>;
 
 const RadioBase = styled.div(props => {
   const { colors } = props.theme;
@@ -13,6 +11,7 @@ const RadioBase = styled.div(props => {
   return {
     position: 'relative',
     width: 20,
+    minWidth: 20,
     height: 20,
     overflow: 'hidden',
     borderRadius: '100%',
@@ -76,7 +75,23 @@ const RadioBase = styled.div(props => {
   };
 });
 
-const RadioLabelBase = styled.label(({ theme }) => {
+export const Radio = ({ className, ...props }: RadioProps) => {
+  return (
+    <RadioBase className={classnames(className, 'ck-radio')}>
+      <input {...props} type="radio" className="ck-radio__hidden" />
+      <div className="ck-radio__visible" />
+    </RadioBase>
+  );
+};
+
+export type RadioLabelProps = LabelHTMLAttributes<HTMLLabelElement>;
+
+interface RadioLabelBaseProps extends RadioLabelProps {
+  disabled?: boolean;
+}
+
+const RadioLabelBase = styled.label<RadioLabelBaseProps>(props => {
+  const { theme, disabled } = props;
   const { fontSizes, fontWeights, lineHeights, colors } = theme;
 
   return {
@@ -86,7 +101,7 @@ const RadioLabelBase = styled.label(({ theme }) => {
     fontSize: fontSizes.body2,
     lineHeight: lineHeights.body2,
     fontWeight: fontWeights.regular,
-    color: colors.fontRegular,
+    color: colors[disabled ? 'fontDisabled' : 'fontRegular'],
     userSelect: 'none',
 
     '.ck-radio': {
@@ -96,32 +111,28 @@ const RadioLabelBase = styled.label(({ theme }) => {
     '.ck-radio + *': {
       position: 'relative',
       top: -2,
+      cursor: disabled ? 'not-allowed' : 'pointer',
     },
   };
 });
 
 export const RadioLabel = ({ children, ...props }: RadioLabelProps) => {
+  let disabled = false;
+
   const childrenElements = React.Children.map(children, child => {
     if (typeof child === 'string' && child.trim()) {
       return <span>{child}</span>;
+    } else if (typeof child === 'object') {
+      disabled = !!(child as ReactElement<RadioProps>).props.disabled;
     }
 
     return child;
   });
 
   return (
-    <RadioLabelBase {...props} className={classnames(props.className, 'ck-radio-label')}>
+    <RadioLabelBase {...props} className={classnames(props.className, 'ck-radio-label')} disabled={disabled}>
       {childrenElements}
     </RadioLabelBase>
-  );
-};
-
-export const Radio = ({ className, ...props }: RadioProps) => {
-  return (
-    <RadioBase className={classnames(className, 'ck-radio')}>
-      <input {...props} type="radio" className="ck-radio__hidden" />
-      <div className="ck-radio__visible" />
-    </RadioBase>
   );
 };
 

@@ -1,26 +1,14 @@
-import React, { useState } from 'react';
+import * as React from 'react';
 import { storiesOf } from '@storybook/react';
-import { text, boolean } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
-import { Omit } from 'utility-types';
-import { Switch, SwitchProps } from 'coderskit';
-
-const Comp = (props: Omit<SwitchProps, 'checked'>) => {
-  const [checked, setChecked] = useState(false);
-
-  const handleChange = (value: boolean, e: any, id: string) => {
-    props.onChange(value, e, id);
-    setChecked(value);
-  };
-
-  return <Switch {...props} checked={checked} onChange={handleChange} />;
-};
+import { boolean, text } from '@storybook/addon-knobs';
+import { Switch } from 'coderskit';
 
 storiesOf('Atoms', module).add('Switch', () => {
   const props = {
-    children: text('children', 'Some radio label'),
-    name: text('name', 'switch-name'),
     disabled: boolean('disabled', false),
+    name: text('name', 'switch-name'),
+    label: text('label', 'Switch label content'),
   };
 
   const actions = {
@@ -29,5 +17,11 @@ storiesOf('Atoms', module).add('Switch', () => {
     onBlur: action('onBlur'),
   };
 
-  return <Comp {...props} {...actions} />;
+  const { label, ...rest } = props;
+
+  return (
+    <Switch.Label>
+      <Switch {...rest} {...actions} /> {label}
+    </Switch.Label>
+  );
 });
