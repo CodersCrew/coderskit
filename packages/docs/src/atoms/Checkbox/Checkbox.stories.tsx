@@ -22,7 +22,7 @@ storiesOf('Atoms', module).add('Checkbox', () => {
   return (
     <Checkbox.Label>
       <Checkbox {...rest} {...actions} />
-      {label}
+      <span>{label}</span>
     </Checkbox.Label>
   );
 });

@@ -1,53 +1,24 @@
-import React, { InputHTMLAttributes } from 'react';
+import React, { InputHTMLAttributes, LabelHTMLAttributes } from 'react';
 import styled from '@emotion/styled';
 import classnames from 'classnames';
-import { Icon, Typography } from '..';
+import { tint } from 'polished';
 
-import CircleSolid from '../../icons/CircleSolid';
-import CircleRegular from '../../icons/CircleRegular';
-import DotCircleSolid from '../../icons/DotCircleSolid';
+export type RadioProps = InputHTMLAttributes<HTMLInputElement>;
 
-export interface RadioProps extends InputHTMLAttributes<HTMLInputElement> {
-  children?: React.ReactNode;
-}
+export type RadioLabelProps = LabelHTMLAttributes<HTMLLabelElement>;
 
-const RadioContainer = styled.div<RadioProps>(props => {
-  const { space, fontSizes, lineHeights, colors } = props.theme;
-  const { disabled } = props;
+const RadioBase = styled.div(props => {
+  const { colors } = props.theme;
 
   return {
-    display: 'flex',
-    alignItems: 'center',
+    position: 'relative',
+    width: 20,
+    height: 20,
+    overflow: 'hidden',
+    borderRadius: '100%',
 
-    '.ck-radio__wrapper': {
-      position: 'relative',
-      width: 20,
-      height: 20,
-      overflow: 'hidden',
-
-      '.ck-icon': {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-
-        '&:first-of-type': {
-          visibility: 'visible',
-          color: colors.border,
-          zIndex: 1,
-        },
-
-        '&:nth-of-type(2)': {
-          visibility: 'hidden',
-          color: colors.primary,
-        },
-
-        '&:last-of-type': {
-          visibility: 'hidden',
-          color: colors.disabled,
-        },
-      },
+    '&:focus-within': {
+      boxShadow: `0 0 0 4px ${tint(0.8, colors.primary)}`,
     },
 
     '.ck-radio__hidden': {
@@ -58,72 +29,92 @@ const RadioContainer = styled.div<RadioProps>(props => {
       padding: 0,
       zIndex: 2,
       opacity: 0,
-      cursor: 'pointer',
 
-      '&:hover:not(:disabled) + .ck-icon:first-of-type': {
-        opacity: 0.64,
-        color: colors.primary,
+      '&:disabled': {
+        cursor: 'not-allowed',
       },
 
-      '&:focus + .ck-icon:first-of-type': {
-        opacity: 1,
-        color: colors.primary,
+      '&:not(:disabled)': {
+        cursor: 'pointer',
       },
 
-      '&:checked ~ .ck-icon:first-of-type': {
-        visibility: 'hidden',
+      '&:hover:not(:disabled) + .ck-radio__visible': {
+        borderColor: tint(0.4, colors.primary),
       },
 
-      '&:checked ~ .ck-icon:nth-of-type(2)': {
-        visibility: 'visible',
+      '&:focus + .ck-radio__visible': {
+        borderColor: tint(0.4, colors.primary),
       },
 
-      '&:disabled:not(:checked) ~ .ck-icon:last-of-type': {
-        visibility: 'visible',
+      '&:checked:not(:disabled) + .ck-radio__visible': {
+        borderColor: colors.primary,
+        borderWidth: 6,
       },
 
-      '&:disabled:checked ~ .ck-icon': {
-        opacity: 1,
-        color: colors.border,
+      '&:disabled:not(:checked) + .ck-radio__visible': {
+        backgroundColor: colors.disabled,
+      },
+
+      '&:disabled:checked + .ck-radio__visible': {
+        borderColor: colors.disabled,
+        borderWidth: 6,
       },
     },
 
-    '.ck-radio__label': {
-      paddingLeft: space[8],
-      fontSize: fontSizes.body2,
-      lineHeight: lineHeights.body2,
-      color: colors[disabled ? 'fontDisabled' : 'fontRegular'],
-      cursor: 'pointer',
+    '.ck-radio__visible': {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '100%',
+      height: '100%',
+      borderRadius: '100%',
+      border: `2px solid ${colors.border}`,
     },
   };
 });
 
-export const Radio = (props: RadioProps) => {
-  const { children, name, value } = props;
-  const valueString = String(value);
-  const className = classnames(props.className, 'ck-radio');
+const RadioLabelBase = styled.label(({ theme }) => {
+  const { fontSizes, fontWeights, lineHeights, colors } = theme;
 
+  return {
+    display: 'flex',
+    alignItems: 'flex-start',
+    width: 'fit-content',
+    fontSize: fontSizes.body2,
+    lineHeight: lineHeights.body2,
+    fontWeight: fontWeights.regular,
+    color: colors.fontRegular,
+    userSelect: 'none',
+
+    '.ck-radio': {
+      marginRight: 8,
+    },
+
+    '.ck-radio + *': {
+      position: 'relative',
+      top: -2,
+    },
+  };
+});
+
+export const RadioLabel = ({ children, ...props }: RadioLabelProps) => {
   return (
-    <RadioContainer {...props} className={className}>
-      <div className="ck-radio__wrapper">
-        <input
-          className="ck-radio__hidden"
-          type="radio"
-          id={valueString}
-          aria-label={props['aria-label'] || valueString}
-          disabled={props.disabled}
-          name={name}
-          value={value}
-        />
-        <Icon icon={CircleRegular} />
-        <Icon icon={DotCircleSolid} />
-        <Icon icon={CircleSolid} />
-      </div>
-      {children && (
-        <Typography as="label" className="ck-radio__label" htmlFor={valueString}>
-          {children}
-        </Typography>
-      )}
-    </RadioContainer>
+    <RadioLabelBase {...props} className={classnames(props.className, 'ck-radio-label')}>
+      {children}
+    </RadioLabelBase>
   );
 };
+
+export const Radio = ({ className, ...props }: RadioProps) => {
+  return (
+    <RadioBase className={classnames(className, 'ck-radio')}>
+      <input {...props} type="radio" className="ck-radio__hidden" />
+      <div className="ck-radio__visible" />
+    </RadioBase>
+  );
+};
+
+Radio.Label = RadioLabel;

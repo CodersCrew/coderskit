@@ -72,7 +72,7 @@ export const lineHeights = {
   h3: '24px',
   h4: '20px',
   body1: '24px',
-  body2: '20px',
+  body2: '24px',
   button1: '24px',
   button2: '16px',
   caption1: '16px',

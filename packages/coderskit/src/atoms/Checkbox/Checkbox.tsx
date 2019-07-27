@@ -37,7 +37,14 @@ const CheckboxBase = styled.div(props => {
       padding: 0,
       zIndex: 2,
       opacity: 0,
-      cursor: 'pointer',
+
+      '&:disabled': {
+        cursor: 'not-allowed',
+      },
+
+      '&:not(:disabled)': {
+        cursor: 'pointer',
+      },
 
       '&:hover:not(:disabled) + .ck-checkbox__visible': {
         borderColor: tint(0.4, colors.primary),
@@ -96,11 +103,15 @@ const ChcekboxLabelBase = styled.label(({ theme }) => {
     lineHeight: lineHeights.body2,
     fontWeight: fontWeights.regular,
     color: colors.fontRegular,
-    cursor: 'pointer',
     userSelect: 'none',
 
     '.ck-checkbox': {
       marginRight: 8,
+    },
+
+    '.ck-checkbox + *': {
+      position: 'relative',
+      top: -2,
     },
   };
 });

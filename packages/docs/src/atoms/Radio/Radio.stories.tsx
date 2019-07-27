@@ -6,8 +6,15 @@ import { Radio } from 'coderskit';
 storiesOf('Atoms', module).add('Radio', () => {
   const props = {
     disabled: boolean('disabled', false),
-    children: text('children', 'Radio label'),
+    label: text('label', 'Radio label'),
   };
 
-  return <Radio {...props} />;
+  const { label, ...rest } = props;
+
+  return (
+    <Radio.Label>
+      <Radio {...rest} />
+      <span>{label}</span>
+    </Radio.Label>
+  );
 });
