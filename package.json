@@ -14,7 +14,7 @@
     "type-check": "lerna run type-check",
     "prettier": "lerna run prettier",
     "prettier:fix": "lerna run prettier:fix",
-    "check-all": "yarn prettier && yarn lint && yarn type-check"
+    "check-all": "yarn type-check && yarn lint && yarn prettier"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^1.13.0",
@@ -30,8 +30,8 @@
     "typescript": "^3.5.3"
   },
   "pre-commit": [
-    "prettier",
+    "type-check",
     "lint",
-    "type-check"
+    "prettier"
   ]
 }

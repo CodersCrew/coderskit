@@ -1,21 +1,50 @@
-import React from 'react';
+import React, { HTMLAttributes, ReactElement } from 'react';
 import ReactSelect from 'react-select';
+import makeAnimated from 'react-select/animated';
 import { Props as ReactSelectProps } from 'react-select/src/Select';
+import { CommonProps } from 'react-select/src/types';
 import styled from '@emotion/styled';
 import classnames from 'classnames';
 import { transparentize, tint } from 'polished';
+import { Icon, Theme } from '../..';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface SelectProps extends Omit<ReactSelectProps, 'theme' | 'classNamePrefix'> {}
+import SpinnerSolid from '../../icons/SpinnerSolid';
+import ExclamationCircleSolid from '../../icons/ExclamationCircleSolid';
+import CheckCircleSolid from '../../icons/CheckCircleSolid';
+import ExclamationTriangleSolid from '../../icons/ExclamationTriangleSolid';
 
-const SelectBase = styled(ReactSelect)(props => {
-  const { theme } = props;
+export type SelectStatus = 'error' | 'warning' | 'success' | 'loading' | 'default';
+
+type LoadingIndicatorProps = CommonProps<{ label: string; value: string }>;
+
+export interface SelectProps extends Omit<ReactSelectProps, 'theme' | 'classNamePrefix' | 'isLoading'> {
+  status?: SelectStatus;
+}
+
+const animatedComponents = makeAnimated();
+
+const getStatusSelectStyles = (status: SelectStatus, { colors }: Theme) => {
+  if (['success', 'warning', 'error'].includes(status)) return { borderColor: colors[status] };
+  if (status === 'loading') {
+    return {
+      borderColor: `${colors.border} !important`,
+      backgroundColor: colors.background,
+      cursor: 'not-allowed',
+    };
+  }
+  return {};
+};
+
+const SelectBase = styled(ReactSelect)<SelectProps>(props => {
+  const { theme, status } = props;
   const { colors, fontSizes, fontWeights, lineHeights, shadows, radii, transitions } = theme;
 
   return {
     '.ck-select__control': {
       borderColor: colors.border,
       minHeight: 40,
+      boxShadow: 'none',
+      ...getStatusSelectStyles(status!, theme),
 
       '&:hover': {
         borderColor: tint(0.4, colors.primary),
@@ -26,8 +55,6 @@ const SelectBase = styled(ReactSelect)(props => {
         borderColor: tint(0.4, colors.primary),
 
         '.ck-select__dropdown-indicator': {
-          paddingRight: 4,
-          paddingLeft: 8,
           transform: 'rotate(180deg)',
           color: colors.fontRegular,
         },
@@ -60,8 +87,6 @@ const SelectBase = styled(ReactSelect)(props => {
       color: colors.fontPlaceholder,
 
       '&.ck-select__dropdown-indicator': {
-        paddingRight: 8,
-        paddingLeft: 4,
         transition: `transform 0.3s ${transitions.easeOutQuad}`,
 
         svg: {
@@ -71,15 +96,11 @@ const SelectBase = styled(ReactSelect)(props => {
       },
 
       '&.ck-select__clear-indicator': {
-        paddingRight: 4,
-        paddingLeft: 4,
+        fontSize: fontSizes.body1,
         color: colors.gray,
-        cursor: 'pointer',
-        opacity: 0.56,
-        transition: `opacity 0.3s ${transitions.easeOutQuart}`,
 
-        '&:hover': {
-          opacity: 0.8,
+        '.ck-select__clear-indicator-icon': {
+          transition: `opacity 0.3s ${transitions.easeOutQuart}`,
         },
       },
     },
@@ -147,6 +168,157 @@ const SelectBase = styled(ReactSelect)(props => {
   };
 });
 
-export const Select = ({ className, ...props }: SelectProps) => {
-  return <SelectBase {...props} className={classnames('ck-select', className)} classNamePrefix="ck-select" />;
+const LoadingIndicatorBase = styled.div<LoadingIndicatorProps>(props => {
+  const { hasValue, selectProps } = props;
+
+  const hasClearIcon = hasValue && selectProps.isClearable;
+
+  return {
+    display: 'flex',
+    alignItems: 'center',
+
+    '.ck-select__clear-indicator-icon': {
+      display: hasClearIcon ? 'block' : 'none',
+      cursor: 'pointer',
+      opacity: 0.56,
+
+      '&:hover': {
+        opacity: 0.8,
+      },
+    },
+
+    '.ck-icon': {
+      marginLeft: 8,
+    },
+  };
+});
+
+const getIcon = (status: SelectStatus) => {
+  switch (status) {
+    case 'success':
+      return <Icon icon={CheckCircleSolid} color="success" />;
+    case 'loading':
+      return <Icon icon={SpinnerSolid} color="info" spin />;
+    case 'error':
+      return <Icon icon={ExclamationCircleSolid} color="error" />;
+    case 'warning':
+      return <Icon icon={ExclamationTriangleSolid} color="warning" />;
+    default: {
+      return null;
+    }
+  }
 };
+
+const LoadingIndicator = (props: LoadingIndicatorProps) => {
+  console.log(props);
+  return (
+    <LoadingIndicatorBase {...props} className="ck-select__indicator ck-select__clear-indicator">
+      <div className="ck-select__clear-indicator-icon" onClick={props.clearValue}>
+        ×
+      </div>
+      {getIcon(props.selectProps.status)}
+    </LoadingIndicatorBase>
+  );
+};
+
+export const Select = ({ className, ...props }: SelectProps) => {
+  const { status } = props;
+
+  const customProps = {
+    menuIsOpen: status === 'loading' ? false : undefined,
+    isSearchable: status === 'loading' ? false : undefined,
+  };
+
+  return (
+    <SelectBase
+      {...props}
+      {...customProps}
+      components={{ ...animatedComponents, LoadingIndicator }}
+      className={classnames('ck-select', className)}
+      classNamePrefix="ck-select"
+      isLoading
+    />
+  );
+};
+
+Select.defaultProps = {
+  status: 'default',
+};
+
+/********************
+  Field component
+********************/
+
+export interface SelectFieldProps extends HTMLAttributes<HTMLDivElement> {
+  label?: string;
+  error?: string;
+  help?: string;
+  children: ReactElement<SelectProps>;
+}
+
+type FieldBaseProps = Omit<SelectFieldProps, 'children'>;
+
+const getHtmlFor = (children: ReactElement<SelectProps>): string => {
+  console.log(children);
+  return 'xxx';
+};
+
+const FieldBase = styled.div<FieldBaseProps>(props => {
+  const { theme, error } = props;
+  const { colors, fontSizes, fontWeights, lineHeights } = theme;
+
+  const errorSelect = error ? { borderColor: colors.error } : {};
+
+  return {
+    display: 'flex',
+    flexDirection: 'column',
+
+    '.ck-select-label': {
+      display: 'inline-block',
+      paddingLeft: 4,
+      paddingBottom: 4,
+      fontSize: fontSizes.label,
+      lineHeight: lineHeights.label,
+      fontWeight: fontWeights.bold,
+      color: colors.fontPrimary,
+    },
+
+    '.ck-select-error, .ck-select-help': {
+      display: 'inline-block',
+      paddingLeft: 4,
+      paddingTop: 4,
+      fontSize: fontSizes.small,
+      lineHeight: lineHeights.small,
+      fontWeight: fontWeights.regular,
+      color: colors.fontDisabled,
+    },
+
+    '.ck-select-error': {
+      color: colors.error,
+    },
+
+    '.ck-select': {
+      ...errorSelect,
+    },
+  };
+});
+
+const Field = ({ children, className, ...props }: SelectFieldProps) => {
+  const { label, error, help } = props;
+  const htmlFor = getHtmlFor(children);
+
+  return (
+    <FieldBase {...props} className={classnames(className, 'ck-select-field')}>
+      {label && (
+        <label htmlFor={htmlFor} className="ck-select-label">
+          {label}
+        </label>
+      )}
+      {children}
+      {error && <small className="ck-select-error">{error}</small>}
+      {help && <small className="ck-select-help">{help}</small>}
+    </FieldBase>
+  );
+};
+
+Select.Field = Field;
