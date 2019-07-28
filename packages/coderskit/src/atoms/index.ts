@@ -13,3 +13,4 @@ export * from './LinearProgress';
 export * from './Select';
 export * from './Badge';
 export * from './TextArea';
+export * from './Avatar';
