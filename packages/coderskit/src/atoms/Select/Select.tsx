@@ -51,8 +51,8 @@ const SelectBase = styled(ReactSelect)<SelectProps>(props => {
       },
 
       '&.ck-select__control--menu-is-open': {
-        boxShadow: `0 0 0 4px ${tint(0.8, colors.primary)}`,
-        borderColor: tint(0.4, colors.primary),
+        boxShadow: `0 0 0 2px ${colors.primary}`,
+        borderColor: colors.primary,
 
         '.ck-select__dropdown-indicator': {
           transform: 'rotate(180deg)',

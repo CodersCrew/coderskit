@@ -12,6 +12,12 @@ const positions = {
 
 const colors = Object.keys(themeColors).reduce((a, key) => ({ ...a, [key]: key }), {});
 
+const baseStyle = {
+  backgroundColor: 'lightGrey',
+  width: 40,
+  height: 40,
+};
+
 storiesOf('Atoms', module).add('Badge', () => {
   const props = {
     value: number('value', 3),
@@ -25,47 +31,19 @@ storiesOf('Atoms', module).add('Badge', () => {
   return (
     <div style={{ display: 'flex' }}>
       <Badge {...rest} value={value}>
-        <Button>Badge button</Button>
+        <div style={{ ...baseStyle, borderRadius: 4 }} />
       </Badge>
       <Badge {...rest} value={value} circle style={{ marginLeft: 24 }}>
-        <div
-          style={{
-            background: 'url("https://randomuser.me/api/portraits/women/76.jpg") no-repeat center/cover',
-            width: 40,
-            height: 40,
-            borderRadius: '100%',
-          }}
-        />
+        <div style={{ ...baseStyle, borderRadius: '100%' }} />
       </Badge>
       <Badge {...rest} value={<Icon src="check-solid.svg" />} style={{ marginLeft: 24 }}>
-        <div
-          style={{
-            background: 'url("https://randomuser.me/api/portraits/women/82.jpg") no-repeat center/cover',
-            width: 40,
-            height: 40,
-            borderRadius: 4,
-          }}
-        />
+        <div style={{ ...baseStyle, borderRadius: 4 }} />
       </Badge>
       <Badge {...rest} style={{ marginLeft: 24 }}>
-        <div
-          style={{
-            backgroundColor: 'lightGrey',
-            width: 40,
-            height: 40,
-            borderRadius: 4,
-          }}
-        />
+        <div style={{ ...baseStyle, borderRadius: 4 }} />
       </Badge>
       <Badge {...rest} style={{ marginLeft: 24 }} circle>
-        <div
-          style={{
-            backgroundColor: 'lightGrey',
-            width: 40,
-            height: 40,
-            borderRadius: '100%',
-          }}
-        />
+        <div style={{ ...baseStyle, borderRadius: '100%' }} />
       </Badge>
     </div>
   );

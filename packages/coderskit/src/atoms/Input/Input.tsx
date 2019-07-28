@@ -48,7 +48,7 @@ const InputBase = styled.input<InputProps>(props => {
 
     '&:focus:not(:disabled)': {
       borderColor: colors.primary,
-      boxShadow: `0 0 0 4px ${tint(0.8, colors.primary)}`,
+      boxShadow: `0 0 0 2px ${colors.primary}`,
     },
 
     '&:disabled, &:disabled::placeholder': {

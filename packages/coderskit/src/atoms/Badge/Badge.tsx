@@ -29,17 +29,17 @@ const useClientRect = (updaters: any[] = []): [ClientRect | undefined, any] => {
 };
 
 const getPosition = (position: BadgePosition, circle: boolean, badgeWidth: number, value?: BadgeValue) => {
-  let [valueY, valueX] = [10, 10];
+  let [valueY, valueX] = [9, 9];
 
   if (typeof value === 'undefined') {
-    valueY -= circle ? 6 : 4;
+    valueY -= circle ? 5 : 4;
     valueX -= circle ? 6 : 4;
   } else if (badgeWidth) {
     valueX = valueX + badgeWidth / 2 - 10;
   }
 
   if (circle) {
-    valueY -= 3;
+    valueY -= 4;
     valueX -= 2;
   }
 
