@@ -34,13 +34,13 @@ const IconContainer = styled.div<IconProps>(props => {
     color: colors[color!],
     width: `${size}px`,
     height: `${size}px`,
+    minWidth: `${size}px`,
+    minHeight: `${size}px`,
     visibility: visible ? 'visible' : 'hidden',
 
     '.isvg > svg, svg': {
       width: '100%',
       height: '100%',
-      minWidth: `${size}px`,
-      minHeight: `${size}px`,
       animation: `${spinKeyframes} 1s linear`,
       animationIterationCount: spin ? 'infinite' : 0,
       cursor: hoverable ? 'pointer' : 'inherit',
