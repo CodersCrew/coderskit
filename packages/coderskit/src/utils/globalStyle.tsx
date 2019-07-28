@@ -150,7 +150,7 @@ const normalize = css`
 
 const customize = css`
   body {
-    font-family: 'Lato', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    font-family: 'Open Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   }
 
   p {

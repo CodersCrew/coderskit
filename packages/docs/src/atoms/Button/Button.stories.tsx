@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { select, boolean } from '@storybook/addon-knobs';
-import { Button, colors as themeColors } from 'coderskit';
+import { Button, Icon, colors as themeColors } from 'coderskit';
 import readme from './Button.md';
 
 const variants = {
@@ -40,5 +40,18 @@ storiesOf('Atoms', module)
       as: select('as', elements, 'button') as keyof typeof elements,
     };
 
-    return <Button {...props}>Example Button</Button>;
+    const iconColor = props.variant === 'contained' ? 'white' : props.color;
+
+    return (
+      <div style={{ display: 'flex' }}>
+        <Button {...props}>Simple Button</Button>
+        <Button {...props} style={{ marginLeft: 24 }}>
+          <Icon src="smile-beam-solid.svg" color={iconColor} style={{ marginRight: 8 }} />
+          Button with icon
+        </Button>
+        <Button {...props} style={{ marginLeft: 24 }}>
+          <Icon src="smile-beam-solid.svg" color={iconColor} />
+        </Button>
+      </div>
+    );
   });

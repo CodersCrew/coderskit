@@ -17,18 +17,31 @@ export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
   [key: string]: any;
 }
 
-const ButtonBase = styled.button<ButtonProps>(props => {
-  const { theme, size } = props;
+interface ButtonBaseProps extends ButtonProps {
+  iconAsChild: boolean;
+}
+
+const deepGet = (obj: any, keys: string[]) => keys.reduce((xs, x) => (xs && xs[x] ? xs[x] : null), obj);
+
+const ButtonBase = styled.button<ButtonBaseProps>(props => {
+  const { theme, size, iconAsChild } = props;
   const { colors, fontSizes, fontWeights, lineHeights, radii, transitions } = theme;
 
   const color = colors[props.color!];
+  const paddingX = iconAsChild ? 0 : size === 'small' ? 15 : 23;
+  const height = size === 'default' ? 40 : size === 'large' ? 48 : 32;
+  const width = iconAsChild ? height : undefined;
 
   return {
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
     outline: 'none',
-    padding: size === 'small' ? '7px 15px' : '11px 23px',
+    height,
+    width,
+    padding: 0,
+    paddingLeft: paddingX,
+    paddingRight: paddingX,
     border: `1px solid ${color}`,
     borderRadius: radii.small,
     fontSize: size === 'large' ? fontSizes.button1 : fontSizes.button2,
@@ -98,9 +111,11 @@ const TextButton = styled(ButtonBase)(props => {
   const { colors } = theme;
 
   const color = colors[props.color!];
+  const paddingX = size === 'small' ? 7 : 11;
 
   return {
-    padding: size === 'small' ? 7 : 11,
+    paddingLeft: paddingX,
+    paddingRight: paddingX,
     backgroundColor: 'transparent',
     borderColor: 'transparent',
 
@@ -123,15 +138,17 @@ const TextButton = styled(ButtonBase)(props => {
   };
 });
 
-export const Button = (props: ButtonProps) => {
-  const { variant, children } = props;
+export const Button = ({ children, ...props }: ButtonProps) => {
+  const { variant } = props;
   const className = classnames(props.className, 'ck-button');
+
+  const iconAsChild = deepGet(children, ['type', 'displayName']) === 'Icon';
 
   const ButtonContainer =
     variant === 'contained' ? ContainedButton : variant === 'outlined' ? OutlinedButton : TextButton;
 
   return (
-    <ButtonContainer {...props} className={className}>
+    <ButtonContainer {...props} className={className} iconAsChild={iconAsChild}>
       {children}
     </ButtonContainer>
   );

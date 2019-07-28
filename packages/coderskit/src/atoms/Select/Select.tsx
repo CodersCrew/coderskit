@@ -132,8 +132,6 @@ const SelectBase = styled(ReactSelect)<SelectProps>(props => {
       backgroundColor: colors.border,
 
       '.ck-select__multi-value__label': {
-        position: 'relative',
-        top: -1,
         padding: '0 4px 0 8px',
         fontSize: fontSizes.body2,
         lineHeight: lineHeights.body2,

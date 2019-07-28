@@ -76,3 +76,5 @@ Icon.defaultProps = {
   hoverable: false,
   visible: true,
 };
+
+Icon.displayName = 'Icon';
