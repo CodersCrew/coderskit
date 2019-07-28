@@ -2,11 +2,15 @@ import React, { HTMLAttributes } from 'react';
 import styled from '@emotion/styled';
 import classnames from 'classnames';
 
+// FIXME: Użyłbym pełnego słowa 'image' zamiast 'img'.
 export type AvatarVariant = 'img' | 'text';
+// FIXME: Żeby ułatwić sobie kod myślę, że tutaj wystarczy, aby size był typu number. Będzie większa customizowalność komponentu.
 export type AvatarSize = 'tiny' | 'small' | 'default' | 'large';
 export type AvatarShape = 'circle' | 'square';
+// FIXME: W przypadku pojedynczych typów wystarczy, że użyjesz ich bezpośrednio w interfejsie
 export type AvatarUrl = 'string';
 
+// FIXME: Warto, żeby wszsytkie elementy komponentu były opcjonalne. Żeby to osiągnąć możesz użyć defaultProps komponentu Avatar.
 export interface AvatarProps extends HTMLAttributes<any> {
   variant: AvatarVariant;
   size: AvatarSize;
@@ -24,6 +28,7 @@ const AvatarBase = styled.div<AvatarProps>(props => {
     justifyContent: 'center',
     outline: 'none',
     border: 'none',
+    // FIXME: Dla circle możesz po prostu określić radius jako 100%.
     borderRadius:
       props.shape === 'circle'
         ? '20px'
@@ -46,6 +51,7 @@ const AvatarText = styled(AvatarBase)(({ ...props }) => {
     backgroundColor: colors.primary,
     color: colors.white,
     lineHeight: size === 'tiny' || 'small' ? lineHeights.caption1 : lineHeights.body1,
+    // FIXME: Tę logikę lepiej przenieść do osobnej funkcji, ktor przyjmie size i theme.
     fontSize:
       size === 'tiny'
         ? fontSizes.caption2
@@ -60,6 +66,7 @@ const AvatarText = styled(AvatarBase)(({ ...props }) => {
   };
 });
 
+// FIXME: Tutaj nie musisz przyjmować props jeśli z nich nie korzystasz
 const AvatarImg = styled(AvatarBase)(({ ...props }) => {
   return {
     background: "url('https://randomuser.me/api/portraits/men/52.jpg')",
