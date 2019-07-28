@@ -19,10 +19,10 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   dimensions?: InputDimensions;
 }
 
-const getDimentions = (dimensions: InputDimensions, { fontSizes: { body1, body2 } }: Theme) => {
-  if (dimensions === 'large') return { height: 48, fontSize: body1, padding: '0 16px' };
-  if (dimensions === 'small') return { height: 32, fontSize: body2, padding: '0 8px' };
-  return { height: 40, fontSize: body2, padding: '0 12px' };
+const getDimentions = (dimensions: InputDimensions, { fontSizes, lineHeights }: Theme) => {
+  if (dimensions === 'large') return { fontSize: fontSizes.body1, lineHeight: lineHeights.body1, padding: '11px 15px' };
+  if (dimensions === 'small') return { fontSize: fontSizes.body2, lineHeight: lineHeights.body2, padding: '3px 7px' };
+  return { fontSize: fontSizes.body2, lineHeight: lineHeights.body2, padding: '7px 11px' };
 };
 
 const InputBase = styled.input<InputProps>(props => {
