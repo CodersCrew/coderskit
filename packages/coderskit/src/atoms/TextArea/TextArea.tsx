@@ -1,8 +1,8 @@
-import React, { InputHTMLAttributes, HTMLAttributes, ReactElement, ReactNode } from 'react';
+import React, { TextareaHTMLAttributes, ReactElement, ReactNode, HTMLAttributes } from 'react';
 import styled from '@emotion/styled';
-import { tint } from 'polished';
 import classnames from 'classnames';
-import { Theme, Icon } from '../..';
+import { tint } from 'polished';
+import { Icon, Theme } from '../..';
 import { Label } from '../../atoms/Label/Label';
 import { FieldMessage } from '../../atoms/FieldMessage/FieldMessage';
 
@@ -11,25 +11,23 @@ import ExclamationCircleSolid from '../../icons/ExclamationCircleSolid';
 import CheckCircleSolid from '../../icons/CheckCircleSolid';
 import ExclamationTriangleSolid from '../../icons/ExclamationTriangleSolid';
 
-/********************
-  Input component
-********************/
+export type TextAreaDimensions = 'small' | 'default' | 'large';
 
-export type InputDimensions = 'small' | 'default' | 'large';
-
-export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  dimensions?: InputDimensions;
+export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  dimensions?: TextAreaDimensions;
+  resize?: 'none' | 'both' | 'horizontal' | 'vertical';
 }
 
-const getDimentions = (dimensions: InputDimensions, { fontSizes, lineHeights }: Theme) => {
+const getDimentions = (dimensions: TextAreaDimensions, { fontSizes, lineHeights }: Theme) => {
   if (dimensions === 'large') return { fontSize: fontSizes.body1, lineHeight: lineHeights.body1, padding: '11px 15px' };
   if (dimensions === 'small') return { fontSize: fontSizes.body2, lineHeight: lineHeights.body2, padding: '3px 7px' };
   return { fontSize: fontSizes.body2, lineHeight: lineHeights.body2, padding: '7px 11px' };
 };
 
-const InputBase = styled.input<InputProps>(props => {
-  const { theme, dimensions } = props;
+const TextAreaBase = styled.textarea<TextAreaProps>(props => {
+  const { theme, dimensions, resize } = props;
   const { colors, radii } = theme;
+  console.log(resize);
 
   return {
     border: `1px solid ${colors.border}`,
@@ -37,6 +35,7 @@ const InputBase = styled.input<InputProps>(props => {
     backgroundColor: colors.white,
     outline: 'none',
     color: colors.fontRegular,
+    resize,
     ...getDimentions(dimensions!, theme),
 
     '&::placeholder': {
@@ -60,36 +59,37 @@ const InputBase = styled.input<InputProps>(props => {
   };
 });
 
-export const Input = ({ className, ...props }: InputProps) => {
-  return <InputBase {...props} className={classnames(className, 'ck-input')} id={props.id || props.name} />;
+export const TextArea = ({ className, children, ...props }: TextAreaProps) => {
+  return (
+    <TextAreaBase {...props} className={classnames(className, 'ck-text-area')} id={props.id || props.name}>
+      {children}
+    </TextAreaBase>
+  );
 };
 
-Input.defaultProps = {
+TextArea.defaultProps = {
   dimensions: 'default',
+  resize: 'none',
 };
 
-Input.Label = Label;
-Input.Message = FieldMessage;
+TextArea.Label = Label;
+TextArea.Message = FieldMessage;
 
-/********************
-  Status component
-********************/
+export type TextAreaStatus = 'error' | 'warning' | 'success' | 'loading' | 'default';
 
-export type InputStatus = 'error' | 'warning' | 'success' | 'loading' | 'default';
-
-export interface InputStatusProps extends HTMLAttributes<HTMLDivElement> {
-  status?: InputStatus;
+export interface TextAreaStatusProps extends HTMLAttributes<HTMLDivElement> {
+  status?: TextAreaStatus;
   noIcon?: boolean;
-  children: ReactElement<InputProps>;
+  children: ReactElement<TextAreaProps>;
 }
 
 interface StatusBaseProps extends HTMLAttributes<HTMLDivElement> {
-  status?: InputStatus;
-  dimensions: InputDimensions;
+  status?: TextAreaStatus;
+  dimensions: TextAreaDimensions;
   children: ReactNode;
 }
 
-const getIcon = (status: InputStatus) => {
+const getIcon = (status: TextAreaStatus) => {
   switch (status) {
     case 'success':
       return <Icon icon={CheckCircleSolid} color="success" />;
@@ -105,7 +105,7 @@ const getIcon = (status: InputStatus) => {
   }
 };
 
-const getStatusInputStyles = (status: InputStatus, { colors }: Theme) => {
+const getStatusTextAreaStyles = (status: TextAreaStatus, { colors }: Theme) => {
   if (['success', 'warning', 'error'].includes(status)) return { borderColor: colors[status] };
   if (status === 'loading') {
     return {
@@ -120,10 +120,10 @@ const getStatusInputStyles = (status: InputStatus, { colors }: Theme) => {
   return {};
 };
 
-const getRightValue = (dimensions: InputDimensions) => {
-  if (dimensions === 'large') return { right: 16 };
-  if (dimensions === 'small') return { right: 8 };
-  return { right: 12 };
+const getPositionValue = (dimensions: TextAreaDimensions) => {
+  if (dimensions === 'large') return { top: 12, right: 16 };
+  if (dimensions === 'small') return { top: 4, right: 8 };
+  return { top: 12, right: 12 };
 };
 
 const StatusBase = styled.div<StatusBaseProps>(props => {
@@ -133,20 +133,18 @@ const StatusBase = styled.div<StatusBaseProps>(props => {
     position: 'relative',
     width: 'fit-content',
 
-    '.ck-input': {
-      ...getStatusInputStyles(status!, theme),
+    '.ck-text-area': {
+      ...getStatusTextAreaStyles(status!, theme),
     },
 
     '.ck-icon': {
       position: 'absolute',
-      top: 0,
-      height: '100%',
-      ...getRightValue(dimensions),
+      ...getPositionValue(dimensions),
     },
   };
 });
 
-const Status = ({ children, className, ...props }: InputStatusProps) => {
+const Status = ({ children, className, ...props }: TextAreaStatusProps) => {
   const dimensions = children.props.dimensions!;
 
   if (props.status === 'loading') {
@@ -154,7 +152,7 @@ const Status = ({ children, className, ...props }: InputStatusProps) => {
   }
 
   return (
-    <StatusBase {...props} className={classnames(className, 'ck-input-status')} dimensions={dimensions}>
+    <StatusBase {...props} className={classnames(className, 'ck-text-area-status')} dimensions={dimensions}>
       {props.noIcon ? null : getIcon(props.status!)}
       {children}
     </StatusBase>
@@ -166,15 +164,11 @@ Status.defaultProps = {
   noIcon: false,
 };
 
-Input.Status = Status;
+TextArea.Status = Status;
 
-/********************
-  Field component
-********************/
+export type TextAreaFieldProps = HTMLAttributes<HTMLDivElement>;
 
-export type InputFieldProps = HTMLAttributes<HTMLDivElement>;
-
-const FieldBase = styled.div<InputFieldProps>(() => {
+const FieldBase = styled.div<TextAreaFieldProps>(() => {
   return {
     display: 'flex',
     flexDirection: 'column',
@@ -182,12 +176,12 @@ const FieldBase = styled.div<InputFieldProps>(() => {
   };
 });
 
-const Field = ({ children, className, ...props }: InputFieldProps) => {
+const Field = ({ children, className, ...props }: TextAreaFieldProps) => {
   return (
-    <FieldBase {...props} className={classnames(className, 'ck-input-field')}>
+    <FieldBase {...props} className={classnames(className, 'ck-text-area-field')}>
       {children}
     </FieldBase>
   );
 };
 
-Input.Field = Field;
+TextArea.Field = Field;

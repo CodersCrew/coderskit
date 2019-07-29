@@ -1,7 +1,7 @@
 export * from './Button';
 export * from './Checkbox';
 export * from './Divider';
-export * from './ErrorMessage';
+export * from './FieldMessage';
 export * from './Icon';
 export * from './Input';
 export * from './Label';
@@ -12,3 +12,4 @@ export * from './Tooltip';
 export * from './LinearProgress';
 export * from './Select';
 export * from './Badge';
+export * from './TextArea';
