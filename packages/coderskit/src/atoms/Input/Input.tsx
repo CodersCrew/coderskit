@@ -3,6 +3,8 @@ import styled from '@emotion/styled';
 import { tint } from 'polished';
 import classnames from 'classnames';
 import { Theme, Icon } from '../..';
+import { Label } from '../../atoms/Label/Label';
+import { FieldMessage } from '../../atoms/FieldMessage/FieldMessage';
 
 import SpinnerSolid from '../../icons/SpinnerSolid';
 import ExclamationCircleSolid from '../../icons/ExclamationCircleSolid';
@@ -66,6 +68,9 @@ Input.defaultProps = {
   dimensions: 'default',
 };
 
+Input.Label = Label;
+Input.Message = FieldMessage;
+
 /********************
   Status component
 ********************/
@@ -74,6 +79,7 @@ export type InputStatus = 'error' | 'warning' | 'success' | 'loading' | 'default
 
 export interface InputStatusProps extends HTMLAttributes<HTMLDivElement> {
   status?: InputStatus;
+  noIcon?: boolean;
   children: ReactElement<InputProps>;
 }
 
@@ -149,7 +155,7 @@ const Status = ({ children, className, ...props }: InputStatusProps) => {
 
   return (
     <StatusBase {...props} className={classnames(className, 'ck-input-status')} dimensions={dimensions}>
-      {getIcon(props.status!)}
+      {props.noIcon ? null : getIcon(props.status!)}
       {children}
     </StatusBase>
   );
@@ -157,6 +163,7 @@ const Status = ({ children, className, ...props }: InputStatusProps) => {
 
 Status.defaultProps = {
   status: 'default',
+  noIcon: false,
 };
 
 Input.Status = Status;
@@ -165,81 +172,20 @@ Input.Status = Status;
   Field component
 ********************/
 
-export interface InputFieldProps extends HTMLAttributes<HTMLDivElement> {
-  label?: string;
-  error?: string;
-  help?: string;
-  children: any;
-}
+export type InputFieldProps = HTMLAttributes<HTMLDivElement>;
 
-const getHtmlFor = (children: any): string => {
-  const childrenDefaultProps = children.type.defaultProps;
-  const childrenProps = children.props;
-
-  // If we pass Input component as children
-  if (childrenDefaultProps.dimensions) {
-    return childrenProps.id || childrenProps.name;
-  }
-
-  // If we pass Status component as children
-  return childrenProps.children.props.id || childrenProps.children.props.name;
-};
-
-const FieldBase = styled.div<InputFieldProps>(props => {
-  const { theme, error } = props;
-  const { colors, fontSizes, fontWeights, lineHeights } = theme;
-
-  const errorInput = error ? { borderColor: colors.error } : {};
-
+const FieldBase = styled.div<InputFieldProps>(() => {
   return {
     display: 'flex',
     flexDirection: 'column',
     width: 'fit-content',
-
-    '.ck-input-label': {
-      display: 'inline-block',
-      paddingLeft: 4,
-      paddingBottom: 4,
-      fontSize: fontSizes.label,
-      lineHeight: lineHeights.label,
-      fontWeight: fontWeights.bold,
-      color: colors.fontPrimary,
-    },
-
-    '.ck-input-error, .ck-input-help': {
-      display: 'inline-block',
-      paddingLeft: 4,
-      paddingTop: 4,
-      fontSize: fontSizes.small,
-      lineHeight: lineHeights.small,
-      fontWeight: fontWeights.regular,
-      color: colors.fontDisabled,
-    },
-
-    '.ck-input-error': {
-      color: colors.error,
-    },
-
-    '.ck-input': {
-      ...errorInput,
-    },
   };
 });
 
 const Field = ({ children, className, ...props }: InputFieldProps) => {
-  const { label, error, help } = props;
-  const htmlFor = getHtmlFor(children);
-
   return (
     <FieldBase {...props} className={classnames(className, 'ck-input-field')}>
-      {label && (
-        <label htmlFor={htmlFor} className="ck-input-label">
-          {label}
-        </label>
-      )}
       {children}
-      {error && <small className="ck-input-error">{error}</small>}
-      {help && <small className="ck-input-help">{help}</small>}
     </FieldBase>
   );
 };

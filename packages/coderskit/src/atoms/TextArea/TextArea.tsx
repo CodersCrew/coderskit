@@ -3,6 +3,8 @@ import styled from '@emotion/styled';
 import classnames from 'classnames';
 import { tint } from 'polished';
 import { Icon, Theme } from '../..';
+import { Label } from '../../atoms/Label/Label';
+import { FieldMessage } from '../../atoms/FieldMessage/FieldMessage';
 
 import SpinnerSolid from '../../icons/SpinnerSolid';
 import ExclamationCircleSolid from '../../icons/ExclamationCircleSolid';
@@ -13,6 +15,7 @@ export type TextAreaDimensions = 'small' | 'default' | 'large';
 
 export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   dimensions?: TextAreaDimensions;
+  resize?: 'none' | 'both' | 'horizontal' | 'vertical';
 }
 
 const getDimentions = (dimensions: TextAreaDimensions, { fontSizes, lineHeights }: Theme) => {
@@ -22,8 +25,9 @@ const getDimentions = (dimensions: TextAreaDimensions, { fontSizes, lineHeights 
 };
 
 const TextAreaBase = styled.textarea<TextAreaProps>(props => {
-  const { theme, dimensions } = props;
+  const { theme, dimensions, resize } = props;
   const { colors, radii } = theme;
+  console.log(resize);
 
   return {
     border: `1px solid ${colors.border}`,
@@ -31,6 +35,7 @@ const TextAreaBase = styled.textarea<TextAreaProps>(props => {
     backgroundColor: colors.white,
     outline: 'none',
     color: colors.fontRegular,
+    resize,
     ...getDimentions(dimensions!, theme),
 
     '&::placeholder': {
@@ -64,12 +69,17 @@ export const TextArea = ({ className, children, ...props }: TextAreaProps) => {
 
 TextArea.defaultProps = {
   dimensions: 'default',
+  resize: 'none',
 };
+
+TextArea.Label = Label;
+TextArea.Message = FieldMessage;
 
 export type TextAreaStatus = 'error' | 'warning' | 'success' | 'loading' | 'default';
 
 export interface TextAreaStatusProps extends HTMLAttributes<HTMLDivElement> {
   status?: TextAreaStatus;
+  noIcon?: boolean;
   children: ReactElement<TextAreaProps>;
 }
 
@@ -110,10 +120,10 @@ const getStatusTextAreaStyles = (status: TextAreaStatus, { colors }: Theme) => {
   return {};
 };
 
-const getRightValue = (dimensions: TextAreaDimensions) => {
-  if (dimensions === 'large') return { right: 16 };
-  if (dimensions === 'small') return { right: 8 };
-  return { right: 12 };
+const getPositionValue = (dimensions: TextAreaDimensions) => {
+  if (dimensions === 'large') return { top: 12, right: 16 };
+  if (dimensions === 'small') return { top: 4, right: 8 };
+  return { top: 12, right: 12 };
 };
 
 const StatusBase = styled.div<StatusBaseProps>(props => {
@@ -129,8 +139,7 @@ const StatusBase = styled.div<StatusBaseProps>(props => {
 
     '.ck-icon': {
       position: 'absolute',
-      top: 0,
-      ...getRightValue(dimensions),
+      ...getPositionValue(dimensions),
     },
   };
 });
@@ -144,7 +153,7 @@ const Status = ({ children, className, ...props }: TextAreaStatusProps) => {
 
   return (
     <StatusBase {...props} className={classnames(className, 'ck-text-area-status')} dimensions={dimensions}>
-      {getIcon(props.status!)}
+      {props.noIcon ? null : getIcon(props.status!)}
       {children}
     </StatusBase>
   );
@@ -152,6 +161,27 @@ const Status = ({ children, className, ...props }: TextAreaStatusProps) => {
 
 Status.defaultProps = {
   status: 'default',
+  noIcon: false,
 };
 
 TextArea.Status = Status;
+
+export type TextAreaFieldProps = HTMLAttributes<HTMLDivElement>;
+
+const FieldBase = styled.div<TextAreaFieldProps>(() => {
+  return {
+    display: 'flex',
+    flexDirection: 'column',
+    width: 'fit-content',
+  };
+});
+
+const Field = ({ children, className, ...props }: TextAreaFieldProps) => {
+  return (
+    <FieldBase {...props} className={classnames(className, 'ck-text-area-field')}>
+      {children}
+    </FieldBase>
+  );
+};
+
+TextArea.Field = Field;
