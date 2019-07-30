@@ -48,6 +48,7 @@
     "rc-progress": "^2.5.1",
     "rc-tooltip": "^3.7.3",
     "rc-util": "^4.8.4",
+    "react-dropzone": "^10.1.7",
     "react-inlinesvg": "^1.1.1",
     "react-modal": "^3.9.1",
     "react-select": "^3.0.4",
