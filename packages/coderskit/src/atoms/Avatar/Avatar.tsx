@@ -17,15 +17,7 @@ const AvatarBase = styled.div<AvatarProps>(props => {
   const { shadows } = props.theme;
 
   const findRadius = (shape?: string, size?: number) => {
-    let radius;
-
-    if (shape === 'circle') {
-      radius = '100%';
-//} else if ((shape === 'square' && size === 1) || 2) {
-      //radius = '4px';
-    } else {
-      radius === '8px';
-    }
+    const radius = shape === 'circle' ? '100%' : size === 1 ? '4px' : size === 2 ? '4px' : '8px';
     return radius;
   };
 
