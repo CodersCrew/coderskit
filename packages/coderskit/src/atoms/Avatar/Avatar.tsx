@@ -2,25 +2,47 @@ import React, { HTMLAttributes } from 'react';
 import styled from '@emotion/styled';
 import classnames from 'classnames';
 
-// FIXME: Użyłbym pełnego słowa 'image' zamiast 'img'.
-export type AvatarVariant = 'img' | 'text';
-// FIXME: Żeby ułatwić sobie kod myślę, że tutaj wystarczy, aby size był typu number. Będzie większa customizowalność komponentu.
-export type AvatarSize = 'tiny' | 'small' | 'default' | 'large';
+export type AvatarVariant = 'photo' | 'text';
 export type AvatarShape = 'circle' | 'square';
-// FIXME: W przypadku pojedynczych typów wystarczy, że użyjesz ich bezpośrednio w interfejsie
-export type AvatarUrl = 'string';
 
-// FIXME: Warto, żeby wszsytkie elementy komponentu były opcjonalne. Żeby to osiągnąć możesz użyć defaultProps komponentu Avatar.
 export interface AvatarProps extends HTMLAttributes<any> {
-  variant: AvatarVariant;
-  size: AvatarSize;
-  shape: AvatarShape;
-  url?: AvatarUrl;
+  variant?: AvatarVariant;
+  size?: number;
+  shape?: AvatarShape;
+  image?: string;
   children?: React.ReactNode;
 }
 
 const AvatarBase = styled.div<AvatarProps>(props => {
   const { shadows } = props.theme;
+
+  const findRadius = (shape?: string, size?: number) => {
+    let radius;
+
+    if (shape === 'circle') {
+      radius = '100%';
+//} else if ((shape === 'square' && size === 1) || 2) {
+      //radius = '4px';
+    } else {
+      radius === '8px';
+    }
+    return radius;
+  };
+
+  const findDimensions = (size?: number) => {
+    let dimensions;
+
+    if (size === 1) {
+      dimensions = '16px';
+    } else if (size === 2) {
+      dimensions = '24px';
+    } else if (size === 3) {
+      dimensions = '32px';
+    } else if (size === 4) {
+      dimensions = '40px';
+    }
+    return dimensions;
+  };
 
   return {
     display: 'flex',
@@ -28,61 +50,99 @@ const AvatarBase = styled.div<AvatarProps>(props => {
     justifyContent: 'center',
     outline: 'none',
     border: 'none',
-    // FIXME: Dla circle możesz po prostu określić radius jako 100%.
-    borderRadius:
-      props.shape === 'circle'
-        ? '20px'
-        : (props.shape === 'square' && props.size === 'tiny') || 'small'
-        ? '4px'
-        : '8px',
-    width:
-      props.size === 'tiny' ? '16px' : props.size === 'small' ? '24px' : props.size === 'default' ? '32px' : '40px',
-    height:
-      props.size === 'tiny' ? '16px' : props.size === 'small' ? '24px' : props.size === 'default' ? '32px' : '40px',
+    borderRadius: findRadius(props.shape, props.size),
+    width: findDimensions(props.size),
+    height: findDimensions(props.size),
     boxShadow: shadows.xs,
   };
 });
 
-const AvatarText = styled(AvatarBase)(({ ...props }) => {
+const AvatarText = styled(AvatarBase)(props => {
   const { colors, fontSizes, lineHeights, fontWeights } = props.theme;
-  const { size } = props;
+
+  const findLineHeight = (size?: number, theme?: any) => {
+    theme.lineHeights = lineHeights;
+    let lineHeight;
+
+    if (size === 1) {
+      lineHeight = lineHeights.caption1;
+    } else if (size === 2) {
+      lineHeight = lineHeights.caption1;
+    } else if (size === 3) {
+      lineHeight = lineHeights.body1;
+    } else if (size === 4) {
+      lineHeight = lineHeights.body1;
+    }
+    return lineHeight;
+  };
+
+  const findFontSize = (size?: number, theme?: any) => {
+    theme.fontSizes = fontSizes;
+    let fontSize;
+
+    if (size === 1) {
+      fontSize = fontSizes.caption2;
+    } else if (size === 2) {
+      fontSize = fontSizes.caption1;
+    } else if (size === 3) {
+      fontSize = fontSizes.body2;
+    } else if (size === 4) {
+      fontSize = fontSizes.h3;
+    }
+    return fontSize;
+  };
+
+  const findFontWeight = (size?: number, theme?: any) => {
+    theme.fontWeights = fontWeights;
+    let fontWeight;
+
+    if (size === 1) {
+      fontWeight = fontWeights.medium;
+    } else if (size === 2) {
+      fontWeight = fontWeights.medium;
+    } else if (size === 3) {
+      fontWeight = fontWeights.bold;
+    } else if (size === 4) {
+      fontWeight = fontWeights.bold;
+    }
+    return fontWeight;
+  };
 
   return {
     backgroundColor: colors.primary,
     color: colors.white,
-    lineHeight: size === 'tiny' || 'small' ? lineHeights.caption1 : lineHeights.body1,
-    // FIXME: Tę logikę lepiej przenieść do osobnej funkcji, ktor przyjmie size i theme.
-    fontSize:
-      size === 'tiny'
-        ? fontSizes.caption2
-        : size === 'small'
-        ? fontSizes.caption1
-        : size === 'default'
-        ? fontSizes.body2
-        : fontSizes.h3,
-    fontWeight: size === 'tiny' || 'small' ? fontWeights.medium : fontWeights.bold,
+    lineHeight: findLineHeight(props.size, props.theme),
+    fontSize: findFontSize(props.size, props.theme),
+    fontWeight: findFontWeight(props.size, props.theme),
     textTransform: 'uppercase',
     textAlign: 'center',
   };
 });
 
-// FIXME: Tutaj nie musisz przyjmować props jeśli z nich nie korzystasz
-const AvatarImg = styled(AvatarBase)(({ ...props }) => {
+const AvatarImg = styled(AvatarBase)(props => {
   return {
-    background: "url('https://randomuser.me/api/portraits/men/52.jpg')",
+    background: `url(${props.image})`,
     backgroundSize: 'cover',
     color: 'transparent',
   };
 });
 
 export const Avatar = (props: AvatarProps) => {
-  const className = classnames(props.className, 'cc-avatar');
+  const className = classnames(props.className, 'ck-avatar');
 
-  const AvatarContainer = props.variant === 'img' ? AvatarImg : AvatarText;
+  const AvatarContainer = props.variant === 'photo' ? AvatarImg : AvatarText;
 
   return (
     <AvatarContainer {...props} className={className}>
       {props.children}
     </AvatarContainer>
   );
+};
+
+Avatar.defaultProps = {
+  variant: 'photo',
+  size: 3,
+  shape: 'circle',
+  children: '',
+  image: 'https://randomuser.me/api/portraits/men/52.jpg',
 };
