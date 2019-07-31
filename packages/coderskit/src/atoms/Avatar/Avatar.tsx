@@ -15,25 +15,30 @@ export interface AvatarProps extends HTMLAttributes<any> {
 
 const AvatarBase = styled.div<AvatarProps>(props => {
   const { shadows } = props.theme;
+  const { size, shape } = props;
 
-  const findRadius = (shape?: string, size?: number) => {
-    const radius = shape === 'circle' ? '100%' : size === 1 ? '4px' : size === 2 ? '4px' : '8px';
-    return radius;
+  const calcRadius = () => {
+    if (shape === 'circle') {
+      return '100%';
+    } else if (size === 1 || size === 2) {
+      return '4px';
+    } else {
+      // handles size === 3, size === 4 and any other size
+      return '8px';
+    }
   };
 
-  const findDimensions = (size?: number) => {
-    let dimensions;
-
+  const calcDimensions = () => {
     if (size === 1) {
-      dimensions = '16px';
+      return '16px';
     } else if (size === 2) {
-      dimensions = '24px';
+      return '24px';
     } else if (size === 3) {
-      dimensions = '32px';
-    } else if (size === 4) {
-      dimensions = '40px';
+      return '32px';
+    } else {
+      // handles size === 4 and other size
+      return '40px';
     }
-    return dimensions;
   };
 
   return {
@@ -42,70 +47,54 @@ const AvatarBase = styled.div<AvatarProps>(props => {
     justifyContent: 'center',
     outline: 'none',
     border: 'none',
-    borderRadius: findRadius(props.shape, props.size),
-    width: findDimensions(props.size),
-    height: findDimensions(props.size),
+    borderRadius: calcRadius(),
+    width: calcDimensions(),
+    height: calcDimensions(),
     boxShadow: shadows.xs,
   };
 });
 
 const AvatarText = styled(AvatarBase)(props => {
   const { colors, fontSizes, lineHeights, fontWeights } = props.theme;
+  const { size } = props;
 
-  const findLineHeight = (size?: number, theme?: any) => {
-    theme.lineHeights = lineHeights;
-    let lineHeight;
-
-    if (size === 1) {
-      lineHeight = lineHeights.caption1;
-    } else if (size === 2) {
-      lineHeight = lineHeights.caption1;
-    } else if (size === 3) {
-      lineHeight = lineHeights.body1;
-    } else if (size === 4) {
-      lineHeight = lineHeights.body1;
+  const calcLineHeight = () => {
+    if (size === 1 || size === 2) {
+      return lineHeights.caption1;
+    } else {
+      // handles size === 3, size === 4 and any other size
+      return lineHeights.body1;
     }
-    return lineHeight;
   };
 
-  const findFontSize = (size?: number, theme?: any) => {
-    theme.fontSizes = fontSizes;
-    let fontSize;
-
+  const calcFontSize = () => {
     if (size === 1) {
-      fontSize = fontSizes.caption2;
+      return fontSizes.caption2;
     } else if (size === 2) {
-      fontSize = fontSizes.caption1;
+      return fontSizes.caption1;
     } else if (size === 3) {
-      fontSize = fontSizes.body2;
-    } else if (size === 4) {
-      fontSize = fontSizes.h3;
+      return fontSizes.body2;
+      // handles size === 4 and any other size
+    } else {
+      return fontSizes.h3;
     }
-    return fontSize;
   };
 
-  const findFontWeight = (size?: number, theme?: any) => {
-    theme.fontWeights = fontWeights;
-    let fontWeight;
-
-    if (size === 1) {
-      fontWeight = fontWeights.medium;
-    } else if (size === 2) {
-      fontWeight = fontWeights.medium;
-    } else if (size === 3) {
-      fontWeight = fontWeights.bold;
-    } else if (size === 4) {
-      fontWeight = fontWeights.bold;
+  const calcFontWeight = () => {
+    if (size === 1 || size === 2) {
+      return fontWeights.medium;
+      // handles size === 3, size === 4 and any other size
+    } else {
+      return fontWeights.bold;
     }
-    return fontWeight;
   };
 
   return {
     backgroundColor: colors.primary,
     color: colors.white,
-    lineHeight: findLineHeight(props.size, props.theme),
-    fontSize: findFontSize(props.size, props.theme),
-    fontWeight: findFontWeight(props.size, props.theme),
+    lineHeight: calcLineHeight(),
+    fontSize: calcFontSize(),
+    fontWeight: calcFontWeight(),
     textTransform: 'uppercase',
     textAlign: 'center',
   };
