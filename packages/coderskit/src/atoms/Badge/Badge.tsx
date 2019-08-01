@@ -9,13 +9,15 @@ type BadgeValue = number | string | ReactElement<Icon>;
 export interface BadgeProps extends HTMLAttributes<HTMLDivElement> {
   circle?: boolean;
   color?: ThemeColorsKeys;
+  maxLength?: number;
   position?: BadgePosition;
   value?: BadgeValue;
-  maxLength?: number;
 }
 
-interface BadgeBaseProps extends BadgeProps {
+interface BadgeBaseProps extends Omit<BadgeProps, 'children' | 'value'> {
   badgeWidth: number;
+  hasChildren: boolean;
+  hasValue: boolean;
 }
 
 const useClientRect = (updaters: any[] = []): [ClientRect | undefined, any] => {
@@ -28,10 +30,10 @@ const useClientRect = (updaters: any[] = []): [ClientRect | undefined, any] => {
   return [rect, ref];
 };
 
-const getPosition = (position: BadgePosition, circle: boolean, badgeWidth: number, value?: BadgeValue) => {
+const getPosition = (position: BadgePosition, circle: boolean, badgeWidth: number, hasValue: boolean) => {
   let [valueY, valueX] = [9, 9];
 
-  if (typeof value === 'undefined') {
+  if (!hasValue) {
     valueY -= circle ? 5 : 4;
     valueX -= circle ? 6 : 4;
   } else if (badgeWidth) {
@@ -69,27 +71,29 @@ const parseValue = (value: BadgeValue, maxLength: number) => {
   return value;
 };
 
-const BadgeBase = styled.div<BadgeBaseProps>(props => {
-  const { theme, color, position, circle, badgeWidth, value } = props;
+const BadgeWrapper = styled.div<BadgeBaseProps>(props => {
+  const { theme, color, position, circle, badgeWidth, hasChildren, hasValue } = props;
   const { colors, fontSizes, lineHeights } = theme;
+  const positionObj = hasChildren ? getPosition(position!, circle!, badgeWidth, hasValue) : {};
 
   return {
-    position: 'relative',
+    position: hasChildren ? 'relative' : 'static',
     width: 'fit-content',
 
     '.ck-badge-value': {
-      position: 'absolute',
+      position: hasChildren ? 'absolute' : 'static',
       opacity: badgeWidth ? 1 : 0,
-      ...getPosition(position!, circle!, badgeWidth, value),
-      width: typeof value === 'undefined' ? 12 : 'fit-content',
-      minWidth: typeof value === 'undefined' ? 12 : 20,
-      height: typeof value === 'undefined' ? 12 : undefined,
+      ...positionObj,
+      width: hasValue ? 'fit-content' : 12,
+      minWidth: hasValue ? 20 : 12,
+      height: hasValue ? undefined : 12,
       padding: '0 4px',
       border: `2px solid ${colors.white}`,
       borderRadius: 10,
       backgroundColor: colors[color!],
       fontSize: fontSizes.caption1,
       lineHeight: lineHeights.caption1,
+      textAlign: 'center',
       color: colors.white,
     },
 
@@ -107,21 +111,23 @@ export const Badge = ({ children, value, ...props }: BadgeProps) => {
   const [rect, ref] = useClientRect([value, props.maxLength]);
 
   const badgeWidth = rect ? rect.width : 0;
-  value = parseValue(value!, props.maxLength!);
+  const hasChildren = !!children;
+  const hasValue = typeof value !== 'undefined';
+  const parsedValue = parseValue(value!, props.maxLength!);
 
   return (
-    <BadgeBase {...props} value={value} badgeWidth={badgeWidth}>
+    <BadgeWrapper {...props} badgeWidth={badgeWidth} hasChildren={hasChildren} hasValue={hasValue}>
       <div className="ck-badge-value" ref={ref}>
-        {value}
+        {parsedValue}
       </div>
       {children}
-    </BadgeBase>
+    </BadgeWrapper>
   );
 };
 
 Badge.defaultProps = {
   circle: false,
   color: 'primary',
-  position: 'rightTop',
   maxLength: 4,
+  position: 'rightTop',
 };

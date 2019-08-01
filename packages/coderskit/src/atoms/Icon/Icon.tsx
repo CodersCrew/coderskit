@@ -26,17 +26,21 @@ const spinKeyframes = keyframes`
 `;
 
 const IconContainer = styled.div<IconProps>(props => {
-  const { colors } = props.theme;
-  const { size, color, spin, hoverable, visible } = props;
+  const { theme, size, color, spin, hoverable, visible } = props;
+  const { colors } = theme;
+  const sizeValue = `${size}px`;
 
   return {
     display: 'inline-flex',
-    color: colors[color!],
-    width: `${size}px`,
-    height: `${size}px`,
-    minWidth: `${size}px`,
-    minHeight: `${size}px`,
+    width: sizeValue,
+    height: sizeValue,
+    minWidth: sizeValue,
+    minHeight: sizeValue,
     visibility: visible ? 'visible' : 'hidden',
+
+    '&&': {
+      color: !color ? undefined : colors[color],
+    },
 
     '.isvg > svg, svg': {
       width: '100%',
@@ -72,7 +76,6 @@ export const Icon = (props: IconProps) => {
 
 Icon.defaultProps = {
   size: 16,
-  color: 'gray',
   hoverable: false,
   visible: true,
 };

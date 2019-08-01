@@ -33,10 +33,10 @@ const getColor = (kind: NotificationKind, { colors }: Theme, isOutlined?: boolea
 };
 
 const getIconData = (kind: NotificationKind) => {
-  if (kind === 'error') return { icon: ExclamationCircleSolid, kind: 'error' as ThemeColorsKeys };
-  if (kind === 'info') return { icon: InfoCircleSolid, kind: 'info' as ThemeColorsKeys };
-  if (kind === 'success') return { icon: CheckCircleSolid, kind: 'success' as ThemeColorsKeys };
-  if (kind === 'warning') return { icon: ExclamationTriangleSolid, kind: 'warning' as ThemeColorsKeys };
+  if (kind === 'error') return { icon: ExclamationCircleSolid, color: 'error' as ThemeColorsKeys };
+  if (kind === 'info') return { icon: InfoCircleSolid, color: 'info' as ThemeColorsKeys };
+  if (kind === 'success') return { icon: CheckCircleSolid, color: 'success' as ThemeColorsKeys };
+  if (kind === 'warning') return { icon: ExclamationTriangleSolid, color: 'warning' as ThemeColorsKeys };
   return null;
 };
 
@@ -72,7 +72,7 @@ const Notification: React.FC<Props> = ({ message, ...props }) => {
   const iconData = props!.variant === 'contained' ? getIconData(props.kind!) : getIconData(props.kind!);
 
   if (props!.variant === 'contained' && iconData) {
-    iconData.kind = 'white';
+    iconData.color = 'white';
   }
 
   return (
