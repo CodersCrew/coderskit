@@ -60,6 +60,10 @@ const ButtonBase = styled.button<ButtonBaseProps>(props => {
     '&:focus:not(:disabled)': {
       boxShadow: `${theme.shadows.md}, 0 0 0 4px ${tint(0.8, color)}`,
     },
+
+    '.ck-icon + *, * + .ck-icon': {
+      marginLeft: 8,
+    },
   };
 });
 
@@ -81,6 +85,10 @@ const ContainedButton = styled(ButtonBase)(props => {
     '&:active:not(:disabled)': {
       backgroundColor: shade(0.04, color),
       boxShadow: 'none',
+    },
+
+    '.ck-icon': {
+      color: colors.white,
     },
   };
 });
@@ -144,12 +152,16 @@ export const Button = ({ children, ...props }: ButtonProps) => {
 
   const iconAsChild = deepGet(children, ['type', 'displayName']) === 'Icon';
 
+  const parsedChildren = React.Children.map(children, child =>
+    typeof child === 'string' ? <span>{child}</span> : child,
+  );
+
   const ButtonContainer =
     variant === 'contained' ? ContainedButton : variant === 'outlined' ? OutlinedButton : TextButton;
 
   return (
     <ButtonContainer {...props} className={className} iconAsChild={iconAsChild}>
-      {children}
+      {parsedChildren}
     </ButtonContainer>
   );
 };

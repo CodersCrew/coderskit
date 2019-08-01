@@ -1,5 +1,6 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
+import { withDesign } from 'storybook-addon-designs';
 import { boolean, select, number } from '@storybook/addon-knobs';
 import { Icon, colors as themeColors } from 'coderskit';
 
@@ -13,14 +14,25 @@ const icons = {
   'smile-beam-solid.svg': 'smile-beam-solid.svg',
 };
 
-storiesOf('Atoms', module).add('Icon', () => {
-  const props = {
-    spin: boolean('spin', false),
-    visible: boolean('visible', true),
-    src: select('src', icons, 'smile-beam-solid.svg'),
-    color: select('color', colors, 'primary') as keyof typeof colors,
-    size: number('size', 16),
-  };
+storiesOf('Atoms', module)
+  .addDecorator(withDesign)
+  .add(
+    'Icon',
+    () => {
+      const props = {
+        spin: boolean('spin', false),
+        visible: boolean('visible', true),
+        src: select('src', icons, 'smile-beam-solid.svg'),
+        color: select('color', colors, 'primary') as keyof typeof colors,
+        size: number('size', 16),
+      };
 
-  return <Icon {...props} />;
-});
+      return <Icon {...props} />;
+    },
+    {
+      design: {
+        type: 'figma',
+        url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=615%3A0',
+      },
+    },
+  );
