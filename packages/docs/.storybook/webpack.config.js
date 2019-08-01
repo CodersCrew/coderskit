@@ -11,6 +11,10 @@ module.exports = ({ config }) => {
         loader: 'babel-loader',
         options: babelConfig,
       },
+      {
+        loader: require.resolve('@storybook/addon-storysource/loader'),
+        options: { parser: 'typescript' },
+      },
     ],
   });
   config.resolve.plugins = config.resolve.plugins || [];

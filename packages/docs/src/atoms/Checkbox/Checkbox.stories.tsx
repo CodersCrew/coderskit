@@ -4,36 +4,47 @@ import { action } from '@storybook/addon-actions';
 import { withDesign } from 'storybook-addon-designs';
 import { boolean, text } from '@storybook/addon-knobs';
 import { Checkbox } from 'coderskit';
+import content from './Checkbox.md';
 
-storiesOf('Atoms', module)
+const design = {
+  type: 'figma',
+  url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=30%3A52',
+};
+
+const readme = { content };
+
+const getCheckboxProps = () => ({
+  disabled: boolean('disabled', false, 'Checkbox'),
+  name: text('name', 'checkbox', 'Checkbox'),
+});
+
+const getChackboxWithLabelProps = () => ({
+  ...getCheckboxProps(),
+  children: text('children', 'Checkbox label content', '.Label'),
+});
+
+const getCheckboxActions = () => ({
+  onChange: action('onChange'),
+  onFocus: action('onFocus'),
+  onBlur: action('onBlur'),
+});
+
+storiesOf('Checkbox', module)
   .addDecorator(withDesign)
-  .add(
-    'Checkbox',
-    () => {
-      const props = {
-        disabled: boolean('disabled', false),
-        name: text('name', 'checkbox'),
-        label: text('label', 'Checkbox label content'),
-      };
+  .addParameters({ design, readme })
+  .add('Only checkbox', () => {
+    const props = getCheckboxProps();
+    const actions = getCheckboxActions();
 
-      const actions = {
-        onChange: action('onChange'),
-        onFocus: action('onFocus'),
-        onBlur: action('onBlur'),
-      };
+    return <Checkbox {...props} {...actions} />;
+  })
+  .add('Checkbox with label', () => {
+    const { children, ...props } = getChackboxWithLabelProps();
+    const actions = getCheckboxActions();
 
-      const { label, ...rest } = props;
-
-      return (
-        <Checkbox.Label>
-          <Checkbox {...rest} {...actions} /> {label}
-        </Checkbox.Label>
-      );
-    },
-    {
-      design: {
-        type: 'figma',
-        url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=30%3A52',
-      },
-    },
-  );
+    return (
+      <Checkbox.Label>
+        <Checkbox {...props} {...actions} /> {children}
+      </Checkbox.Label>
+    );
+  });
