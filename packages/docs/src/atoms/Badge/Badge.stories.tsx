@@ -1,7 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
+import { withDesign } from 'storybook-addon-designs';
 import { number, select } from '@storybook/addon-knobs';
-import { Badge, Button, Icon, colors as themeColors } from 'coderskit';
+import { Badge, Icon, colors as themeColors } from 'coderskit';
 
 const positions = {
   leftTop: 'leftTop',
@@ -18,33 +19,44 @@ const baseStyle = {
   height: 40,
 };
 
-storiesOf('Atoms', module).add('Badge', () => {
-  const props = {
-    value: number('value', 3),
-    maxLength: number('maxLength', 2),
-    color: select('color', colors, 'success') as keyof typeof colors,
-    position: select('position', positions, 'rightTop') as keyof typeof positions,
-  };
+storiesOf('Atoms', module)
+  .addDecorator(withDesign)
+  .add(
+    'Badge',
+    () => {
+      const props = {
+        value: number('value', 3),
+        maxLength: number('maxLength', 2),
+        color: select('color', colors, 'success') as keyof typeof colors,
+        position: select('position', positions, 'rightTop') as keyof typeof positions,
+      };
 
-  const { value, ...rest } = props;
+      const { value, ...rest } = props;
 
-  return (
-    <div style={{ display: 'flex' }}>
-      <Badge {...rest} value={value}>
-        <div style={{ ...baseStyle, borderRadius: 4 }} />
-      </Badge>
-      <Badge {...rest} value={value} circle style={{ marginLeft: 24 }}>
-        <div style={{ ...baseStyle, borderRadius: '100%' }} />
-      </Badge>
-      <Badge {...rest} value={<Icon src="check-solid.svg" />} style={{ marginLeft: 24 }}>
-        <div style={{ ...baseStyle, borderRadius: 4 }} />
-      </Badge>
-      <Badge {...rest} style={{ marginLeft: 24 }}>
-        <div style={{ ...baseStyle, borderRadius: 4 }} />
-      </Badge>
-      <Badge {...rest} style={{ marginLeft: 24 }} circle>
-        <div style={{ ...baseStyle, borderRadius: '100%' }} />
-      </Badge>
-    </div>
+      return (
+        <div style={{ display: 'flex' }}>
+          <Badge {...rest} value={value}>
+            <div style={{ ...baseStyle, borderRadius: 4 }} />
+          </Badge>
+          <Badge {...rest} value={value} circle style={{ marginLeft: 24 }}>
+            <div style={{ ...baseStyle, borderRadius: '100%' }} />
+          </Badge>
+          <Badge {...rest} value={<Icon src="check-solid.svg" />} style={{ marginLeft: 24 }}>
+            <div style={{ ...baseStyle, borderRadius: 4 }} />
+          </Badge>
+          <Badge {...rest} style={{ marginLeft: 24 }}>
+            <div style={{ ...baseStyle, borderRadius: 4 }} />
+          </Badge>
+          <Badge {...rest} style={{ marginLeft: 24 }} circle>
+            <div style={{ ...baseStyle, borderRadius: '100%' }} />
+          </Badge>
+        </div>
+      );
+    },
+    {
+      design: {
+        type: 'figma',
+        url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=17%3A236',
+      },
+    },
   );
-});

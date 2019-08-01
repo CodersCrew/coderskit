@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { storiesOf } from '@storybook/react';
+import { withDesign } from 'storybook-addon-designs';
 import { text, number, boolean } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 import { Upload } from 'coderskit';
@@ -22,17 +23,28 @@ const UploadField = (props: any) => {
   );
 };
 
-storiesOf('Atoms', module).add('Upload', () => {
-  const props = {
-    children: text('children', 'Upload something'),
-    width: number('width', 160),
-    height: number('height', 160),
-    multiple: boolean('multiple', false),
-  };
+storiesOf('Atoms', module)
+  .addDecorator(withDesign)
+  .add(
+    'Upload',
+    () => {
+      const props = {
+        children: text('children', 'Upload something'),
+        width: number('width', 160),
+        height: number('height', 160),
+        multiple: boolean('multiple', false),
+      };
 
-  const actions = {
-    onChange: action('onChange'),
-  };
+      const actions = {
+        onChange: action('onChange'),
+      };
 
-  return <UploadField actions={actions} {...props} />;
-});
+      return <UploadField actions={actions} {...props} />;
+    },
+    {
+      design: {
+        type: 'figma',
+        url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=551%3A32',
+      },
+    },
+  );

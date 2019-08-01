@@ -34,13 +34,14 @@
     "babel-loader": "^8.0.6",
     "babel-plugin-emotion": "^10.0.14",
     "babel-plugin-inline-react-svg": "^1.1.0",
+    "storybook-addon-designs": "^5.1.1",
     "storybook-readme": "^5.0.5",
     "tsconfig-paths-webpack-plugin": "^3.2.0"
   },
   "dependencies": {
-    "coderskit": "0.0.1",
     "@emotion/core": "^10.0.14",
     "@emotion/styled": "^10.0.14",
+    "coderskit": "0.0.1",
     "formik": "^1.5.8",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
