@@ -14,8 +14,10 @@
     "prettier": "lerna run prettier",
     "prettier:fix": "lerna run prettier:fix",
     "check-all": "yarn type-check && yarn lint && yarn prettier",
-    "dev:coderskit": "lerna run dev --scope={coderskit}",
-    "dev:docs": "lerna run dev --scope={docs}"
+    "dev:coderskit": "lerna run dev --scope=coderskit",
+    "build:coderskit": "lerna run build --scope=coderskit",
+    "dev:docs": "lerna run dev --scope=docs",
+    "build:docs": "yarn build:coderskit && lerna run build --scope=docs"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^1.13.0",

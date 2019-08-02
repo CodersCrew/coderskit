@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "start-storybook -s ./public -p 9001 -c .storybook --ci",
-    "build": "build-storybook -s ./public -c .storybook -o docs",
+    "build": "build-storybook -s ./public -c .storybook",
     "lint": "eslint './src/**/*.{ts,tsx}'",
     "lint:fix": "eslint './src/**/*.{ts,tsx}' --fix",
     "type-check": "tsc --noEmit",
