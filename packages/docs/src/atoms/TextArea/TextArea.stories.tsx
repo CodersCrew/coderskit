@@ -3,6 +3,14 @@ import { storiesOf } from '@storybook/react';
 import { withDesign } from 'storybook-addon-designs';
 import { select, boolean, text } from '@storybook/addon-knobs';
 import { TextArea } from 'coderskit';
+import content from './TextArea.md';
+
+const design = {
+  type: 'figma',
+  url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=243%3A0',
+};
+
+const readme = { content };
 
 const textAreaGroup = 'TextArea';
 const statusGroup = '.Status';
@@ -30,47 +38,44 @@ const resize = {
   vertical: 'vertical',
 };
 
-storiesOf('Atoms', module)
+const getTextAreaProps = () => ({
+  disabled: boolean('disabled', false, textAreaGroup),
+  dimensions: select('dimensions', dimensions, 'default', textAreaGroup) as keyof typeof dimensions,
+  resize: select('resize', resize, 'none', textAreaGroup) as keyof typeof resize,
+  placeholder: text('placeholder', 'Placeholder', textAreaGroup),
+  name: text('name', 'text-area-name', textAreaGroup),
+});
+
+const getStatusProps = () => ({
+  status: select('status', statuses, 'default', statusGroup) as keyof typeof statuses,
+  noIcon: boolean('noIcon', false, statusGroup),
+});
+
+const getLabelProps = () => ({
+  label: text('label', 'Label', labelGroup),
+});
+
+const getMessages = () => ({
+  help: text('help', 'Help message', messageGroup),
+  error: boolean('error', false, messageGroup),
+});
+
+storiesOf('Atoms|TextArea', module)
   .addDecorator(withDesign)
-  .add(
-    'TextArea',
-    () => {
-      const props = {
-        disabled: boolean('disabled', false, textAreaGroup),
-        dimensions: select('dimensions', dimensions, 'default', textAreaGroup) as keyof typeof dimensions,
-        resize: select('resize', resize, 'none', textAreaGroup) as keyof typeof resize,
-        placeholder: text('placeholder', 'Placeholder', textAreaGroup),
-        name: text('name', 'text-area-name', textAreaGroup),
-      };
+  .addParameters({ design, readme })
+  .add('Default textarea', () => {
+    const props = getTextAreaProps();
+    const statusProps = getStatusProps();
+    const labelProps = getLabelProps();
+    const messageProps = getMessages();
 
-      const statusProps = {
-        status: select('status', statuses, 'default', statusGroup) as keyof typeof statuses,
-        noIcon: boolean('noIcon', false, statusGroup),
-      };
-
-      const labelProps = {
-        label: text('label', 'Label', labelGroup),
-      };
-
-      const messageProps = {
-        help: text('help', 'Help message', messageGroup),
-        error: boolean('error', false, messageGroup),
-      };
-
-      return (
-        <TextArea.Field>
-          <TextArea.Label htmlFor={props.name}>{labelProps.label}</TextArea.Label>
-          <TextArea.Status {...statusProps}>
-            <TextArea {...props} />
-          </TextArea.Status>
-          <TextArea.Message error={messageProps.error}>{messageProps.help}</TextArea.Message>
-        </TextArea.Field>
-      );
-    },
-    {
-      design: {
-        type: 'figma',
-        url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=243%3A0',
-      },
-    },
-  );
+    return (
+      <TextArea.Field>
+        <TextArea.Label htmlFor={props.name}>{labelProps.label}</TextArea.Label>
+        <TextArea.Status {...statusProps}>
+          <TextArea {...props} />
+        </TextArea.Status>
+        <TextArea.Message error={messageProps.error}>{messageProps.help}</TextArea.Message>
+      </TextArea.Field>
+    );
+  });

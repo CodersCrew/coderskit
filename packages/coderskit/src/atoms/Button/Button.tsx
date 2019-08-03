@@ -9,7 +9,7 @@ export type ButtonVariant = 'contained' | 'outlined' | 'text';
 export type ButtonSize = 'small' | 'default' | 'large';
 
 export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
-  as?: ElementType;
+  as?: ElementType | string;
   children: ReactNode;
   color?: ThemeColorsKeys;
   size?: ButtonSize;

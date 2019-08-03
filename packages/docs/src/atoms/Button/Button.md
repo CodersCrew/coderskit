@@ -6,7 +6,7 @@
 
 | Name    | Type                                    | Default value | Description                                                                    |
 | ------- | --------------------------------------- | ------------- | ------------------------------------------------------------------------------ |
-| as      | `elementType` / `string`                | `'button'`    | Type of the element that will be rendered as a button                          |
+| as      | `ElementType` / `string`                | `'button'`    | Type of the element that will be rendered as a button                          |
 | size    | `'small'` / `'default'` / `'large'`     | `'default'`   | Size of the button                                                             |
 | color   | Theme palette color                     | `'primary'`   | Name of the color of button background or text (depends on the button variant) |
 | variant | `'contained'` / `'outlined'` / `'text'` | `'contained'` | Layout of the button                                                           |

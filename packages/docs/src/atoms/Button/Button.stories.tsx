@@ -4,7 +4,17 @@ import { withDesign } from 'storybook-addon-designs';
 import { select, boolean, number, text } from '@storybook/addon-knobs';
 import { Button, Icon, colors as themeColors } from 'coderskit';
 import { omit } from 'lodash-es';
-import readme from './Button.md';
+import content from './Button.md';
+
+const design = {
+  type: 'figma',
+  url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=15%3A64',
+};
+
+const readme = { content };
+
+const buttonGroup = 'Button';
+const iconGroup = 'Icon';
 
 const variants = {
   contained: 'contained',
@@ -35,91 +45,60 @@ const icons = {
   'smile-beam-solid.svg': 'smile-beam-solid.svg',
 };
 
-const design = {
-  type: 'figma',
-  url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=15%3A64',
-};
-
 const getButtonProps = () => ({
-  children: text('children', 'Simple Button', 'Button'),
-  disabled: boolean('disabled', false, 'Button'),
-  variant: select('variant', variants, 'contained', 'Button') as keyof typeof variants,
-  color: select('color', colors, 'unset', 'Button') as keyof typeof colors,
-  size: select('size', sizes, 'default', 'Button') as keyof typeof sizes,
-  as: select('as', elements, 'button', 'Button') as keyof typeof elements,
+  children: text('children', 'Simple Button', buttonGroup),
+  disabled: boolean('disabled', false, buttonGroup),
+  variant: select('variant', variants, 'contained', buttonGroup) as keyof typeof variants,
+  color: select('color', colors, 'unset', buttonGroup) as keyof typeof colors,
+  size: select('size', sizes, 'default', buttonGroup) as keyof typeof sizes,
+  as: select('as', elements, 'button', buttonGroup) as keyof typeof elements,
 });
 
 const getIconProps = () => ({
-  spin: boolean('spin', false, 'Icon'),
-  visible: boolean('visible', true, 'Icon'),
-  src: select('src', icons, 'smile-beam-solid.svg', 'Icon'),
-  color: select('iconColor', colors, 'unset', 'Icon') as keyof typeof colors,
-  size: number('size', 16, undefined, 'Icon'),
+  spin: boolean('spin', false, iconGroup),
+  visible: boolean('visible', true, iconGroup),
+  src: select('src', icons, 'smile-beam-solid.svg', iconGroup),
+  color: select('iconColor', colors, 'unset', iconGroup) as keyof typeof colors,
+  size: number('size', 16, undefined, iconGroup),
 });
 
-storiesOf('Button', module)
+storiesOf('Atoms|Button', module)
   .addDecorator(withDesign)
-  .add(
-    'Button with text',
-    () => {
-      const { children, ...props } = getButtonProps();
-      const color = props.color === 'unset' ? undefined : props.color;
+  .addParameters({ design, readme })
+  .add('Button with text', () => {
+    const { children, ...props } = getButtonProps();
+    const color = props.color === 'unset' ? undefined : props.color;
 
-      return (
-        <Button {...props} color={color}>
-          {children}
-        </Button>
-      );
-    },
-    {
-      design,
-      readme: {
-        content: readme,
-      },
-    },
-  )
-  .add(
-    'Button with icon',
-    () => {
-      const props = omit(getButtonProps(), ['children']);
-      const iconProps = getIconProps();
+    return (
+      <Button {...props} color={color}>
+        {children}
+      </Button>
+    );
+  })
+  .add('Button with icon', () => {
+    const props = omit(getButtonProps(), ['children']);
+    const iconProps = getIconProps();
 
-      const color = props.color === 'unset' ? undefined : props.color;
-      const iconColor: any = iconProps.color === 'unset' ? undefined : iconProps.color;
+    const color = props.color === 'unset' ? undefined : props.color;
+    const iconColor: any = iconProps.color === 'unset' ? undefined : iconProps.color;
 
-      return (
-        <Button {...props} color={color}>
-          <Icon {...iconProps} color={iconColor} />
-        </Button>
-      );
-    },
-    {
-      design,
-      readme: {
-        content: readme,
-      },
-    },
-  )
-  .add(
-    'Button with text and icon',
-    () => {
-      const { children, ...props } = getButtonProps();
-      const iconProps = getIconProps();
+    return (
+      <Button {...props} color={color}>
+        <Icon {...iconProps} color={iconColor} />
+      </Button>
+    );
+  })
+  .add('Button with text and icon', () => {
+    const { children, ...props } = getButtonProps();
+    const iconProps = getIconProps();
 
-      const color = props.color === 'unset' ? undefined : props.color;
-      const iconColor: any = iconProps.color === 'unset' ? undefined : iconProps.color;
+    const color = props.color === 'unset' ? undefined : props.color;
+    const iconColor: any = iconProps.color === 'unset' ? undefined : iconProps.color;
 
-      return (
-        <Button {...props} color={color}>
-          <Icon {...iconProps} color={iconColor} />
-          {children}
-        </Button>
-      );
-    },
-    {
-      design,
-      readme: {
-        content: readme,
-      },
-    },
-  );
+    return (
+      <Button {...props} color={color}>
+        <Icon {...iconProps} color={iconColor} />
+        {children}
+      </Button>
+    );
+  });

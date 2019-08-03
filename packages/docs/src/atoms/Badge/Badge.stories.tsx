@@ -6,6 +6,15 @@ import { omit } from 'lodash-es';
 import { Badge, Icon, colors as themeColors } from 'coderskit';
 import content from './Badge.md';
 
+const design = {
+  type: 'figma',
+  url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=17%3A236',
+};
+
+const readme = { content };
+
+const badgeGroup = 'Badge';
+
 const positions = {
   leftTop: 'leftTop',
   rightTop: 'rightTop',
@@ -21,13 +30,6 @@ const baseStyle = {
   height: 40,
 };
 
-const design = {
-  type: 'figma',
-  url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=17%3A236',
-};
-
-const readme = { content };
-
 const Circle = () => <div style={{ ...baseStyle, borderRadius: '100%' }} />;
 
 const Square = () => <div style={{ ...baseStyle, borderRadius: 4 }} />;
@@ -37,13 +39,13 @@ const Wrapper: React.FC = ({ children }) => <div style={{ display: 'flex' }}>{ch
 const IconElement = <Icon src="check-solid.svg" />;
 
 const getBadgeProps = () => ({
-  value: number('value', 3),
-  maxLength: number('maxLength', 2),
-  color: select('color', colors, 'success') as keyof typeof colors,
-  position: select('position', positions, 'rightTop') as keyof typeof positions,
+  value: number('value', 3, undefined, badgeGroup),
+  maxLength: number('maxLength', 2, undefined, badgeGroup),
+  color: select('color', colors, 'success', badgeGroup) as keyof typeof colors,
+  position: select('position', positions, 'rightTop', badgeGroup) as keyof typeof positions,
 });
 
-storiesOf('Badge', module)
+storiesOf('Atoms|Badge', module)
   .addDecorator(withDesign)
   .addParameters({ design, readme })
   .add('Empty badge', () => {

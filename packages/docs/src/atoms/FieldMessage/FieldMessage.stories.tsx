@@ -3,25 +3,26 @@ import { storiesOf } from '@storybook/react';
 import { withDesign } from 'storybook-addon-designs';
 import { text, boolean } from '@storybook/addon-knobs';
 import { FieldMessage } from 'coderskit';
+import content from './FieldMessage.md';
 
-storiesOf('Atoms', module)
+const design = {
+  type: 'figma',
+  url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=600%3A796',
+};
+
+const readme = { content };
+
+const getFieldMessageProps = () => ({
+  children: text('children', 'Type something'),
+  error: boolean('error', false),
+});
+
+storiesOf('Atoms|FieldMessage', module)
   .addDecorator(withDesign)
-  .add(
-    'FieldMessage',
-    () => {
-      const props = {
-        children: text('children', 'Type something'),
-        error: boolean('error', false),
-      };
+  .addParameters({ design, readme })
+  .add('Default message', () => {
+    const props = getFieldMessageProps();
+    const { children, ...rest } = props;
 
-      const { children, ...rest } = props;
-
-      return <FieldMessage {...rest}>{children}</FieldMessage>;
-    },
-    {
-      design: {
-        type: 'figma',
-        url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=600%3A796',
-      },
-    },
-  );
+    return <FieldMessage {...rest}>{children}</FieldMessage>;
+  });

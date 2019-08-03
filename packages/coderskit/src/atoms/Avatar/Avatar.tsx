@@ -1,21 +1,17 @@
-import React, { HTMLAttributes } from 'react';
+import React, { HTMLAttributes, ElementType } from 'react';
 import styled from '@emotion/styled';
 import classnames from 'classnames';
+import { Theme } from '../..';
 
-export type AvatarVariant = 'photo' | 'text';
 export type AvatarShape = 'circle' | 'square';
 
-export interface AvatarProps extends HTMLAttributes<any> {
-  variant?: AvatarVariant;
-  size?: number;
+export interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
+  as?: ElementType | string;
   shape?: AvatarShape;
-  image?: string;
-  children?: React.ReactNode;
+  size?: number;
+  src?: string;
+  [key: string]: any;
 }
-
-const calcDimensions = (size?: number): string => {
-  return `${size}px`;
-};
 
 const calcRadius = (size?: number, shape?: string): string => {
   if (shape === 'circle') {
@@ -27,11 +23,23 @@ const calcRadius = (size?: number, shape?: string): string => {
   }
 };
 
+const calcFontSize = (size?: number): string => {
+  if (size! <= 16) {
+    return `${size! / 2 + 2}px`;
+  } else if (size! <= 24) {
+    return `${size! / 2}px`;
+  } else {
+    return `${size! / 2 - 2}px`;
+  }
+};
+
+const calcFontWeight = (size: number, theme: Theme): number => theme.fontWeights[size! <= 32 ? 'medium' : 'bold'];
+
 const AvatarBase = styled.div<AvatarProps>(props => {
   const { shadows } = props.theme;
   const { size, shape } = props;
 
-  const dimension: string = calcDimensions(size);
+  const dimension = `${size}px`;
 
   return {
     display: 'inline-flex',
@@ -45,26 +53,6 @@ const AvatarBase = styled.div<AvatarProps>(props => {
     boxShadow: shadows.xs,
   };
 });
-
-const calcFontSize = (size?: number): string => {
-  if (size! <= 16) {
-    return `${size! / 2 + 2}px`;
-  } else if (size! <= 24) {
-    return `${size! / 2}px`;
-  } else {
-    return `${size! / 2 - 2}px`;
-  }
-};
-
-const calcFontWeight = (size?: number, theme?: any): number => {
-  const { fontWeights } = theme;
-
-  if (size! <= 32) {
-    return fontWeights.medium;
-  } else {
-    return fontWeights.bold;
-  }
-};
 
 const AvatarText = styled(AvatarBase)(props => {
   const { colors } = props.theme;
@@ -82,28 +70,25 @@ const AvatarText = styled(AvatarBase)(props => {
 
 const AvatarImg = styled(AvatarBase)(props => {
   return {
-    background: `url(${props.image})`,
+    background: `url(${props.src})`,
     backgroundSize: 'cover',
     color: 'transparent',
   };
 });
 
-export const Avatar = (props: AvatarProps) => {
-  const className = classnames(props.className, 'ck-avatar');
-
-  const AvatarContainer = props.variant === 'photo' ? AvatarImg : AvatarText;
+export const Avatar = ({ children, className, ...props }: AvatarProps) => {
+  const AvatarContainer = props.src ? AvatarImg : AvatarText;
 
   return (
-    <AvatarContainer {...props} className={className}>
-      {props.children}
+    <AvatarContainer {...props} className={classnames(className, 'ck-avatar')}>
+      {props.src ? null : children}
     </AvatarContainer>
   );
 };
 
 Avatar.defaultProps = {
-  variant: 'text',
   size: 32,
   shape: 'circle',
   children: '',
-  image: 'https://randomuser.me/api/portraits/men/52.jpg',
+  src: '',
 };

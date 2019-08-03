@@ -3,6 +3,14 @@ import { storiesOf } from '@storybook/react';
 import { withDesign } from 'storybook-addon-designs';
 import { select, boolean, text } from '@storybook/addon-knobs';
 import { Input } from 'coderskit';
+import content from './Input.md';
+
+const design = {
+  type: 'figma',
+  url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=17%3A236',
+};
+
+const readme = { content };
 
 const inputGroup = 'Input';
 const statusGroup = '.Status';
@@ -28,47 +36,44 @@ const types = {
   text: 'text',
 };
 
-storiesOf('Atoms', module)
+const getInputProps = () => ({
+  disabled: boolean('disabled', false, inputGroup),
+  dimensions: select('dimensions', dimensions, 'default', inputGroup) as keyof typeof dimensions,
+  type: select('type', types, 'text', inputGroup) as keyof typeof types,
+  placeholder: text('placeholder', 'Placeholder', inputGroup),
+  name: text('name', 'input-name', inputGroup),
+});
+
+const getStatusProps = () => ({
+  status: select('status', statuses, 'default', statusGroup) as keyof typeof statuses,
+  noIcon: boolean('noIcon', false, statusGroup),
+});
+
+const getLabelProps = () => ({
+  label: text('label', 'Label', labelGroup),
+});
+
+const getMessageProps = () => ({
+  help: text('help', 'Help message', messageGroup),
+  error: boolean('error', false, messageGroup),
+});
+
+storiesOf('Atoms|Input', module)
   .addDecorator(withDesign)
-  .add(
-    'Input',
-    () => {
-      const props = {
-        disabled: boolean('disabled', false, inputGroup),
-        dimensions: select('dimensions', dimensions, 'default', inputGroup) as keyof typeof dimensions,
-        type: select('type', types, 'text', inputGroup) as keyof typeof types,
-        placeholder: text('placeholder', 'Placeholder', inputGroup),
-        name: text('name', 'input-name', inputGroup),
-      };
+  .addParameters({ design, readme })
+  .add('Default input', () => {
+    const props = getInputProps();
+    const statusProps = getStatusProps();
+    const labelProps = getLabelProps();
+    const messageProps = getMessageProps();
 
-      const statusProps = {
-        status: select('status', statuses, 'default', statusGroup) as keyof typeof statuses,
-        noIcon: boolean('noIcon', false, statusGroup),
-      };
-
-      const labelProps = {
-        label: text('label', 'Label', labelGroup),
-      };
-
-      const messageProps = {
-        help: text('help', 'Help message', messageGroup),
-        error: boolean('error', false, messageGroup),
-      };
-
-      return (
-        <Input.Field>
-          <Input.Label htmlFor={props.name}>{labelProps.label}</Input.Label>
-          <Input.Status {...statusProps}>
-            <Input {...props} />
-          </Input.Status>
-          <Input.Message error={messageProps.error}>{messageProps.help}</Input.Message>
-        </Input.Field>
-      );
-    },
-    {
-      design: {
-        type: 'figma',
-        url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=17%3A236',
-      },
-    },
-  );
+    return (
+      <Input.Field>
+        <Input.Label htmlFor={props.name}>{labelProps.label}</Input.Label>
+        <Input.Status {...statusProps}>
+          <Input {...props} />
+        </Input.Status>
+        <Input.Message error={messageProps.error}>{messageProps.help}</Input.Message>
+      </Input.Field>
+    );
+  });

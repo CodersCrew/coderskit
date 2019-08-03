@@ -1,10 +1,8 @@
-import React from 'react';
+import React, { HTMLAttributes } from 'react';
 import styled from '@emotion/styled';
 import classnames from 'classnames';
 
-export interface DividerProps extends React.HTMLAttributes<HTMLDivElement> {
-  children?: string;
-}
+export type DividerProps = HTMLAttributes<HTMLDivElement>;
 
 const PureDivider = styled.div<DividerProps>(props => {
   const { colors } = props.theme;

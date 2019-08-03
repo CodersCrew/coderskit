@@ -3,6 +3,14 @@ import { storiesOf } from '@storybook/react';
 import { withDesign } from 'storybook-addon-designs';
 import { boolean, select, number } from '@storybook/addon-knobs';
 import { Icon, colors as themeColors } from 'coderskit';
+import content from './Icon.md';
+
+const design = {
+  type: 'figma',
+  url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=615%3A0',
+};
+
+const readme = { content };
 
 const colors = Object.keys(themeColors).reduce((a, key) => ({ ...a, [key]: key }), {});
 
@@ -16,23 +24,15 @@ const icons = {
 
 storiesOf('Atoms', module)
   .addDecorator(withDesign)
-  .add(
-    'Icon',
-    () => {
-      const props = {
-        spin: boolean('spin', false),
-        visible: boolean('visible', true),
-        src: select('src', icons, 'smile-beam-solid.svg'),
-        color: select('color', colors, 'primary') as keyof typeof colors,
-        size: number('size', 16),
-      };
+  .addParameters({ design, readme })
+  .add('Icon', () => {
+    const props = {
+      spin: boolean('spin', false),
+      visible: boolean('visible', true),
+      src: select('src', icons, 'smile-beam-solid.svg'),
+      color: select('color', colors, 'primary') as keyof typeof colors,
+      size: number('size', 16),
+    };
 
-      return <Icon {...props} />;
-    },
-    {
-      design: {
-        type: 'figma',
-        url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=615%3A0',
-      },
-    },
-  );
+    return <Icon {...props} />;
+  });
