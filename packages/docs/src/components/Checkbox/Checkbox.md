@@ -4,7 +4,7 @@
 
 ### Checkbox props
 
-Checkbox accept all of the properties that can be provided to the native `<input type="checkbox">` element.
+Checkbox accepts all of the properties that can be provided to the native `<input type="checkbox">` element.
 
 ### Checkbox.Label props
 
