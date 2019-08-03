@@ -9,7 +9,7 @@ export * from './Icon';
 export * from './Input';
 export * from './Label';
 export * from './LinearProgress';
-export * from './notify';
+export * from './message';
 export * from './Radio';
 export * from './Select';
 export * from './StylesProvider';

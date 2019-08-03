@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { ThemeProvider } from 'emotion-theming';
 import { Global } from '@emotion/core';
-import { theme, Theme, globalStyle, initializeNotifications } from '../..';
+import { theme, Theme, globalStyle, MessagesContainer } from '../..';
 
 export interface StylesProviderProps {
   children: ReactNode;
@@ -13,7 +13,7 @@ export const StylesProvider = (props: StylesProviderProps) => {
     <ThemeProvider theme={props.theme || theme}>
       <Global styles={globalStyle} />
       {props.children}
-      {initializeNotifications()}
+      <MessagesContainer />
     </ThemeProvider>
   );
 };

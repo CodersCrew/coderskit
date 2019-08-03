@@ -1,5 +1,4 @@
 import { css } from '@emotion/core';
-import NotificationCss from '../components/notify/Notification.css';
 
 const normalize = css`
   html {
@@ -168,7 +167,6 @@ const customize = css`
 const globalStyle = css`
   ${normalize};
   ${customize};
-  ${NotificationCss};
 `;
 
 export default globalStyle;
