@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withDesign } from 'storybook-addon-designs';
 import { select, boolean, text } from '@storybook/addon-knobs';
-import { TextArea } from 'coderskit';
+import { TextArea, Label, FieldMessage } from 'coderskit';
 import content from './TextArea.md';
 
 const design = {
@@ -71,11 +71,11 @@ storiesOf('Atoms|TextArea', module)
 
     return (
       <TextArea.Field>
-        <TextArea.Label htmlFor={props.name}>{labelProps.label}</TextArea.Label>
+        <Label htmlFor={props.name}>{labelProps.label}</Label>
         <TextArea.Status {...statusProps}>
           <TextArea {...props} />
         </TextArea.Status>
-        <TextArea.Message error={messageProps.error}>{messageProps.help}</TextArea.Message>
+        <FieldMessage error={messageProps.error}>{messageProps.help}</FieldMessage>
       </TextArea.Field>
     );
   });

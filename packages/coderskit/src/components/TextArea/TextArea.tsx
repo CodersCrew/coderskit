@@ -3,8 +3,6 @@ import styled from '@emotion/styled';
 import classnames from 'classnames';
 import { tint } from 'polished';
 import { Icon, Theme } from '../..';
-import { Label } from '../../atoms/Label/Label';
-import { FieldMessage } from '../../atoms/FieldMessage/FieldMessage';
 
 import SpinnerSolid from '../../icons/SpinnerSolid';
 import ExclamationCircleSolid from '../../icons/ExclamationCircleSolid';
@@ -71,9 +69,6 @@ TextArea.defaultProps = {
   dimensions: 'default',
   resize: 'none',
 };
-
-TextArea.Label = Label;
-TextArea.Message = FieldMessage;
 
 export type TextAreaStatus = 'error' | 'warning' | 'success' | 'loading' | 'default';
 

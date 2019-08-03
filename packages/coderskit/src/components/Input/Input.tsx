@@ -3,8 +3,6 @@ import styled from '@emotion/styled';
 import { tint } from 'polished';
 import classnames from 'classnames';
 import { Theme, Icon } from '../..';
-import { Label } from '../../atoms/Label/Label';
-import { FieldMessage } from '../../atoms/FieldMessage/FieldMessage';
 
 import SpinnerSolid from '../../icons/SpinnerSolid';
 import ExclamationCircleSolid from '../../icons/ExclamationCircleSolid';
@@ -67,9 +65,6 @@ export const Input = ({ className, ...props }: InputProps) => {
 Input.defaultProps = {
   dimensions: 'default',
 };
-
-Input.Label = Label;
-Input.Message = FieldMessage;
 
 /********************
   Status component

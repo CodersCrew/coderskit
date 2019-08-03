@@ -42,7 +42,7 @@ const UploadBase = styled.div<UploadBaseProps>(props => {
       cursor: 'pointer',
 
       '&:hover + .ck-upload-dropzone': {
-        backgroundColor: colors.itemHover,
+        backgroundColor: colors.hover,
       },
     },
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withDesign } from 'storybook-addon-designs';
 import { select, boolean, text } from '@storybook/addon-knobs';
-import { Input } from 'coderskit';
+import { Input, Label, FieldMessage } from 'coderskit';
 import content from './Input.md';
 
 const design = {
@@ -69,11 +69,11 @@ storiesOf('Atoms|Input', module)
 
     return (
       <Input.Field>
-        <Input.Label htmlFor={props.name}>{labelProps.label}</Input.Label>
+        <Label htmlFor={props.name}>{labelProps.label}</Label>
         <Input.Status {...statusProps}>
           <Input {...props} />
         </Input.Status>
-        <Input.Message error={messageProps.error}>{messageProps.help}</Input.Message>
+        <FieldMessage error={messageProps.error}>{messageProps.help}</FieldMessage>
       </Input.Field>
     );
   });

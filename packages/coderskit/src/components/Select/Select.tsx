@@ -118,7 +118,7 @@ const SelectBase = styled(ReactSelect)<SelectProps>(props => {
       cursor: 'pointer',
 
       '&.ck-select__option--is-focused': {
-        backgroundColor: colors.itemHover,
+        backgroundColor: colors.hover,
       },
 
       '&.ck-select__option--is-selected': {

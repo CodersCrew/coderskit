@@ -1,5 +1,5 @@
 import { css } from '@emotion/core';
-import NotificationCss from '../molecules/Notification/Notification.css';
+import NotificationCss from '../components/notify/Notification.css';
 
 const normalize = css`
   html {
@@ -9,6 +9,8 @@ const normalize = css`
   *,
   *::before,
   *::after {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     box-sizing: inherit;
   }
 
