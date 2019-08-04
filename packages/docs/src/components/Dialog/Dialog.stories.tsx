@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, MouseEvent, KeyboardEvent } from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { withDesign } from 'storybook-addon-designs';
@@ -14,7 +14,6 @@ const design = {
 const readme = { content };
 
 const getDialogProps = () => ({
-  isOpen: boolean('isOpen', true),
   ariaHideApp: boolean('ariaHideApp', true),
   shouldFocusAfterRender: boolean('shouldFocusAfterRender', true),
   shouldCloseOnOverlayClick: boolean('shouldCloseOnOverlayClick', true),
@@ -38,6 +37,35 @@ const getData = () => ({
   ),
 });
 
+const DialogComponent = ({ props, data, actions }: any) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleClick = () => setIsOpen(true);
+
+  const handleRequestClose = (e: MouseEvent | KeyboardEvent) => {
+    setIsOpen(false);
+    actions.onRequestClose(e);
+  };
+
+  return (
+    <>
+      <Dialog {...props} {...actions} isOpen={isOpen} onRequestClose={handleRequestClose}>
+        <Dialog.Header>
+          <Typography el="h3">{data.header}</Typography>
+        </Dialog.Header>
+        <Dialog.Content>{data.content}</Dialog.Content>
+        <Dialog.Footer>
+          <Button onClick={handleRequestClose} variant="outlined" color="gray">
+            Cancel
+          </Button>
+          <Button onClick={handleRequestClose}>Confirm</Button>
+        </Dialog.Footer>
+      </Dialog>
+      <Button onClick={handleClick}>Open dialog</Button>
+    </>
+  );
+};
+
 storiesOf('Atoms', module)
   .addDecorator(withDesign)
   .addParameters({ design, readme })
@@ -46,18 +74,5 @@ storiesOf('Atoms', module)
     const actions = getActions();
     const data = getData();
 
-    return (
-      <Dialog {...props} {...actions}>
-        <Dialog.Header>
-          <Typography el="h3">{data.header}</Typography>
-        </Dialog.Header>
-        <Dialog.Content>{data.content}</Dialog.Content>
-        <Dialog.Footer>
-          <Button variant="outlined" color="gray">
-            Cancel
-          </Button>
-          <Button>Confirm</Button>
-        </Dialog.Footer>
-      </Dialog>
-    );
+    return <DialogComponent props={props} data={data} actions={actions} />;
   });

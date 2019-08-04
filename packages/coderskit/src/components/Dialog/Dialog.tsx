@@ -34,7 +34,7 @@ const ModalAdapter = ({ className, ...props }: DialogProps) => {
   );
 };
 
-const DialogWrapper = styled(ModalAdapter)(props => {
+const DialogBase = styled(ModalAdapter)(props => {
   const { theme, width } = props;
   const { colors, radii, shadows, fontSizes, fontWeights, lineHeights } = theme;
 
@@ -91,38 +91,39 @@ const DialogWrapper = styled(ModalAdapter)(props => {
   };
 });
 
-const DialogHeader = (props: DialogHeaderProps) => {
-  const className = classnames(props.className, 'ck-dialog__header');
+const DialogHeader = ({ children, className, ...props }: DialogHeaderProps) => {
+  className = classnames(className, 'ck-dialog__header');
+
   return (
     <div {...props} className={className}>
-      <div className="ck-dialog__header-content">{props.children}</div>
+      <div className="ck-dialog__header-content">{children}</div>
       <Divider />
     </div>
   );
 };
 
-const DialogContent = (props: DialogContentProps) => {
-  const className = classnames(props.className, 'ck-dialog__content');
+const DialogContent = ({ children, className, ...props }: DialogContentProps) => {
+  className = classnames(className, 'ck-dialog__content');
+
   return (
     <div {...props} className={className}>
-      {props.children}
+      {children}
     </div>
   );
 };
 
-const DialogFooter = (props: DialogFooterProps) => {
-  const className = classnames(props.className, 'ck-dialog__footer');
+const DialogFooter = ({ children, className, ...props }: DialogFooterProps) => {
+  className = classnames(className, 'ck-dialog__footer');
+
   return (
     <div {...props} className={className}>
       <Divider />
-      <div className="ck-dialog__footer-content">{props.children}</div>
+      <div className="ck-dialog__footer-content">{children}</div>
     </div>
   );
 };
 
-export const Dialog = (props: DialogProps) => {
-  return <DialogWrapper {...props} />;
-};
+export const Dialog = (props: DialogProps) => <DialogBase {...props} />;
 
 Dialog.defaultProps = {
   width: 480,
