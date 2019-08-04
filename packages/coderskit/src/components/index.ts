@@ -18,3 +18,5 @@ export * from './TextArea';
 export * from './Tooltip';
 export * from './Typography';
 export * from './Upload';
+export * from './Menu';
+export * from './Menu/Item';
