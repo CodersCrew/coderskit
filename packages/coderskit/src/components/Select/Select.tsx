@@ -17,7 +17,7 @@ export type SelectStatus = 'error' | 'warning' | 'success' | 'loading' | 'defaul
 
 type LoadingIndicatorProps = CommonProps<{ label: string; value: string }>;
 
-export interface SelectProps extends Omit<ReactSelectProps, 'theme' | 'classNamePrefix' | 'isLoading'> {
+export interface SelectProps extends Omit<ReactSelectProps, 'theme' | 'classNamePrefix' | 'isLoading' | 'components'> {
   status?: SelectStatus;
 }
 

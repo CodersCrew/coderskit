@@ -23,7 +23,7 @@ const readme = { content };
 const typographyGroup = 'Typography';
 
 const asElements = {
-  none: 'none',
+  unset: 'unset',
   h1: 'h1',
   h2: 'h2',
   h3: 'h3',
@@ -34,16 +34,16 @@ const asElements = {
   label: 'label',
 };
 
-const elements = { none: 'none', ...Object.keys(fontSizes).reduce((acc, key) => ({ ...acc, [key]: key }), {}) };
-const weights = { none: 'none', ...Object.keys(fontWeights).reduce((acc, key) => ({ ...acc, [key]: key }), {}) };
-const colors = { none: 'none', ...Object.keys(themeColors).reduce((a, key) => ({ ...a, [key]: key }), {}) };
+const elements = { unset: 'unset', ...Object.keys(fontSizes).reduce((acc, key) => ({ ...acc, [key]: key }), {}) };
+const weights = { unset: 'unset', ...Object.keys(fontWeights).reduce((acc, key) => ({ ...acc, [key]: key }), {}) };
+const colors = { unset: 'unset', ...Object.keys(themeColors).reduce((a, key) => ({ ...a, [key]: key }), {}) };
 
 const getTypographyProps = () => ({
-  el: select('el', elements, 'none', typographyGroup) as ThemeFontSizesKeys,
-  as: select('as', asElements, 'none', typographyGroup),
+  el: select('el', elements, 'unset', typographyGroup) as ThemeFontSizesKeys,
+  as: select('as', asElements, 'unset', typographyGroup),
   children: text('children', 'Type something', typographyGroup),
-  weight: select('weight', weights, 'none', typographyGroup) as ThemeFontWeightsKeys,
-  color: select('color', colors, 'none', typographyGroup) as ThemeColorsKeys,
+  weight: select('weight', weights, 'unset', typographyGroup) as ThemeFontWeightsKeys,
+  color: select('color', colors, 'unset', typographyGroup) as ThemeColorsKeys,
 });
 
 storiesOf('Atoms|Typography', module)
@@ -55,7 +55,7 @@ storiesOf('Atoms|Typography', module)
 
     // eslint-disable-next-line no-restricted-syntax
     for (const key of ['el', 'weight', 'color', 'as']) {
-      if (rest[key] === 'none') {
+      if (rest[key] === 'unset') {
         delete rest[key];
       }
     }

@@ -73,10 +73,10 @@ const getSelectActions = () => ({
   onMenuClose: action('onMenuClose'),
 });
 
-storiesOf('Atoms|Select', module)
+storiesOf('Atoms', module)
   .addDecorator(withDesign)
   .addParameters({ design, readme })
-  .add('Default select', () => {
+  .add('Select', () => {
     const props = getSelectProps();
     const messages = getMessages();
     const fieldProps = getFieldProps();

@@ -1,10 +1,9 @@
-import React, { ElementType, ReactNode } from 'react';
+import React, { ElementType } from 'react';
 import styled from '@emotion/styled';
 import classnames from 'classnames';
 import { ThemeColorsKeys, ThemeFontWeightsKeys, ThemeFontSizesKeys } from '../..';
 
 export interface TypographyProps extends React.HTMLAttributes<any> {
-  children: ReactNode;
   el?: ThemeFontSizesKeys;
   as?: ElementType | string;
   color?: ThemeColorsKeys;
