@@ -43,14 +43,7 @@ storiesOf('Atoms|Avatar', module)
     const props = getAvatarProps();
     const { children, ...rest } = props;
 
-    return (
-      <>
-        <Avatar {...rest}>{children}</Avatar>
-        <Avatar {...rest} src={undefined}>
-          {children}
-        </Avatar>
-      </>
-    );
+    return <Avatar {...rest}>{children}</Avatar>;
   })
   .add('Avatar without image', () => {
     const props = getAvatarWithoutImageProps();
