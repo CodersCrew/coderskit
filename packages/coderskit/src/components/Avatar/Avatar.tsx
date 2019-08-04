@@ -1,7 +1,8 @@
-import React, { HTMLAttributes, ElementType } from 'react';
+import React, { useMemo, HTMLAttributes, ElementType } from 'react';
 import styled from '@emotion/styled';
 import classnames from 'classnames';
-import { Theme } from '../..';
+import { css } from '@emotion/core';
+import { GlobalStyles, Theme } from '../..';
 
 export type AvatarShape = 'circle' | 'square';
 
@@ -13,76 +14,76 @@ export interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
   [key: string]: any;
 }
 
-const calcRadius = (size?: number, shape?: string): string => {
-  if (shape === 'circle') {
-    return '100%';
-  } else if (size! >= 32) {
-    return '8px';
-  } else {
-    return '4px';
-  }
+const calcRadius = (size: number, shape?: AvatarShape) => {
+  if (shape === 'circle') return '100%';
+  else if (size >= 32) return '8px';
+  else return '4px';
 };
 
-const calcFontSize = (size?: number): string => {
-  if (size! <= 16) {
-    return `${size! / 2 + 2}px`;
-  } else if (size! <= 24) {
-    return `${size! / 2}px`;
-  } else {
-    return `${size! / 2 - 2}px`;
-  }
+const calcFontSize = (size: number) => {
+  if (size <= 16) return `${size / 2 + 2}px`;
+  else if (size <= 24) return `${size / 2}px`;
+  else return `${size / 2 - 2}px`;
 };
 
 const calcFontWeight = (size: number, theme: Theme): number => theme.fontWeights[size! <= 32 ? 'medium' : 'bold'];
 
-const AvatarBase = styled.div<AvatarProps>(props => {
-  const { shadows } = props.theme;
-  const { size, shape } = props;
+const globalStyles = ({ shadows, colors }: Theme) => css`
+  .ck-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    border: none;
+    box-shadow: ${shadows.xs};
+  }
 
-  const dimension = `${size}px`;
+  .ck-avatar-img {
+    background-size: cover;
+    color: transparent;
+  }
 
-  return {
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    outline: 'none',
-    border: 'none',
-    borderRadius: calcRadius(size, shape),
-    width: dimension,
-    height: dimension,
-    boxShadow: shadows.xs,
-  };
-});
+  .ck-avatar-text {
+    background-color: ${colors.primary};
+    color: ${colors.white};
+    text-transform: uppercase;
+    text-align: center;
+  }
+`;
 
-const AvatarText = styled(AvatarBase)(props => {
-  const { colors } = props.theme;
-  const { size } = props;
+const AvatarBase = styled.div<AvatarProps>(({ size, shape }) => ({
+  borderRadius: calcRadius(size!, shape),
+  width: size,
+  height: size,
+}));
 
-  return {
-    backgroundColor: colors.primary,
-    color: colors.white,
-    fontSize: calcFontSize(size),
-    fontWeight: calcFontWeight(size, props.theme),
-    textTransform: 'uppercase',
-    textAlign: 'center',
-  };
-});
+const AvatarText = styled(AvatarBase)<AvatarProps>(({ size, theme }) => ({
+  fontSize: calcFontSize(size!),
+  fontWeight: calcFontWeight(size!, theme),
+}));
 
-const AvatarImg = styled(AvatarBase)(props => {
-  return {
-    background: `url(${props.src})`,
-    backgroundSize: 'cover',
-    color: 'transparent',
-  };
-});
+const AvatarImg = styled(AvatarBase)<AvatarProps>(({ src }) => ({
+  backgroundImage: `url(${src})`,
+}));
 
-export const Avatar = ({ children, className, ...props }: AvatarProps) => {
-  const AvatarContainer = props.src ? AvatarImg : AvatarText;
+export const Avatar = ({ children, className, src, ...props }: AvatarProps) => {
+  const AvatarContainer = src ? AvatarImg : AvatarText;
+  const customClass = useMemo(
+    () =>
+      classnames(className, 'ck-avatar', {
+        'ck-avatar-img': src,
+        'ck-avatar-text': !src,
+      }),
+    [src, className],
+  );
 
   return (
-    <AvatarContainer {...props} className={classnames(className, 'ck-avatar')}>
-      {props.src ? null : children}
-    </AvatarContainer>
+    <>
+      <GlobalStyles styles={globalStyles} component="Avatar" />
+      <AvatarContainer {...props} src={src} className={customClass}>
+        {src ? null : children}
+      </AvatarContainer>
+    </>
   );
 };
 
