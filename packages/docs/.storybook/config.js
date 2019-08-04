@@ -2,10 +2,8 @@ import React from 'react';
 import { configure, addDecorator, addParameters } from '@storybook/react';
 import { withA11y } from '@storybook/addon-a11y';
 import { withKnobs } from '@storybook/addon-knobs';
-import { ThemeProvider } from 'emotion-theming';
-import { Global } from '@emotion/core';
 import { addReadme } from 'storybook-readme';
-import { theme, globalStyle, initializeNotifications } from 'coderskit';
+import { StylesProvider } from 'coderskit';
 
 addParameters({
   options: {
@@ -16,13 +14,11 @@ addParameters({
 const req = require.context('../src', true, /.stories.tsx$/);
 
 const withGlobal = story => (
-  <ThemeProvider theme={theme}>
+  <StylesProvider>
     <div style={{ width: '100%', height: '100%', padding: 32 }}>
-      <Global styles={globalStyle} />
       {story()}
-      {initializeNotifications()}
     </div>
-  </ThemeProvider>
+  </StylesProvider>
 );
 
 addDecorator(withA11y);
