@@ -12,16 +12,27 @@ const design = {
 
 const readme = { content };
 
-const getFieldMessageProps = () => ({
+const getDefaultFieldMessageProps = () => ({
   children: text('children', 'Type something'),
   error: boolean('error', false),
+});
+
+const getErrorFieldMessageProps = () => ({
+  children: text('children', 'Type something'),
+  error: boolean('error', true),
 });
 
 storiesOf('Atoms|FieldMessage', module)
   .addDecorator(withDesign)
   .addParameters({ design, readme })
   .add('Default message', () => {
-    const props = getFieldMessageProps();
+    const props = getDefaultFieldMessageProps();
+    const { children, ...rest } = props;
+
+    return <FieldMessage {...rest}>{children}</FieldMessage>;
+  })
+  .add('Error message', () => {
+    const props = getErrorFieldMessageProps();
     const { children, ...rest } = props;
 
     return <FieldMessage {...rest}>{children}</FieldMessage>;

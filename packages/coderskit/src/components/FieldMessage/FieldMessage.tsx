@@ -1,9 +1,11 @@
-import React, { HTMLAttributes } from 'react';
+import React, { HTMLAttributes, ElementType } from 'react';
 import styled from '@emotion/styled';
 import classnames from 'classnames';
 
 export interface FieldMessageProps extends HTMLAttributes<any> {
+  as?: ElementType | string;
   error?: boolean;
+  [key: string]: any;
 }
 
 const FieldMessageWrapper = styled.small<FieldMessageProps>(props => {
