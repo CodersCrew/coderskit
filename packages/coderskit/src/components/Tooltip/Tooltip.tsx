@@ -5,10 +5,24 @@ import ReactTooltip, { RCTooltip } from 'rc-tooltip';
 import classnames from 'classnames';
 import { transparentize } from 'polished';
 
-export type TooltipProps = Omit<RCTooltip.Props, 'ref'>;
+export type TooltipProps = Omit<
+  RCTooltip.Props,
+  | 'prefixCls'
+  | 'transitionName'
+  | 'ref'
+  | 'getTooltipContainer'
+  | 'arrowContent'
+  | 'align'
+  | 'overlayStyle'
+  | 'overlayClassName'
+>;
 
 interface AdapterProps extends TooltipProps {
   className?: string;
+}
+
+interface TooltipBaseProps extends AdapterProps {
+  transitionName?: string;
 }
 
 const ARROW_WIDTH = 6;
@@ -36,7 +50,7 @@ const TooltipAdapter = ({ className, ...props }: AdapterProps) => {
   return <ReactTooltip overlayClassName={classnames(className)} prefixCls="ck-tooltip" {...props} />;
 };
 
-const TooltipWrapper = styled(TooltipAdapter)(({ theme }) => {
+const TooltipBase = styled(TooltipAdapter)<TooltipBaseProps>(({ theme }) => {
   const { colors, radii, shadows, fontSizes, lineHeights, transitions } = theme;
 
   return {
@@ -176,5 +190,5 @@ const TooltipWrapper = styled(TooltipAdapter)(({ theme }) => {
 });
 
 export const Tooltip = (props: TooltipProps) => {
-  return <TooltipWrapper {...props} transitionName="fade" />;
+  return <TooltipBase {...props} transitionName="fade" />;
 };

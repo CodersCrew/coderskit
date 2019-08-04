@@ -142,12 +142,13 @@ export type RadioGroupLayout = 'vertical' | 'horizontal';
 
 export interface RadioGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   name: string;
-  children: React.ReactElement<RadioProps>[];
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  children: ReactElement<RadioProps>[];
   layout?: RadioGroupLayout;
   spaceBetween?: number;
 }
 
-type RadioGroupWrapperProps = Omit<RadioGroupProps, 'name' | 'children'>;
+type RadioGroupWrapperProps = Omit<RadioGroupProps, 'name' | 'children' | 'onChange' | 'onFocus' | 'onBlur'>;
 
 const RadioGroupWrapper = styled.div<RadioGroupWrapperProps>(props => {
   const { layout, spaceBetween } = props;
@@ -164,11 +165,11 @@ const RadioGroupWrapper = styled.div<RadioGroupWrapperProps>(props => {
   };
 });
 
-export const RadioGroup = ({ name, children, ...props }: RadioGroupProps) => {
+export const RadioGroup = ({ name, children, onChange, ...props }: RadioGroupProps) => {
   const childrenWithNames = React.Children.map(children, child => {
     const children = React.Children.map(child.props.children as ReactElement[], innerChild => {
       if (innerChild.props && innerChild.props.value) {
-        return React.cloneElement(innerChild, { name });
+        return React.cloneElement(innerChild, { name, onChange });
       }
 
       return innerChild;

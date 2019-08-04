@@ -45,7 +45,12 @@ const getInputProps = () => ({
 });
 
 const getStatusProps = () => ({
-  status: select('status', statuses, 'default', statusGroup) as keyof typeof statuses,
+  status: select('status', statuses, 'success', statusGroup) as keyof typeof statuses,
+  noIcon: boolean('noIcon', false, statusGroup),
+});
+
+const getFieldStatusProps = () => ({
+  status: select('status', statuses, 'error', statusGroup) as keyof typeof statuses,
   noIcon: boolean('noIcon', false, statusGroup),
 });
 
@@ -55,15 +60,30 @@ const getLabelProps = () => ({
 
 const getMessageProps = () => ({
   help: text('help', 'Help message', messageGroup),
-  error: boolean('error', false, messageGroup),
+  error: boolean('error', true, messageGroup),
 });
 
 storiesOf('Atoms|Input', module)
   .addDecorator(withDesign)
   .addParameters({ design, readme })
-  .add('Default input', () => {
+  .add('Simple input', () => {
+    const props = getInputProps();
+
+    return <Input {...props} />;
+  })
+  .add('Input with a status', () => {
     const props = getInputProps();
     const statusProps = getStatusProps();
+
+    return (
+      <Input.Status {...statusProps}>
+        <Input {...props} />
+      </Input.Status>
+    );
+  })
+  .add('Complete form input field', () => {
+    const props = getInputProps();
+    const statusProps = getFieldStatusProps();
     const labelProps = getLabelProps();
     const messageProps = getMessageProps();
 

@@ -13,10 +13,16 @@ const design = {
 
 const readme = { content };
 
+const switchGroup = 'Switch';
+const labelGroup = '.Label';
+
 const getSwitchProps = () => ({
-  disabled: boolean('disabled', false),
-  name: text('name', 'switch-name'),
-  label: text('label', 'Switch label content'),
+  disabled: boolean('disabled', false, switchGroup),
+  name: text('name', 'switch', switchGroup),
+});
+
+const getLabelProps = () => ({
+  children: text('children', 'Switch label', labelGroup),
 });
 
 const getSwitchActions = () => ({
@@ -28,15 +34,20 @@ const getSwitchActions = () => ({
 storiesOf('Atoms|Switch', module)
   .addDecorator(withDesign)
   .addParameters({ design, readme })
-  .add('Default switch', () => {
+  .add('Only switch', () => {
     const props = getSwitchProps();
     const actions = getSwitchActions();
 
-    const { label, ...rest } = props;
+    return <Switch {...props} {...actions} />;
+  })
+  .add('Switch with label', () => {
+    const props = getSwitchProps();
+    const actions = getSwitchActions();
+    const { children } = getLabelProps();
 
     return (
       <Switch.Label>
-        <Switch {...rest} {...actions} /> {label}
+        <Switch {...props} {...actions} /> {children}
       </Switch.Label>
     );
   });

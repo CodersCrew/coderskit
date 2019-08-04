@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { withDesign } from 'storybook-addon-designs';
 import { boolean, text, number, optionsKnob, select } from '@storybook/addon-knobs';
-import { Tooltip, Input } from 'coderskit';
+import { Tooltip, Input, Button } from 'coderskit';
 import content from './Tooltip.md';
 
 const design = {
@@ -54,13 +54,23 @@ const getActions = () => ({
 storiesOf('Atoms|Tooltip', module)
   .addDecorator(withDesign)
   .addParameters({ design, readme })
-  .add('Default tooltip', () => {
+  .add('With button', () => {
     const props = getTooltipProps();
     const actions = getActions();
 
     return (
       <Tooltip {...props} {...actions}>
-        <Input value="Input with tooltip" />
+        <Button>Button with tooltip</Button>
+      </Tooltip>
+    );
+  })
+  .add('With input', () => {
+    const props = getTooltipProps();
+    const actions = getActions();
+
+    return (
+      <Tooltip {...props} {...actions}>
+        <Input placeholder="Input with tooltip" />
       </Tooltip>
     );
   });

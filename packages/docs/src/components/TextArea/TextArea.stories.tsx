@@ -47,7 +47,12 @@ const getTextAreaProps = () => ({
 });
 
 const getStatusProps = () => ({
-  status: select('status', statuses, 'default', statusGroup) as keyof typeof statuses,
+  status: select('status', statuses, 'success', statusGroup) as keyof typeof statuses,
+  noIcon: boolean('noIcon', false, statusGroup),
+});
+
+const getFlieldStatusProps = () => ({
+  status: select('status', statuses, 'error', statusGroup) as keyof typeof statuses,
   noIcon: boolean('noIcon', false, statusGroup),
 });
 
@@ -57,15 +62,30 @@ const getLabelProps = () => ({
 
 const getMessages = () => ({
   help: text('help', 'Help message', messageGroup),
-  error: boolean('error', false, messageGroup),
+  error: boolean('error', true, messageGroup),
 });
 
 storiesOf('Atoms|TextArea', module)
   .addDecorator(withDesign)
   .addParameters({ design, readme })
-  .add('Default textarea', () => {
+  .add('Simple textarea', () => {
+    const props = getTextAreaProps();
+
+    return <TextArea {...props} />;
+  })
+  .add('TextArea with status', () => {
     const props = getTextAreaProps();
     const statusProps = getStatusProps();
+
+    return (
+      <TextArea.Status {...statusProps}>
+        <TextArea {...props} />
+      </TextArea.Status>
+    );
+  })
+  .add('Complete form textarea field', () => {
+    const props = getTextAreaProps();
+    const statusProps = getFlieldStatusProps();
     const labelProps = getLabelProps();
     const messageProps = getMessages();
 

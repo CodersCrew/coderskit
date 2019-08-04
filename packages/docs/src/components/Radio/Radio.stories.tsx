@@ -1,6 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withDesign } from 'storybook-addon-designs';
+import { action } from '@storybook/addon-actions';
 import { boolean, text, radios } from '@storybook/addon-knobs';
 import { Radio } from 'coderskit';
 import content from './Radio.md';
@@ -13,6 +14,7 @@ const design = {
 const readme = { content };
 
 const radioGroup = 'Radio';
+const labelGroup = '.Label';
 const radioGroupGroup = '.Group';
 
 const layouts = {
@@ -22,7 +24,11 @@ const layouts = {
 
 const getRadioProps = () => ({
   disabled: boolean('disabled', false, radioGroup),
-  label: text('label', 'Radio label', radioGroup),
+  name: text('name', 'radio', radioGroup),
+});
+
+const getLabelProps = () => ({
+  children: text('children', 'Radio label', labelGroup),
 });
 
 const getRadioGroupProps = () => ({
@@ -30,24 +36,34 @@ const getRadioGroupProps = () => ({
   name: text('name', 'fruits', radioGroupGroup),
 });
 
+const getRadioGroupActions = () => ({
+  onChange: action('onChange'),
+});
+
 storiesOf('Atoms|Radio', module)
   .addDecorator(withDesign)
   .addParameters({ design, readme })
-  .add('Default radio', () => {
+  .add('Only radio', () => {
     const props = getRadioProps();
-    const { label, ...rest } = props;
+
+    return <Radio {...props} />;
+  })
+  .add('Radio with label', () => {
+    const props = getRadioProps();
+    const { children } = getLabelProps();
 
     return (
       <Radio.Label>
-        <Radio {...rest} /> {label}
+        <Radio {...props} /> {children}
       </Radio.Label>
     );
   })
   .add('Radio group', () => {
-    const radioGroupProps = getRadioGroupProps();
+    const props = getRadioGroupProps();
+    const actions = getRadioGroupActions();
 
     return (
-      <Radio.Group {...radioGroupProps}>
+      <Radio.Group {...props} {...actions}>
         <Radio.Label>
           <Radio value="apple" /> Apple
         </Radio.Label>
