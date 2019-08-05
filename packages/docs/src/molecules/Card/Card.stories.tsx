@@ -17,7 +17,7 @@ const elements = {
 
 storiesOf('Molecules', module).add('Card', () => {
   const props = {
-    image: text('image', 'popcorn.jpg'),
+    src: text('image', 'popcorn.jpg'),
     width: number('width', 280, widthRange),
     inlineBtn: boolean('inline buttons', false),
     as: select('as', elements, 'div') as keyof typeof elements,
@@ -32,17 +32,20 @@ storiesOf('Molecules', module).add('Card', () => {
   };
 
   return (
-    <Card {...props}>
-      <Typography el="h3">{data.header}</Typography>
-      <Card.Content>
-        <Typography el="body2">{data.content}</Typography>
-      </Card.Content>
-      <Card.Footer>
-        <Button variant="outlined" color="gray">
-          <Icon src="edit-solid.svg" />
-        </Button>
-        <Button>Details</Button>
-      </Card.Footer>
-    </Card>
+    <>
+      <Card {...props}>
+        <Card.Image />
+        <Card.Content>
+          <Typography el="h3">{data.header}</Typography>
+          <Typography el="body2">{data.content}</Typography>
+        </Card.Content>
+        <Card.Footer>
+          <Button variant="outlined" color="gray">
+            <Icon src="edit-solid.svg" />
+          </Button>
+          <Button>Details</Button>
+        </Card.Footer>
+      </Card>
+    </>
   );
 });

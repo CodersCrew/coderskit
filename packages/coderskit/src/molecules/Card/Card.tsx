@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import classnames from 'classnames';
 
 export interface CardImageProps extends HTMLAttributes<HTMLDivElement> {
-  image?: string;
+  src?: string;
 }
 
 export interface CardProps extends CardImageProps {
@@ -14,28 +14,35 @@ export interface CardProps extends CardImageProps {
 }
 
 const CardContainer = styled.div<CardProps>(props => {
-  const { theme, width, image, inlineBtn } = props;
+  const { theme, width, src, inlineBtn } = props;
   const { borders, colors, radii } = theme;
+  const padding = 16;
 
   return {
     width,
     border: borders.light,
+    padding: padding,
     background: colors.white,
     borderRadius: radii.small,
 
     '.ck-card__image': {
-      width: '100%',
+      width: `calc(100% + ${padding} * 2)`,
+      margin: `-${padding}px -${padding}px 0 -${padding}px`,
       height: 160,
-      background: `url(${image}) center center / cover no-repeat ${colors.fontPlaceholder}`,
+      background: `url(${src}) center center / cover no-repeat ${colors.fontPlaceholder}`,
     },
 
-    '.ck-card__wrapper': {
-      width: '100%',
-      padding: 16,
-      boxSizing: 'border-box',
+    '.ck-card__content': {
+      marginTop: padding,
+      display: 'flex',
+      flexDirection: 'column',
+
+      '> *:not(:first-child)': {
+        marginTop: 8,
+      },
     },
 
-    '.ck-card__content, .ck-card__footer': {
+    '.ck-card__footer': {
       marginTop: 8,
       display: 'flex',
       alignItems: 'center',
@@ -63,14 +70,9 @@ const CardFooter = (props: HTMLAttributes<HTMLDivElement>) => {
 };
 
 export const Card = (props: CardProps) => {
-  const { className, image, children } = props;
+  const { className } = props;
 
-  return (
-    <CardContainer {...props} className={classnames(className, 'ck-card')}>
-      <CardImage image={image} />
-      <div className="ck-card__wrapper">{children}</div>
-    </CardContainer>
-  );
+  return <CardContainer {...props} className={classnames(className, 'ck-card')} />;
 };
 
 Card.defaultProps = {
@@ -78,5 +80,6 @@ Card.defaultProps = {
   inlineBtn: false,
 };
 
+Card.Image = CardImage;
 Card.Content = CardContent;
 Card.Footer = CardFooter;
