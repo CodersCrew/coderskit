@@ -15,3 +15,4 @@ export * from './Badge';
 export * from './TextArea';
 export * from './Upload';
 export * from './Avatar';
+export * from './Breadcrumb';
