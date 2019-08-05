@@ -8,7 +8,7 @@ import content from './Switch.md';
 
 const design = {
   type: 'figma',
-  url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=24%3A28',
+  url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=25%3A66',
 };
 
 const readme = { content };

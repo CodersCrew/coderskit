@@ -8,7 +8,7 @@ import content from './Badge.md';
 
 const design = {
   type: 'figma',
-  url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=17%3A236',
+  url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=30%3A52',
 };
 
 const readme = { content };
