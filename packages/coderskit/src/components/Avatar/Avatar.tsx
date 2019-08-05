@@ -1,8 +1,7 @@
-import React, { useMemo, HTMLAttributes, ElementType } from 'react';
+import React, { HTMLAttributes, ElementType } from 'react';
 import styled from '@emotion/styled';
 import classnames from 'classnames';
-import { css } from '@emotion/core';
-import { GlobalStyles, Theme } from '../..';
+import { Theme } from '../..';
 
 export type AvatarShape = 'circle' | 'square';
 
@@ -28,62 +27,45 @@ const calcFontSize = (size: number) => {
 
 const calcFontWeight = (size: number, theme: Theme): number => theme.fontWeights[size! <= 32 ? 'medium' : 'bold'];
 
-const globalStyles = ({ shadows, colors }: Theme) => css`
-  .ck-avatar {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    outline: none;
-    border: none;
-    box-shadow: ${shadows.xs};
-  }
-
-  .ck-avatar-img {
-    background-size: cover;
-    color: transparent;
-  }
-
-  .ck-avatar-text {
-    background-color: ${colors.primary};
-    color: ${colors.white};
-    text-transform: uppercase;
-    text-align: center;
-  }
-`;
-
-const AvatarBase = styled.div<AvatarProps>(({ size, shape }) => ({
+const AvatarBase = styled.div<AvatarProps>(({ size, shape, theme: { shadows } }) => ({
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  outline: 'none',
+  border: 'none',
+  boxShadow: shadows.xs,
   borderRadius: calcRadius(size!, shape),
   width: size,
   height: size,
 }));
 
-const AvatarText = styled(AvatarBase)<AvatarProps>(({ size, theme }) => ({
-  fontSize: calcFontSize(size!),
-  fontWeight: calcFontWeight(size!, theme),
-}));
+const AvatarText = styled(AvatarBase)<AvatarProps>(({ size, theme }) => {
+  const { colors } = theme;
+
+  return {
+    backgroundColor: colors.primary,
+    color: colors.white,
+    textTransform: 'uppercase',
+    textAlign: 'center',
+    fontSize: calcFontSize(size!),
+    fontWeight: calcFontWeight(size!, theme),
+  };
+});
 
 const AvatarImg = styled(AvatarBase)<AvatarProps>(({ src }) => ({
+  backgroundSize: 'cover',
+  color: 'transparent',
   backgroundImage: `url(${src})`,
 }));
 
 export const Avatar = ({ children, className, src, ...props }: AvatarProps) => {
   const AvatarContainer = src ? AvatarImg : AvatarText;
-  const customClass = useMemo(
-    () =>
-      classnames(className, 'ck-avatar', {
-        'ck-avatar-img': src,
-        'ck-avatar-text': !src,
-      }),
-    [src, className],
-  );
+  className = classnames(className, 'ck-avatar');
 
   return (
-    <>
-      <GlobalStyles styles={globalStyles} component="Avatar" />
-      <AvatarContainer {...props} src={src} className={customClass}>
-        {src ? null : children}
-      </AvatarContainer>
-    </>
+    <AvatarContainer {...props} src={src} className={className}>
+      {src ? null : children}
+    </AvatarContainer>
   );
 };
 
