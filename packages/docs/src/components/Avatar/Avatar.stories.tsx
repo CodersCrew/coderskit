@@ -2,14 +2,14 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { text, select, number } from '@storybook/addon-knobs';
 import { Avatar } from 'coderskit';
-import content from './Avatar.md';
+import sidebar from './Avatar.md';
 
 const design = {
   type: 'figma',
   url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=31%3A28',
 };
 
-const readme = { content };
+const readme = { sidebar };
 
 const avatarGroup = 'Avatar';
 

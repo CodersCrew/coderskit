@@ -3,14 +3,14 @@ import { storiesOf } from '@storybook/react';
 import { withDesign } from 'storybook-addon-designs';
 import { select, boolean, text } from '@storybook/addon-knobs';
 import { Input, Label, FieldMessage } from 'coderskit';
-import content from './Input.md';
+import sidebar from './Input.md';
 
 const design = {
   type: 'figma',
   url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=17%3A236',
 };
 
-const readme = { content };
+const readme = { sidebar };
 
 const inputGroup = 'Input';
 const statusGroup = '.Status';

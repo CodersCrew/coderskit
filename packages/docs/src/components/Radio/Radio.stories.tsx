@@ -4,14 +4,14 @@ import { withDesign } from 'storybook-addon-designs';
 import { action } from '@storybook/addon-actions';
 import { boolean, text, radios } from '@storybook/addon-knobs';
 import { Radio } from 'coderskit';
-import content from './Radio.md';
+import sidebar from './Radio.md';
 
 const design = {
   type: 'figma',
   url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=25%3A35',
 };
 
-const readme = { content };
+const readme = { sidebar };
 
 const radioGroup = 'Radio';
 const labelGroup = '.Label';

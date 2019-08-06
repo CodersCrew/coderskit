@@ -1,6 +1,6 @@
 # Switch
 
-<!-- STORY -->
+
 
 ### Switch props
 

@@ -1,6 +1,6 @@
 # TextArea
 
-<!-- STORY -->
+
 
 ### TextArea props
 

@@ -1,6 +1,6 @@
 # Upload
 
-<!-- STORY -->
+
 
 ### Upload props
 

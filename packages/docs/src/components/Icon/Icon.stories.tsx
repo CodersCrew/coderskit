@@ -3,14 +3,14 @@ import { storiesOf } from '@storybook/react';
 import { withDesign } from 'storybook-addon-designs';
 import { boolean, select, number } from '@storybook/addon-knobs';
 import { Icon, colors as themeColors } from 'coderskit';
-import content from './Icon.md';
+import sidebar from './Icon.md';
 
 const design = {
   type: 'figma',
   url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=615%3A0',
 };
 
-const readme = { content };
+const readme = { sidebar };
 
 const colors = Object.keys(themeColors).reduce((a, key) => ({ ...a, [key]: key }), {});
 

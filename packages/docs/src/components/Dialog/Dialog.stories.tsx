@@ -4,14 +4,14 @@ import { action } from '@storybook/addon-actions';
 import { withDesign } from 'storybook-addon-designs';
 import { boolean, text, number } from '@storybook/addon-knobs';
 import { Dialog, Button, Typography } from 'coderskit';
-import content from './Dialog.md';
+import sidebar from './Dialog.md';
 
 const design = {
   type: 'figma',
   url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=222%3A0',
 };
 
-const readme = { content };
+const readme = { sidebar };
 
 const getDialogProps = () => ({
   ariaHideApp: boolean('ariaHideApp', true),

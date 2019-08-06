@@ -1,6 +1,6 @@
 # Dialog
 
-<!-- STORY -->
+
 
 Accessible modal dialog component. It uses [react-modal](http://reactcommunity.org/react-modal/) under the hood.
 

@@ -1,6 +1,6 @@
 # Label
 
-<!-- STORY -->
+
 
 ### Label props
 

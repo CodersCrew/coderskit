@@ -4,14 +4,14 @@ import { action } from '@storybook/addon-actions';
 import { withDesign } from 'storybook-addon-designs';
 import { boolean, text } from '@storybook/addon-knobs';
 import { Checkbox } from 'coderskit';
-import content from './Checkbox.md';
+import sidebar from './Checkbox.md';
 
 const design = {
   type: 'figma',
   url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=30%3A52',
 };
 
-const readme = { content };
+const readme = { sidebar };
 
 const checkboxGroup = 'Checkbox';
 const labelGroup = '.Label';

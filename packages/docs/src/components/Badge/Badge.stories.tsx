@@ -4,14 +4,14 @@ import { withDesign } from 'storybook-addon-designs';
 import { number, select } from '@storybook/addon-knobs';
 import { omit } from 'lodash-es';
 import { Badge, Icon, colors as themeColors } from 'coderskit';
-import content from './Badge.md';
+import sidebar from './Badge.md';
 
 const design = {
   type: 'figma',
   url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=30%3A52',
 };
 
-const readme = { content };
+const readme = { sidebar };
 
 const badgeGroup = 'Badge';
 

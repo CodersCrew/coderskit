@@ -1,6 +1,6 @@
 # FieldMessage
 
-<!-- STORY -->
+
 
 ### FieldMessage props
 

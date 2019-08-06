@@ -3,14 +3,14 @@ import { storiesOf } from '@storybook/react';
 import { withDesign } from 'storybook-addon-designs';
 import { select, text, number } from '@storybook/addon-knobs';
 import { message, Button } from 'coderskit';
-import content from './message.md';
+import sidebar from './message.md';
 
 const design = {
   type: 'figma',
   url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=26%3A186',
 };
 
-const readme = { content };
+const readme = { sidebar };
 
 const childrenGroup = '1. Children';
 const configGroup = '2. Config';

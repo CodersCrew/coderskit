@@ -1,6 +1,6 @@
 # Divider
 
-<!-- STORY -->
+
 
 ### Divider props
 

@@ -1,6 +1,6 @@
 # Tooltip
 
-<!-- STORY -->
+
 
 ### Tooltip props
 

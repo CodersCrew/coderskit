@@ -11,14 +11,14 @@ import {
   ThemeColorsKeys,
   ThemeFontWeightsKeys,
 } from 'coderskit';
-import content from './Typography.md';
+import sidebar from './Typography.md';
 
 const design = {
   type: 'figma',
   url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=618%3A110',
 };
 
-const readme = { content };
+const readme = { sidebar };
 
 const typographyGroup = 'Typography';
 

@@ -4,14 +4,14 @@ import { withDesign } from 'storybook-addon-designs';
 import { action } from '@storybook/addon-actions';
 import { boolean, text } from '@storybook/addon-knobs';
 import { Switch } from 'coderskit';
-import content from './Switch.md';
+import sidebar from './Switch.md';
 
 const design = {
   type: 'figma',
   url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=25%3A66',
 };
 
-const readme = { content };
+const readme = { sidebar };
 
 const switchGroup = 'Switch';
 const labelGroup = '.Label';

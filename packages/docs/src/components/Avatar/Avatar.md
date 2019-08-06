@@ -1,6 +1,6 @@
 # Avatar
 
-<!-- STORY -->
+
 
 ### Avatar props
 

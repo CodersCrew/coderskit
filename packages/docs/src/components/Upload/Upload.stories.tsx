@@ -4,14 +4,14 @@ import { withDesign } from 'storybook-addon-designs';
 import { text, number, boolean } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 import { Upload } from 'coderskit';
-import content from './Upload.md';
+import sidebar from './Upload.md';
 
 const design = {
   type: 'figma',
   url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=551%3A32',
 };
 
-const readme = { content };
+const readme = { sidebar };
 
 const UploadField = (props: any) => {
   const [image, setImage] = useState('');

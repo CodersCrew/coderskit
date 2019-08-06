@@ -1,6 +1,6 @@
 # LinearProgress
 
-<!-- STORY -->
+
 
 ### LinearProgress props
 

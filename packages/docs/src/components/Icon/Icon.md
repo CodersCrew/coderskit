@@ -1,6 +1,6 @@
 # Icon
 
-<!-- STORY -->
+
 
 ### Icon props
 

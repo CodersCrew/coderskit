@@ -1,6 +1,6 @@
 # message
 
-<!-- STORY -->
+
 
 `message` is a function that allows you to display floating messages around your application.
 

@@ -1,6 +1,6 @@
 # Badge
 
-<!-- STORY -->
+
 
 ### Badge props
 

@@ -4,14 +4,14 @@ import { action } from '@storybook/addon-actions';
 import { withDesign } from 'storybook-addon-designs';
 import { boolean, text, number, optionsKnob, select } from '@storybook/addon-knobs';
 import { Tooltip, Input, Button } from 'coderskit';
-import content from './Tooltip.md';
+import sidebar from './Tooltip.md';
 
 const design = {
   type: 'figma',
   url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=220%3A631',
 };
 
-const readme = { content };
+const readme = { sidebar };
 
 const triggers = {
   hover: 'hover',

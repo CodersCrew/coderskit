@@ -4,14 +4,14 @@ import { withDesign } from 'storybook-addon-designs';
 import { select, boolean, number, text } from '@storybook/addon-knobs';
 import { Button, Icon, colors as themeColors } from 'coderskit';
 import { omit } from 'lodash-es';
-import content from './Button.md';
+import sidebar from './Button.md';
 
 const design = {
   type: 'figma',
   url: 'https://www.figma.com/file/H3nYAU5AetzPWs04mL8Em5CY/CodersKit?node-id=15%3A64',
 };
 
-const readme = { content };
+const readme = { sidebar };
 
 const buttonGroup = 'Button';
 const iconGroup = 'Icon';
