@@ -7,22 +7,22 @@ export interface BreadcrumbProps extends HTMLAttributes<HTMLElement> {
   name?: string;
   color?: ThemeColorsKeys;
   size?: number;
-  iconVisible?: boolean;
-  dividerVisible?: boolean;
+  isIconVisible?: boolean;
+  isDividerVisible?: boolean;
   separator?: string;
   href?: string;
 }
 
 const BreadcrumbBase = styled.li<BreadcrumbProps>(props => {
-  const { theme, size, iconVisible, dividerVisible, separator } = props;
+  const { theme, size, isIconVisible, isDividerVisible, separator } = props;
   const { colors } = theme;
 
   const color = colors[props.color!];
-  const visible = iconVisible ? 'visible' : 'hidden';
-  const visibleDivider = dividerVisible ? 'visible' : 'hidden';
-  const paddingX = iconVisible ? 10 : 0;
-  const marginX = iconVisible ? 0 : 16;
-  const marginIcon = paddingX / 2;
+  const visibleIcon = isIconVisible ? 'visible' : 'hidden';
+  const visibleDivider = isDividerVisible ? 'visible' : 'hidden';
+  const paddingX = isIconVisible ? 10 : 0;
+  const marginX = isIconVisible ? 0 : 16;
+  const iconMargin = paddingX / 2;
 
   return {
     display: 'inline-flex',
@@ -34,8 +34,8 @@ const BreadcrumbBase = styled.li<BreadcrumbProps>(props => {
     cursor: 'pointer',
 
     '.ck-icon': {
-      visibility: visible,
-      marginRight: marginIcon,
+      visibility: visibleIcon,
+      marginRight: iconMargin,
     },
 
     '.ck-breadcrumb-divider': {
@@ -64,15 +64,17 @@ const BreadcrumbBase = styled.li<BreadcrumbProps>(props => {
   };
 });
 
-const BreadCrumbDivider = ({ className }: BreadcrumbProps) => {
-  return <div className={classnames(className, 'ck-breadcrumb-divider')} />;
+const BreadCrumbDivider = ({ ...props }: BreadcrumbProps) => {
+  const { className } = props;
+
+  return <div {...props} className={classnames(className, 'ck-breadcrumb-divider')} />;
 };
 
 const BreadCrumbItem = ({ ...props }: BreadcrumbProps) => {
   const { href, className, name } = props;
 
   return (
-    <div className={classnames(className, 'ck-breadcrumb-item')}>
+    <div {...props} className={classnames(className, 'ck-breadcrumb-item')}>
       <a href={href}>
         <Icon {...props} style={{ color: 'currentColor' }} />
         {name}
@@ -97,8 +99,8 @@ Breadcrumb.defaultProps = {
   name: 'Icon 1',
   color: 'primary',
   size: 16,
-  iconVisible: true,
-  dividerVisible: true,
+  isIconVisible: true,
+  isDividerVisible: true,
 };
 
 Breadcrumb.Item = BreadCrumbItem;

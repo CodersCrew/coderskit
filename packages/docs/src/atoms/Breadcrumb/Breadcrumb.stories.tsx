@@ -29,8 +29,8 @@ storiesOf('Atoms', module)
       size: number('size', 14),
       src: select('src', icons, icons.user) as keyof typeof icons,
       separator: select('separator', separators, separators.slash) as keyof typeof separators,
-      iconVisible: boolean('iconVisible', true),
-      dividerVisible: boolean('dividerVisible', true),
+      isIconVisible: boolean('iconVisible', true),
+      isDividerVisible: boolean('dividerVisible', true),
       href: text('href', 'javascript:;'),
     };
 
@@ -38,7 +38,7 @@ storiesOf('Atoms', module)
       <div style={{ display: 'flex' }}>
         <Breadcrumb {...props} />
         <Breadcrumb {...props} />
-        <Breadcrumb {...props} dividerVisible={false} />
+        <Breadcrumb {...props} isDividerVisible={false} />
       </div>
     );
   });
