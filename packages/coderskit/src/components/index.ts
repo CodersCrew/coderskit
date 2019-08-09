@@ -20,3 +20,4 @@ export * from './Typography';
 export * from './Upload';
 export * from './Menu';
 export * from './Menu/Item';
+export * from './Menu/Sub';

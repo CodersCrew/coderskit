@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { text, select, number } from '@storybook/addon-knobs';
-import { Menu, Item, Icon } from 'coderskit';
+import { Menu, Item, Icon, Sub } from 'coderskit';
 import content from './Menu.md';
 
 const design = {
@@ -40,9 +40,10 @@ storiesOf('Atoms|Menu', module)
     return (
       <>
         <Menu>
-          <Item src="check-solid.svg" label="item content" />
-          <Item src="check-solid.svg" label="item content" />
-          <Item src="check-solid.svg" label="item content" />
+          <Item src="check-solid.svg" label="Dashboard" />
+          <Item src="person.svg" label="About as" />
+          <Sub src="basket.svg" label="Products" />
+          <Item src="message.svg" label="Contact" />
         </Menu>
       </>
     );

@@ -14,14 +14,14 @@ const {
   space,
 } = theme;
 
-export interface ItemProps extends HTMLAttributes<HTMLDivElement> {
+export interface SubProps extends HTMLAttributes<HTMLDivElement> {
   src: string;
   label: string;
   [key: string]: any;
 }
 
 const globalStyles = ({ shadows, colors }: Theme) => css`
-  .ck-menu-item {
+  .ck-menu-sub {
     width: 100%;
     display: flex;
     align-items: center;
@@ -40,19 +40,20 @@ const globalStyles = ({ shadows, colors }: Theme) => css`
   }
 `;
 
-export const Item = ({ src, label, children, className, ...props }: ItemProps) => {
+export const Sub = ({ src, label, children, className, ...props }: SubProps) => {
   return (
     <>
       <GlobalStyles styles={globalStyles} component="Item" />
       <div {...props} className={classnames(className, 'ck-menu-item')}>
         <Icon src={src} color="fontPlaceholder" />
         <span className="ck-menu-item-label">{label}</span>
+        <Icon src={src} color="primary" />
       </div>
     </>
   );
 };
 
-Item.defaultProps = {
+Sub.defaultProps = {
   src: '',
   label: '',
   children: '',
