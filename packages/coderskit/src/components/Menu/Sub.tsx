@@ -1,55 +1,53 @@
-import React, { useMemo, HTMLAttributes, ElementType } from 'react';
-import { Icon } from '../Icon';
+import React, { useState, HTMLAttributes } from 'react';
 import styled from '@emotion/styled';
 import classnames from 'classnames';
-import { css } from '@emotion/core';
-import { GlobalStyles, Theme } from '../..';
 import theme from '../../utils/theme';
-
-const {
-  colors: { white, fontRegular, primary, fontPlaceholder },
-  shadows: { sm },
-  radii: { large },
-  fontWeights: { medium },
-  space,
-} = theme;
+import { Item } from './Item';
 
 export interface SubProps extends HTMLAttributes<HTMLDivElement> {
+  children: Item;
   src: string;
   label: string;
+  chevron: boolean;
   [key: string]: any;
 }
 
-const globalStyles = ({ shadows, colors }: Theme) => css`
-  .ck-menu-sub {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    padding: ${space[16]};
-    font-weight: ${medium};
-    cursor: pointer;
+interface SubBaseProps extends HTMLAttributes<HTMLDivElement> {}
 
-    &:hover * {
-      color: ${primary};
-    }
-  }
+const SubWrapper = styled.div<SubBaseProps>(props => {
+  const { colors, space, fontWeights } = theme;
+  return {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    fontWeight: fontWeights.medium,
+    cursor: 'pointer',
 
-  .ck-menu-item-label {
-    color: ${fontRegular};
-    margin-left: ${space[12]};
-  }
-`;
+    '.ck-menu-item-label': {
+      color: colors.fontRegular,
+      marginLeft: space[12],
+    },
 
-export const Sub = ({ src, label, children, className, ...props }: SubProps) => {
+    '.ck-menu-item-wrapper': {
+      width: '90%',
+      marginLeft: 'auto',
+      display: 'flex',
+      flexDirection: 'column',
+      '.ck-menu-item:first-child': {
+        borderTop: `1px solid ${colors.border}`,
+      },
+    },
+  };
+});
+
+export const Sub = ({ src, label, chevron, children, className, ...props }: SubProps) => {
+  const [open, setOpen] = useState(true);
+
   return (
-    <>
-      <GlobalStyles styles={globalStyles} component="Item" />
-      <div {...props} className={classnames(className, 'ck-menu-item')}>
-        <Icon src={src} color="fontPlaceholder" />
-        <span className="ck-menu-item-label">{label}</span>
-        <Icon src={src} color="primary" />
-      </div>
-    </>
+    <SubWrapper {...props} className={classnames('ck-menu-item', className)}>
+      <Item src={src} label={label} onClick={() => setOpen(!open)} chevron />
+      {open && <div className="ck-menu-item-wrapper">{children}</div>}
+    </SubWrapper>
   );
 };
 

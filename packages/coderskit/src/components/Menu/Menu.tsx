@@ -1,47 +1,34 @@
-import React, { useMemo, HTMLAttributes, ElementType } from 'react';
+import React, { HTMLAttributes } from 'react';
 import { Item } from './Item';
 import styled from '@emotion/styled';
-import classnames from 'classnames';
-import { css } from '@emotion/core';
-import { GlobalStyles, Theme } from '../..';
 import theme from '../../utils/theme';
-
-const {
-  colors: { white, border },
-  shadows: {
-    special: { menu },
-  },
-  radii: { large },
-} = theme;
 
 export interface MenuProps extends HTMLAttributes<HTMLDivElement> {
   [key: string]: any;
   children: Item;
 }
 
-const globalStyles = ({ shadows, colors }: Theme) => css`
-  .ck-menu {
-    width: 240px;
-    height: auto;
-    background-color: ${white};
-    box-shadow: ${menu};
-    border-radius: ${large};
-  }
+interface MenuBaseProps extends Omit<MenuProps, 'children' | 'value'> {}
 
-  .ck-menu-item:not(:last-child) {
-    border-bottom: 1px solid ${border};
-  }
-`;
+const MenuWrapper = styled.div<MenuBaseProps>(props => {
+  const { colors, shadows, radii } = theme;
+
+  return {
+    width: 240,
+    height: 'auto',
+    backgroundColor: colors.white,
+    boxShadow: shadows.special.menu,
+    borderRadius: radii.large,
+    userSelect: 'none',
+
+    '.ck-menu-item:not(:first-child)': {
+      borderTop: `1px solid ${colors.border}`,
+    },
+  };
+});
 
 export const Menu = ({ children, className, ...props }: MenuProps) => {
-  return (
-    <>
-      <GlobalStyles styles={globalStyles} component="Menu" />
-      <div {...props} className={classnames(className, 'ck-menu')}>
-        {children}
-      </div>
-    </>
-  );
+  return <MenuWrapper {...props}>{children}</MenuWrapper>;
 };
 
 Menu.defaultProps = {

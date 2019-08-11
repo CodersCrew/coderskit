@@ -13,36 +13,26 @@ const readme = { content };
 
 const menuGroup = 'Menu';
 
-const elements = {
-  a: 'a',
-  button: 'button',
-  div: 'div',
-  span: 'span',
-};
+const getMenuWithoutImageProps = () => ({});
 
-const getMenuWithoutImageProps = () => ({
-  as: select('as', elements, 'button', menuGroup) as keyof typeof elements,
-  children: text('children', 'Menu', menuGroup),
-  size: number('size', 32, undefined, menuGroup),
-});
-
-const getMenuProps = () => ({
-  ...getMenuWithoutImageProps(),
-  src: text('src', 'https://randomuser.me/api/portraits/men/52.jpg', menuGroup),
-});
+const getMenuProps = () => ({});
 
 storiesOf('Atoms|Menu', module)
   .addParameters({ design, readme })
   .add('Menu', () => {
     const props = getMenuProps();
-    const { children, ...rest } = props;
+    const { ...rest } = props;
 
     return (
       <>
         <Menu>
           <Item src="check-solid.svg" label="Dashboard" />
           <Item src="person.svg" label="About as" />
-          <Sub src="basket.svg" label="Products" />
+          <Sub src="basket.svg" label="Products" chevron>
+            <Item label="Hardware" />
+            <Item label="Software" />
+            <Item label="Other" />
+          </Sub>
           <Item src="message.svg" label="Contact" />
         </Menu>
       </>
