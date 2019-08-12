@@ -5,34 +5,31 @@ import { Steps, Step } from 'coderskit';
 import { Icon, colors as themeColors } from 'coderskit';
 
 const labelLayouts = {
-    horizontal: 'horizontal',
-    vertical: 'vertical'
-}
+  horizontal: 'horizontal',
+  vertical: 'vertical',
+};
 
 const stepStates = {
   success: 'success',
   failure: 'failure',
   active: 'active',
   pending: 'pending',
-  unset: 'unset'
-}
-
+  unset: 'unset',
+};
 
 const colors = { unset: 'unset', ...Object.keys(themeColors).reduce((a, key) => ({ ...a, [key]: key }), {}) };
 
 const getStepProps = () => ({
-    state: select('state', stepStates, 'unset') as keyof typeof stepStates,
-    size: number('size', 32),
-    color: select('color', colors, 'unset') as keyof typeof colors,
-    fontColor: select('fontColor', colors, 'unset') as keyof typeof colors,
-})
-
+  state: select('state', stepStates, 'unset') as keyof typeof stepStates,
+  size: number('size', 32),
+  color: select('color', colors, 'unset') as keyof typeof colors,
+  fontColor: select('fontColor', colors, 'unset') as keyof typeof colors,
+});
 
 storiesOf('Steps', module)
   .add('Step with number', () => {
-
     const inheritedProps = getStepProps();
-    
+
     const props = {
       ...inheritedProps,
       children: number('children', 1),
@@ -51,9 +48,8 @@ storiesOf('Steps', module)
     );
   })
   .add('Step with icon', () => {
-
     const inheritedProps = getStepProps();
-    
+
     const props = {
       ...inheritedProps,
       children: text('children', 'check-solid.svg'),
@@ -63,7 +59,7 @@ storiesOf('Steps', module)
     const fontColor = props.fontColor === 'unset' ? undefined : props.fontColor;
     const state = props.state === 'unset' ? undefined : props.state;
 
-    const {children, ...rest } = props;
+    const { children, ...rest } = props;
 
     return (
       <Step {...rest} color={color} fontColor={fontColor} state={state}>
@@ -89,5 +85,4 @@ storiesOf('Steps', module).add('StepGroup', () => {
       <Step></Step>
     </Steps>
   );
-
 });

@@ -3,11 +3,11 @@ import classnames from 'classnames';
 import styled from '@emotion/styled';
 import { ThemeColorsKeys } from '../..';
 
-export type LabelLayout = 'vertical' | 'horizontal'
+export type LabelLayout = 'vertical' | 'horizontal';
 
 export interface StepsProps extends HTMLAttributes<HTMLDivElement> {
   children?: ReactNode;
-  labelLayout?: LabelLayout; 
+  labelLayout?: LabelLayout;
   activeStep?: number;
   pendingSteps?: [];
 }
@@ -24,9 +24,9 @@ export interface StepProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const StepBase = styled.div<StepProps>(props => {
-   const { colors } = props.theme;
-   const color = colors[props.color!];
-   const fontColor = colors[props.fontColor!];
+  const { colors } = props.theme;
+  const color = colors[props.color!];
+  const fontColor = colors[props.fontColor!];
 
   return {
     display: 'flex',
@@ -81,12 +81,20 @@ const StepPending = styled(StepBase)(props => {
   };
 });
 
-
 export const Step = (props: StepProps) => {
   const className = classnames(props.className, 'ck-step');
 
-  const StepContainer = props.state === 'success'? StepSuccess : props.state === 'failure' ? StepFailure : props.state === 'active' ? StepActive : props.state === 'pending' ? StepPending : StepBase;
-  
+  const StepContainer =
+    props.state === 'success'
+      ? StepSuccess
+      : props.state === 'failure'
+      ? StepFailure
+      : props.state === 'active'
+      ? StepActive
+      : props.state === 'pending'
+      ? StepPending
+      : StepBase;
+
   return (
     <StepContainer {...props} className={className}>
       {props.children}
@@ -95,33 +103,48 @@ export const Step = (props: StepProps) => {
 };
 
 const StepsWrapper = styled.div<StepsProps>(props => {
-
   return {
     display: 'flex',
-  }
+  };
 });
 
+const Divider = styled.div(props => {
+  const { colors } = props.theme;
 
-export const Steps = ({children, ...props}: StepsProps) => {
+  return {
+    height: '3px',
+    width: '20px',
+    backgroundColor: colors.disabled,
+  };
+});
+
+export const Steps = ({ children, ...props }: StepsProps) => {
   const className = classnames(props.className, 'ck-steps');
 
-  const childrenStatus = React.Children.map(children, (child, index) => {
-  
+  const childrenWithState = React.Children.map(children, (child, index) => {
     if (index === props.activeStep) {
-      return React.cloneElement(child as ReactElement, { state: 'active' });
+      return React.cloneElement(child as ReactElement, { state: 'active', children: index + 1 });
     } else if (index > props.activeStep!) {
-      return React.cloneElement(child as ReactElement, { state: 'pending' });
+      return React.cloneElement(child as ReactElement, { state: 'pending', children: index + 1 });
     }
     return child;
   });
 
-    return (
-      <StepsWrapper {...props} className={className}>
-        {childrenStatus}
-      </StepsWrapper>
-    );
-};
+  // const separator = Divider;
+  const childrenWithSeparators: ReactNode[] = [];
+  childrenWithState.forEach((element: ReactNode, index) => {
+    childrenWithSeparators.push(element);
+    if (index < childrenWithState.length - 1) {
+      childrenWithSeparators.push(React.createElement(Divider, null));
+    }
+  });
 
+  return (
+    <StepsWrapper {...props} className={className}>
+      {childrenWithSeparators}
+    </StepsWrapper>
+  );
+};
 
 Step.defaultProps = {
   fontColor: 'white',
@@ -131,5 +154,5 @@ Step.defaultProps = {
 };
 
 Steps.defaultProps = {
-  activeStep: 2
+  activeStep: 2,
 };
