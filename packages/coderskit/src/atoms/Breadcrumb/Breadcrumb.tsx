@@ -74,7 +74,7 @@ const BreadCrumbItem = ({ ...props }: BreadcrumbProps) => {
   const { href, className, name } = props;
 
   return (
-    <div {...props} className={classnames(className, 'ck-breadcrumb-item')}>
+    <div className={classnames(className, 'ck-breadcrumb-item')}>
       <a href={href}>
         <Icon {...props} style={{ color: 'currentColor' }} />
         {name}
