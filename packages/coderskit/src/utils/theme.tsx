@@ -124,6 +124,9 @@ export const shadows = {
   md: `0 6px 6px -1px ${shadowColor1}, 0 0 1px 0 ${shadowColor2}`,
   lg: `0 16px 16px -1px ${shadowColor1}, 0 0 1px 0 ${shadowColor2}`,
   xl: `0 32px 40px -2px ${transparentize(0.88, colors.fontPrimary)}, 0 0 1px 0 ${shadowColor2}`,
+  special: {
+    menu: `0px 8px 16px ${shadowColor1}, 0px 0px 1px ${shadowColor2}`,
+  },
 };
 
 export type ThemeShadows = typeof shadows;
