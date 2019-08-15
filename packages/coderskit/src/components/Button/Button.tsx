@@ -57,10 +57,6 @@ const ButtonBase = styled.button<ButtonBaseProps>(props => {
       opacity: 0.6,
     },
 
-    '&:focus:not(:disabled)': {
-      boxShadow: `${theme.shadows.md}, 0 0 0 4px ${tint(0.8, color)}`,
-    },
-
     '.ck-icon + *, * + .ck-icon': {
       marginLeft: 8,
     },
@@ -87,6 +83,10 @@ const ContainedButton = styled(ButtonBase)(props => {
       boxShadow: 'none',
     },
 
+    '&:focus:not(:disabled)': {
+      boxShadow: `${theme.shadows.md}, 0 0 0 4px ${tint(0.8, color)}`,
+    },
+
     '.ck-icon': {
       color: colors.white,
     },
@@ -110,6 +110,10 @@ const OutlinedButton = styled(ButtonBase)(props => {
     '&:active:not(:disabled)': {
       backgroundColor: tint(0.92, color),
       boxShadow: 'none',
+    },
+
+    '&:focus:not(:disabled)': {
+      boxShadow: `${theme.shadows.md}, 0 0 0 4px ${tint(0.8, color)}`,
     },
   };
 });

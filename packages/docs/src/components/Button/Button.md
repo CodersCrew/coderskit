@@ -1,7 +1,5 @@
 # Button
 
-
-
 ### Button props
 
 | Name    | Type                                    | Default value | Description                                                                       |

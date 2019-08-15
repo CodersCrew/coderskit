@@ -1,4 +1,4 @@
-import React, { useMemo, HTMLAttributes, ElementType } from 'react';
+import React, { HTMLAttributes } from 'react';
 import { Icon } from '../Icon';
 import ChevronDownSolid from '../../icons/ChevronDownSolid';
 import styled from '@emotion/styled';
@@ -14,9 +14,9 @@ export interface ItemProps extends HTMLAttributes<HTMLDivElement> {
   [key: string]: any;
 }
 
-interface ItemBaseProps extends HTMLAttributes<HTMLDivElement> {}
+type ItemBaseProps = HTMLAttributes<HTMLDivElement>;
 
-const ItemWrapper = styled.div<ItemBaseProps>(props => {
+const ItemWrapper = styled.div<ItemBaseProps>(() => {
   return {
     width: '100%',
     display: 'flex',
@@ -48,7 +48,7 @@ const ItemWrapper = styled.div<ItemBaseProps>(props => {
   };
 });
 
-export const Item = ({ src, label, chevron, children, className, ...props }: ItemProps) => {
+export const Item = ({ src, label, chevron, className, ...props }: ItemProps) => {
   return (
     <ItemWrapper {...props} className={classnames('ck-menu-item', className)}>
       {src && <Icon src={src} />}

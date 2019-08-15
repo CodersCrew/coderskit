@@ -1,16 +1,16 @@
 import React, { HTMLAttributes } from 'react';
-import { Item } from './Item';
 import styled from '@emotion/styled';
-import theme from '../../utils/theme';
+import { Item } from './Item';
+import { Sub } from './Sub';
 
 export interface MenuProps extends HTMLAttributes<HTMLDivElement> {
   [key: string]: any;
-  children: Item;
+  children: Item | Sub;
 }
 
-interface MenuBaseProps extends Omit<MenuProps, 'children' | 'value'> {}
+type MenuBaseProps = Omit<MenuProps, 'children' | 'value'>;
 
-const MenuWrapper = styled.div<MenuBaseProps>(props => {
+const MenuWrapper = styled.div<MenuBaseProps>(({ theme }) => {
   const { colors, shadows, radii } = theme;
 
   return {
@@ -27,10 +27,13 @@ const MenuWrapper = styled.div<MenuBaseProps>(props => {
   };
 });
 
-export const Menu = ({ children, className, ...props }: MenuProps) => {
+export const Menu = ({ children, ...props }: MenuProps) => {
   return <MenuWrapper {...props}>{children}</MenuWrapper>;
 };
 
 Menu.defaultProps = {
   children: '',
 };
+
+Menu.Item = Item;
+Menu.Sub = Sub;

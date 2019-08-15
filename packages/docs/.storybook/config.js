@@ -16,7 +16,7 @@ const req = require.context('../src', true, /.stories.tsx$/);
 
 const withGlobal = story => (
   <StylesProvider>
-    <div style={{ width: '100%', height: '100%', paddingLeft: 32 }}>
+    <div style={{ width: '100%', height: '100%', paddingLeft: 32, paddingRight: 32 }}>
       {story()}
     </div>
   </StylesProvider>

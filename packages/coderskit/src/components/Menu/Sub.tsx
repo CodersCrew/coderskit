@@ -12,9 +12,9 @@ export interface SubProps extends HTMLAttributes<HTMLDivElement> {
   [key: string]: any;
 }
 
-interface SubBaseProps extends HTMLAttributes<HTMLDivElement> {}
+type SubBaseProps = HTMLAttributes<HTMLDivElement>;
 
-const SubWrapper = styled.div<SubBaseProps>(props => {
+const SubWrapper = styled.div<SubBaseProps>(() => {
   const { colors, space, fontWeights } = theme;
   return {
     display: 'flex',
@@ -45,7 +45,7 @@ export const Sub = ({ src, label, chevron, children, className, ...props }: SubP
 
   return (
     <SubWrapper {...props} className={classnames('ck-menu-item', className)}>
-      <Item src={src} label={label} onClick={() => setOpen(!open)} chevron />
+      <Item src={src} label={label} onClick={() => setOpen(!open)} chevron={chevron} />
       {open && <div className="ck-menu-item-wrapper">{children}</div>}
     </SubWrapper>
   );
