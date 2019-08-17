@@ -1,4 +1,4 @@
-import React, { Children } from 'react';
+import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { text, select, number } from '@storybook/addon-knobs';
 import { Steps, Step } from 'coderskit';
@@ -11,7 +11,7 @@ const labelLayouts = {
 
 const stepStates = {
   success: 'success',
-  failure: 'failure',
+  error: 'error',
   active: 'active',
   pending: 'pending',
   unset: 'unset',
@@ -20,11 +20,20 @@ const stepStates = {
 const colors = { unset: 'unset', ...Object.keys(themeColors).reduce((a, key) => ({ ...a, [key]: key }), {}) };
 
 const getStepProps = () => ({
-  state: select('state', stepStates, 'unset') as keyof typeof stepStates,
-  size: number('size', 32),
-  color: select('color', colors, 'unset') as keyof typeof colors,
-  fontColor: select('fontColor', colors, 'unset') as keyof typeof colors,
+  state: select('state', stepStates, 'unset', 'Step') as keyof typeof stepStates,
+  size: number('size', 32, undefined, 'Step'),
+  color: select('color', colors, 'unset', 'Step') as keyof typeof colors,
+  fontColor: select('fontColor', colors, 'unset', 'Step') as keyof typeof colors,
+  label: text('label', 'Step label', 'Label'),
+  labelLayout: select('labelLayout', labelLayouts, 'vertical', 'Label') as keyof typeof labelLayouts,
 });
+
+const setValues = (props = getStepProps()) => {
+    const color = props.color === 'unset' ? undefined : props.color;
+    const fontColor = props.fontColor === 'unset' ? undefined : props.fontColor;
+    const state = props.state === 'unset' ? undefined : props.state;
+  return { color, fontColor, state }
+}
 
 storiesOf('Steps', module)
   .add('Step with number', () => {
@@ -32,19 +41,22 @@ storiesOf('Steps', module)
 
     const props = {
       ...inheritedProps,
-      children: number('children', 1),
+      children: number('children', 1, undefined, 'Step'),
     };
 
-    const color = props.color === 'unset' ? undefined : props.color;
-    const fontColor = props.fontColor === 'unset' ? undefined : props.fontColor;
-    const state = props.state === 'unset' ? undefined : props.state;
-
-    const { children, ...rest } = props;
+    const { color, fontColor, state } = setValues();
+    const { label, children, labelLayout, ...rest } = props;
 
     return (
-      <Step {...rest} color={color} fontColor={fontColor} state={state}>
-        {children}
+      <Step {...rest} labelLayout={labelLayout} state={state}> 
+        <Step.Content color={color} fontColor={fontColor} state={state} >
+          {children} 
+        </Step.Content>
+        <Step.Label state={state}>
+          {label}
+        </Step.Label> 
       </Step>
+      
     );
   })
   .add('Step with icon', () => {
@@ -52,37 +64,61 @@ storiesOf('Steps', module)
 
     const props = {
       ...inheritedProps,
-      children: text('children', 'check-solid.svg'),
+      children: text('children', 'check-solid.svg', 'Step'),
     };
 
-    const color = props.color === 'unset' ? undefined : props.color;
-    const fontColor = props.fontColor === 'unset' ? undefined : props.fontColor;
-    const state = props.state === 'unset' ? undefined : props.state;
-
-    const { children, ...rest } = props;
+    const { color, fontColor, state } = setValues();
+    const { label, children, labelLayout, ...rest } = props;
 
     return (
-      <Step {...rest} color={color} fontColor={fontColor} state={state}>
-        <Icon src={children} />
+      <Step {...rest} labelLayout={labelLayout} state={state}> 
+        <Step.Content color={color} fontColor={fontColor} state={state} >
+          <Icon src={children} />
+        </Step.Content>
+        <Step.Label state={state}>
+          {label}
+        </Step.Label> 
       </Step>
     );
-  });
-
-storiesOf('Steps', module).add('StepGroup', () => {
+  })
+.add('StepGroup', () => {
   const props = {
     labelLayout: select('labelLayout', labelLayouts, 'vertical') as keyof typeof labelLayouts,
   };
 
+  const label = 'Step label';
+  const { labelLayout } = props;
+
   return (
-    <Steps {...props}>
-      <Step state="success">
-        <Icon src="check-solid.svg" />
-      </Step>
-      <Step state="failure">
-        <Icon src="times-solid.svg" />
-      </Step>
-      <Step></Step>
-      <Step></Step>
+    <Steps labelLayout= {labelLayout}> 
+        <Step state="success">
+          <Step.Content state="success">
+            <Icon src="check-solid.svg" />
+          </Step.Content>
+          <Step.Label>
+            {label}
+          </Step.Label>
+        </Step>
+        <Step state="error">
+          <Step.Content state="error">
+            <Icon src="times-solid.svg" />
+          </Step.Content>
+          <Step.Label>
+            {label}
+          </Step.Label>
+        </Step>
+        <Step>
+          <Step.Content></Step.Content>
+          <Step.Label>
+            {label}
+          </Step.Label>
+        </Step>
+        <Step>
+          <Step.Content></Step.Content>
+          <Step.Label>
+            {label}
+          </Step.Label>
+        </Step>
     </Steps>
   );
 });
