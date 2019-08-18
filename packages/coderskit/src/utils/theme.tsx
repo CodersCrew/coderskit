@@ -6,17 +6,17 @@ export const colors = {
   success: '#00CC92',
   warning: '#FF985C',
   error: '#FF526C',
-  gray: '#909399',
+  gray: '#72809D',
   black: '#252529',
   white: '#FFFFFF',
-  background: '#F9F9FC',
-  border: '#E1E4E8',
-  disabled: '#E9E9EE',
-  itemHover: '#F6F6F9',
+  background: '#FAFBFD',
+  border: '#DCE1E7',
+  disabled: '#D7E1EA',
+  hover: '#F6FAFD',
   fontPrimary: '#0A1F44',
   fontRegular: '#4E5D78',
-  fontPlaceholder: '#8A94A6',
-  fontDisabled: '#B0B7C3',
+  fontPlaceholder: '#ACB8C3',
+  fontDisabled: '#798593',
 };
 
 export type ThemeColors = typeof colors;
@@ -124,6 +124,9 @@ export const shadows = {
   md: `0 6px 6px -1px ${shadowColor1}, 0 0 1px 0 ${shadowColor2}`,
   lg: `0 16px 16px -1px ${shadowColor1}, 0 0 1px 0 ${shadowColor2}`,
   xl: `0 32px 40px -2px ${transparentize(0.88, colors.fontPrimary)}, 0 0 1px 0 ${shadowColor2}`,
+  special: {
+    menu: `0px 8px 16px ${shadowColor1}, 0px 0px 1px ${shadowColor2}`,
+  },
 };
 
 export type ThemeShadows = typeof shadows;
