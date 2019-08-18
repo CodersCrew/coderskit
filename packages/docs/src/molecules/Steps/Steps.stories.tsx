@@ -29,11 +29,11 @@ const getStepProps = () => ({
 });
 
 const setValues = (props = getStepProps()) => {
-    const color = props.color === 'unset' ? undefined : props.color;
-    const fontColor = props.fontColor === 'unset' ? undefined : props.fontColor;
-    const state = props.state === 'unset' ? undefined : props.state;
-  return { color, fontColor, state }
-}
+  const color = props.color === 'unset' ? undefined : props.color;
+  const fontColor = props.fontColor === 'unset' ? undefined : props.fontColor;
+  const state = props.state === 'unset' ? undefined : props.state;
+  return { color, fontColor, state };
+};
 
 storiesOf('Steps', module)
   .add('Step with number', () => {
@@ -48,15 +48,12 @@ storiesOf('Steps', module)
     const { label, children, labelLayout, ...rest } = props;
 
     return (
-      <Step {...rest} labelLayout={labelLayout} state={state}> 
-        <Step.Content color={color} fontColor={fontColor} state={state} >
-          {children} 
+      <Step {...rest} labelLayout={labelLayout} state={state}>
+        <Step.Content color={color} fontColor={fontColor} state={state}>
+          {children}
         </Step.Content>
-        <Step.Label state={state}>
-          {label}
-        </Step.Label> 
+        <Step.Label state={state}>{label}</Step.Label>
       </Step>
-      
     );
   })
   .add('Step with icon', () => {
@@ -71,54 +68,44 @@ storiesOf('Steps', module)
     const { label, children, labelLayout, ...rest } = props;
 
     return (
-      <Step {...rest} labelLayout={labelLayout} state={state}> 
-        <Step.Content color={color} fontColor={fontColor} state={state} >
+      <Step {...rest} labelLayout={labelLayout} state={state}>
+        <Step.Content color={color} fontColor={fontColor} state={state}>
           <Icon src={children} />
         </Step.Content>
-        <Step.Label state={state}>
-          {label}
-        </Step.Label> 
+        <Step.Label state={state}>{label}</Step.Label>
       </Step>
     );
   })
-.add('StepGroup', () => {
-  const props = {
-    labelLayout: select('labelLayout', labelLayouts, 'vertical') as keyof typeof labelLayouts,
-  };
+  .add('StepGroup', () => {
+    const props = {
+      labelLayout: select('labelLayout', labelLayouts, 'vertical') as keyof typeof labelLayouts,
+    };
 
-  const label = 'Step label';
-  const { labelLayout } = props;
+    const label = 'Step label';
+    const { labelLayout } = props;
 
-  return (
-    <Steps labelLayout= {labelLayout}> 
+    return (
+      <Steps labelLayout={labelLayout}>
         <Step state="success">
           <Step.Content state="success">
             <Icon src="check-solid.svg" />
           </Step.Content>
-          <Step.Label>
-            {label}
-          </Step.Label>
+          <Step.Label>{label}</Step.Label>
         </Step>
         <Step state="error">
           <Step.Content state="error">
             <Icon src="times-solid.svg" />
           </Step.Content>
-          <Step.Label>
-            {label}
-          </Step.Label>
+          <Step.Label>{label}</Step.Label>
         </Step>
         <Step>
           <Step.Content></Step.Content>
-          <Step.Label>
-            {label}
-          </Step.Label>
+          <Step.Label>{label}</Step.Label>
         </Step>
         <Step>
           <Step.Content></Step.Content>
-          <Step.Label>
-            {label}
-          </Step.Label>
+          <Step.Label>{label}</Step.Label>
         </Step>
-    </Steps>
-  );
-});
+      </Steps>
+    );
+  });
