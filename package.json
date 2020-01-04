@@ -1,5 +1,4 @@
 {
-  "name": "coderskit",
   "version": "0.0.1",
   "repository": "https://github.com/CodersCrew/coderskit.git",
   "author": "CodersCrew",
@@ -14,7 +13,11 @@
     "type-check": "lerna run type-check",
     "prettier": "lerna run prettier",
     "prettier:fix": "lerna run prettier:fix",
-    "check-all": "yarn prettier && yarn lint && yarn type-check"
+    "check-all": "yarn type-check && yarn lint && yarn prettier",
+    "dev:coderskit": "lerna run dev --scope=coderskit --stream",
+    "build:coderskit": "lerna run build --scope=coderskit",
+    "dev:docs": "lerna run dev --scope=docs --stream",
+    "build:docs": "yarn build:coderskit && lerna run build --scope=docs"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^1.13.0",
@@ -28,10 +31,5 @@
     "pre-commit": "^1.2.2",
     "prettier": "^1.18.2",
     "typescript": "^3.5.3"
-  },
-  "pre-commit": [
-    "prettier",
-    "lint",
-    "type-check"
-  ]
+  }
 }

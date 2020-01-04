@@ -1,5 +1,4 @@
 import { css } from '@emotion/core';
-import NotificationCss from '../molecules/Notification/Notification.css';
 
 const normalize = css`
   html {
@@ -9,6 +8,8 @@ const normalize = css`
   *,
   *::before,
   *::after {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     box-sizing: inherit;
   }
 
@@ -150,7 +151,7 @@ const normalize = css`
 
 const customize = css`
   body {
-    font-family: 'Lato', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    font-family: 'Open Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   }
 
   p {
@@ -166,7 +167,6 @@ const customize = css`
 const globalStyle = css`
   ${normalize};
   ${customize};
-  ${NotificationCss};
 `;
 
 export default globalStyle;

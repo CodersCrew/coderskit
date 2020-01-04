@@ -1,4 +1,2 @@
-export * from './atoms';
-export * from './molecules';
-export * from './forms';
+export * from './components';
 export * from './utils';
