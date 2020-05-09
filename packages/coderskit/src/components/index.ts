@@ -21,3 +21,4 @@ export * from './TextArea';
 export * from './Tooltip';
 export * from './Typography';
 export * from './Upload';
+export * from './Steps';
